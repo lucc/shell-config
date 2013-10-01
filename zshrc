@@ -299,9 +299,18 @@ compinit
 
 # aoutoloading stuff {{{1
 autoload colors
-autoload checkmail
+#autoload checkmail
+unalias run-help
 autoload run-help
 HELPDIR=~/zsh_help
+
+# directory hash table
+######################
+#hash -d i=~/Pictures
+#hash -d m=~/Music
+hash -d t=~/tmp
+hash -d u=~/uni
+hash -d v=/Volumes
 
 # load zsh modules {{{1
 zmodload zsh/sched
