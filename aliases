@@ -94,6 +94,8 @@ if [ `uname` = "Darwin" ] ; then # (Mac OS X, 10.6)
   #alias passon="defaults write com.apple.screensaver askForPassword 1; defaults write com.apple.screensaver askForPasswordDelay 0"
   #alias passoff="defaults write com.apple.screensaver askForPassword 0"
   alias sp='open -a System\ Preferences'
+  alias quit_finder='osascript -e tell\ app\ \"Finder\"\ to\ quit'
+  alias d='display.scpt iterm'
 elif [ `uname` = Linux ]; then
   alias pstree='pstree -n'
 fi
