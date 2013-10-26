@@ -78,7 +78,7 @@ if [ -z $DISPLAY ] && [ "$SSH_CLIENT" ]; then
   export DISPLAY=`echo $SSH_CLIENT | cut -f1 -d\ `:0.0
 fi
 
-export EDITOR="transparent-gvim.sh --tab '+call LucRemoteEditor(0)'"
+export EDITOR="transparent-gvim.sh --tab '+call luc.misc.RemoteEditor(0)'"
 export HISTSIZE=2000
 export PYTHONSTARTUP=~/.pystartup
 
