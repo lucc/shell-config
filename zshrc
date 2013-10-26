@@ -23,6 +23,13 @@ if [[ -r $ZDOTDIR/private ]]; then . $ZDOTDIR/private; fi
 if [[ -r $BREW/etc/profile.d/z.sh ]]; then
   # read man z
   _Z_CMD=j . $BREW/etc/profile.d/z.sh
+  autoload add-zsh-hook
+  add-zsh-hook chpwd _z_precmd
+  unalias j
+  autoload colors && colors
+  function j () {
+    _z "$@" 2>&1 && echo $fg[red]`pwd`$reset_color
+  }
 elif [[ -r /usr/share/autojump/autojump.sh ]]; then
   #export AUTOJUMP_KEEP_SYMLINKS=1
   . /usr/share/autojump/autojump.sh
@@ -270,6 +277,7 @@ function +vi-git-add-untracked-files () {
 # starting the completion system {{{2
 autoload -Uz compinit
 compinit
+compdef gpg2=gpg
 
 # aoutoloading stuff {{{1
 autoload colors
@@ -277,6 +285,8 @@ autoload colors
 unalias run-help
 autoload run-help
 HELPDIR=~/zsh_help
+bindkey -M viins '\C-h' run-help
+bindkey -M vicmd '\C-h' run-help
 
 # directory hash table
 ######################

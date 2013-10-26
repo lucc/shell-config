@@ -25,8 +25,15 @@ alias lla='l -A'
 alias mv='mv -i'
 alias scp='scp -p'
 alias mkdir='mkdir -p'
-alias man='transparent-gvim.sh -m'
-alias info='transparent-gvim.sh -i'
+alias nload='nload -i 6144 -o 1024'
+alias diff=colordiff
+
+# view documentation
+alias info='transparent-gvim.sh --info'
+alias man='transparent-gvim.sh --man'
+alias perldoc='transparent-gvim.sh --perldoc'
+alias phpdoc='transparent-gvim.sh --php'
+alias pydoc='transparent-gvim.sh --pydoc'
 
 # searching the internet
 alias c:='internet_search.sh -f'
@@ -49,12 +56,15 @@ alias tbz2='tar -cjv --exclude .DS_Store'
 alias tgz='tar -czv --exclude .DS_Store'
 alias up='date +"%F `uptime`"'
 alias bk='backup.make fullbk'
-alias nload='nload -i 6144 -o 1024'
 alias uz=aunpack
 
 # other
 alias ctw-muc='ctw GMXX0087'
-alias garbage='while ! read -t 1; do head -c 1000000 /dev/random | hexdump -C | grep --color=auto "42.*42.*42"; done; unset REPLY'
+alias garbage='while ! read -t 1; do
+		 head -c 1000000 /dev/random | \
+		   hexdump -C | \
+		   grep --color=auto "42.*42.*42"
+	       done; unset REPLY'
 alias gtype='gtypist ktde.typ'
 alias tex=latexmk
 #alias tmp='cd ~/tmp'
@@ -91,12 +101,10 @@ if [ `uname` = "Darwin" ] ; then # (Mac OS X, 10.6)
   alias pst='pstree `ps -o ppid= $$` `pgrep tmux`'
   alias psu='pstree -u $USER'
   alias timemachine=/System/Library/CoreServices/backupd.bundle/Contents/Resources/backupd-helper
-  alias f=mdfind
+  #alias f=mdfind
   alias o=open
   alias app='open -a'
   alias truecrypt=/Applications/TrueCrypt.app/Contents/MacOS/TrueCrypt
-  #alias passon="defaults write com.apple.screensaver askForPassword 1; defaults write com.apple.screensaver askForPasswordDelay 0"
-  #alias passoff="defaults write com.apple.screensaver askForPassword 0"
   alias sp='open -a System\ Preferences'
   alias quit_finder='osascript -e tell\ app\ \"Finder\"\ to\ quit'
   alias d='display.scpt iterm'
@@ -111,11 +119,17 @@ if [ "$BASH" != "" ]; then
   ## We are running bash
   alias ..='cd ..'
   alias hgrep='history | grep'
-  alias histhead='history | awk '\''{a[$2]++}END{for(i in a){print a[i]" "i}}'\'' | sort -rn | head'
+  alias histhead='history | \
+		    awk '\''{a[$2]++}END{for(i in a){print a[i]" "i}}'\'' | \
+		    sort -rn | \
+		    head'
 elif [ "$ZSH_NAME" = zsh ]; then
   ## We are running zsh
   alias hgrep='history 1 -1 | grep'
-  alias histhead='history 1 -1 | awk '\''{a[$2]++}END{for(i in a){print a[i]" "i}}'\'' | sort -rn | head'
+  alias histhead='history 1 -1 | \
+		    awk '\''{a[$2]++}END{for(i in a){print a[i]" "i}}'\'' | \
+		    sort -rn | \
+		    head'
   alias -s com=urlopen
   alias -s org=urlopen
   alias -s net=urlopen
@@ -226,7 +240,8 @@ self () {
   if [ $SECONDS -gt $((24*3600)) ]; then
     echo -n "$(($SECONDS/3600/24)) days and "
   fi
-  printf "%02d:%02d:%02d (SHLVL=$SHLVL)\n" $((SECONDS/3600%24)) $((SECONDS/60%60)) $((SECONDS%60))
+  printf "%02d:%02d:%02d (SHLVL=$SHLVL)\n" $((SECONDS/3600%24)) \
+    $((SECONDS/60%60)) $((SECONDS%60))
   #echo
   echo "Jobs in backround:"
   if [ `jobs|wc -l` -ne 0 ]; then jobs; else echo "None"; fi
@@ -265,7 +280,8 @@ if [ "$BASH" != "" ]; then
             case `file --mime --dereference --brief "$FILE"` in
               text/*|application/x-sh)
                 if [ 50 -gt `wc -l <"$FILE"` ]; then cat "$FILE"
-                else echo "$FILE is quite a long text file. I will not cat it."; fi
+                else echo "$FILE is quite a long text file. I will not cat it."
+	       	fi
                 ;;
               application/*)
                 echo "$FILE is a compiled executable or unsupported format."
@@ -320,7 +336,8 @@ elif [ "$ZSH_NAME" = zsh ]; then
             case `file --mime --dereference --brief "$FILE"` in
               text/*|application/x-sh)
                 if [ 50 -gt `wc -l <"$FILE"` ]; then cat "$FILE"
-                else echo "$FILE is quite a long text file. I will not cat it."; fi
+                else echo "$FILE is quite a long text file. I will not cat it."
+	       	fi
                 ;;
               application/*)
                 echo "$FILE is a compiled executable or unsupported format."
