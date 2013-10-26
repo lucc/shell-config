@@ -1,0 +1,5 @@
+# general stuff
+.*.swp
+.swp
+cache
+histfile
