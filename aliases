@@ -1,18 +1,14 @@
-##########################################################################{{{1
-# file:		aliases
+# file:		aliases                                                   {{{1
 # author:	luc
 # vim:          spelllang=en filetype=zsh foldmethod=marker
-# description:  This file contains aliases and functions which hopefully work
-#               not only in bash and zsh (I did not test anything else by
-#               now).
+# description:  This file contains aliases and functions.  They are tested
+#               with zsh and might not work with any other shell.
 # credits:	many thanks to the people from
 #		http://crunchbanglinux.org/forums/topic/1093/post-your-bashrc/
-##############################################################################
 
 # alias (all systems) {{{1
-##############################################################################
 
-# general aliases
+# general aliases {{{2
 alias cp='cp -ip'
 alias grep='grep --color=auto'
 #alias l='ls -l --time-style=full-iso'
@@ -28,14 +24,14 @@ alias mkdir='mkdir -p'
 alias nload='nload -i 6144 -o 1024'
 alias diff=colordiff
 
-# view documentation
+# view documentation {{{2
 alias info='transparent-gvim.sh --info'
-alias man='transparent-gvim.sh --man'
+#alias man='transparent-gvim.sh --man'
 alias perldoc='transparent-gvim.sh --perldoc'
 alias phpdoc='transparent-gvim.sh --php'
 alias pydoc='transparent-gvim.sh --pydoc'
 
-# searching the internet
+# searching the internet {{{2
 alias c:='internet_search.sh -f'
 alias g:='internet_search.sh -g'
 alias l:='internet_search.sh -l'
@@ -45,11 +41,11 @@ alias s='internet_search.sh -d'
 alias q='internet_search.sh -d'
 alias ip='curl --silent http://luc42.lima-city.de/ip.php'
 
-# connecting to remote servers
+# connecting to remote servers {{{2
 alias lima='ftp ftp.lima-city.de'
 alias limalog="PAGER=/bin/cat ftp -Vi ftp.lima-city.de <<<more\ .log$'\n'quit"
 
-# backup and statistics
+# backup and statistics {{{2
 alias b='battery.sh -v'
 alias t='statistics.sh -td ~'
 alias tbz2='tar -cjv --exclude .DS_Store'
@@ -58,7 +54,7 @@ alias up='date +"%F `uptime`"'
 alias bk='backup.make fullbk'
 alias uz=aunpack
 
-# other
+# other {{{2
 alias ctw-muc='ctw GMXX0087'
 alias garbage='while ! read -t 1; do
 		 head -c 1000000 /dev/random | \
@@ -71,6 +67,7 @@ alias tex=latexmk
 alias maillog='cat ~/log/fetchmail.log | tail'
 alias maillog='syslog -k Sender fetchmail -k Time ge -1h | tail'
 alias mlog='syslog -k Sender fetchmail -k Time ge -10m'
+alias mlog='syslog -k Sender com.apple.launchd.peruser.$UID -k Time ge -10m'
 alias mail='mail||mutt'
 alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
 alias D='date +%F'
@@ -78,19 +75,19 @@ alias m=ncmpcpp
 alias play='mpc play'
 alias pause='mpc pause'
 
-# old
-#alias ba='clear && cd ~/files/uni/mathe/ba/ && ls -lT'
-#alias bkba='make -C ~/files/uni/mathe/ba backup'
-#alias run='./`ls -t | head -n 1`'
-#alias vide='vim -S'
-#alias :q='read -s -k "?Quit the shell? [y]|n "; [ "$REPLY" = y -o "$REPLY" = Y -o "$REPLY" = " " -o -z "$REPLY" ] && exit || echo; unset REPLY'
-#alias :q='read -s -n1 -p "Do you realy want to quit the shell? [y]|n "; if [ "$REPLY" != n ] && [ "$REPLY" != N ]; then exit; else echo; fi'
-#alias :q='read -s -n1 -p "Quit the shell? [y]|n "; [ "$REPLY" = y -o "$REPLY" = Y -o "$REPLY" = " " -o -z "$REPLY" ] && exit || echo; unset REPLY'
+alias hgrep='history 1 | grep'
+alias histhead='history 1 | \
+		  awk '\''{a[$2]++}END{for(i in a){print a[i]" "i}}'\'' | \
+		  sort -rn | \
+		  head'
+alias -s com=urlopen
+alias -s org=urlopen
+alias -s net=urlopen
+alias -s de=urlopen
 
 # alias (system specific) {{{1
-##############################################################################
 
-if [ `uname` = "Darwin" ] ; then # (Mac OS X, 10.6)
+if [ `uname` = "Darwin" ] ; then # (Mac OS X, 10.6) {{{2
   alias dl='cd $HOME/Downloads && wget'
   #play go
   alias igo='(wine c:/Program\ Files/igowin/igowin.exe &) >/dev/null 2>&1'
@@ -108,44 +105,17 @@ if [ `uname` = "Darwin" ] ; then # (Mac OS X, 10.6)
   alias sp='open -a System\ Preferences'
   alias quit_finder='osascript -e tell\ app\ \"Finder\"\ to\ quit'
   alias d='display.scpt iterm'
-elif [ `uname` = Linux ]; then
-  alias pstree='pstree -n'
-fi
-
-# alias (shell specific) {{{1
-##############################################################################
-
-if [ "$BASH" != "" ]; then
-  ## We are running bash
-  alias ..='cd ..'
-  alias hgrep='history | grep'
-  alias histhead='history | \
-		    awk '\''{a[$2]++}END{for(i in a){print a[i]" "i}}'\'' | \
-		    sort -rn | \
-		    head'
-elif [ "$ZSH_NAME" = zsh ]; then
-  ## We are running zsh
-  alias hgrep='history 1 -1 | grep'
-  alias histhead='history 1 -1 | \
-		    awk '\''{a[$2]++}END{for(i in a){print a[i]" "i}}'\'' | \
-		    sort -rn | \
-		    head'
-  alias -s com=urlopen
-  alias -s org=urlopen
-  alias -s net=urlopen
-  alias -s de=urlopen
-  if [ `uname` = Darwin ]; then
     alias -s jpg=open
     alias -s pdf=open
     alias e='for v in ~v/*~/Volumes/System(N); diskutil unmount $v'
     urlopen () { open "http://$*"; }
-  fi
+elif [ `uname` = Linux ]; then #{{{2
+  alias pstree='pstree -n'
 fi
 
-#  functions (all systems) {{{1
-##############################################################################
+#  functions {{{1
 
-conf () {
+conf () { #{{{2
   # configure different rc files and source changes
   local SOURCE=.
   local SARG=
@@ -174,7 +144,7 @@ conf () {
   $REHASH
 }
 
-selff2() {
+selff2() { #{{{2
   clear
   date +"$fg[red]Date:$reset_color %F %H:%M:%S$reset_color"
   echo "$fg[red]Uptime:$reset_color `uptime | \
@@ -201,7 +171,7 @@ selff2() {
   w | tail +3
 }
 
-selff() {
+selff() { #{{{2
   color_field () { printf "$fg[$1]$2$reset_color $3\n" "$@[4,-1]"; }
   blue () { printf "$fg[blue]$1$reset_color $2\n" "$@[3,-1]"; }
   green () { printf "$fg[green]$1$reset_color $2\n" "$@[3,-1]"; }
@@ -231,7 +201,7 @@ selff() {
   w | tail +3
 }
 
-self () {
+self () { #{{{2
   date +"%F %H:%M:%S `hostname` is running `uname -sr`"
   #echo;
   w
@@ -247,125 +217,73 @@ self () {
   if [ `jobs|wc -l` -ne 0 ]; then jobs; else echo "None"; fi
 }
 
-#  functions (shell specific) {{{1
-##############################################################################
-
-if [ "$BASH" != "" ]; then
-
-  comp () { #compare the speed of two ($1, $2) commands (loop $3 times)
-    #if [ $# -ne 3 ]; then return 1; fi
-    type $1 >/dev/null 2>&1 || return 2
-    type $2 >/dev/null 2>&1 || return 3
-    printf 1
-    time (for ((i=0; i<${3:-10}; i++)) ; do $1 ; done >/dev/null 2>&1)
-    printf 2
-    time (for ((i=0; i<${3:-10}; i++)) ; do $2 ; done >/dev/null 2>&1)
-  }
-
-  fnd () { find . ${1:+-name "${@}"}; }
-
-  fndr () { find . -name "${@:?Give an argument.}" -delete; }
-
-  h () {
-    for ARG; do
-      case `type -t "$ARG"` in
-        alias)    alias "$ARG";;
-        builtin)  help $ARG;;
-        function) type -a $ARG;;
-        keyword)  help "$ARG" || type -a "$ARG";;
-        file)
-          man "$ARG" || info "$ARG"
-          if [ $? -ne 0 ]; then
-            FILE=`which "$ARG"`
-            case `file --mime --dereference --brief "$FILE"` in
-              text/*|application/x-sh)
-                if [ 50 -gt `wc -l <"$FILE"` ]; then cat "$FILE"
-                else echo "$FILE is quite a long text file. I will not cat it."
-	       	fi
-                ;;
-              application/*)
-                echo "$FILE is a compiled executable or unsupported format."
-                echo "It does not have a man page installed. Try '$FILE --help' or '-h'."
-                ;;
-            esac
-          fi
-          ;;
-        *) echo "Not found: $ARG";;
-      esac
-    done
-  }
-
-elif [ "$ZSH_NAME" = zsh ]; then
-
-  help () {
-    local browser=
-    for b in lynx elinks; do
-      if command which -s $b; then
-	browser=$b
-	break
-      fi
-    done
-    if [ -z $browser ]; then
-      echo No browser available. >&2
-      return 1
+help () { #{{{2
+  local browser=
+  for b in lynx elinks; do
+    if command which -s $b; then
+      browser=$b
+      break
     fi
-    if [ -r ~/tmp/zsh_html/zsh.html ]; then
-      URL=file://$HOME/tmp/zsh_html/zsh_toc.html
-    else
-      URL=http://zsh.sourceforge.net/Doc/Release/zsh_toc.html
-    fi
-    echo Visiting online help at $URL.
-    sleep 2
-    $browser $URL
-  }
+  done
+  if [ -z $browser ]; then
+    echo No browser available. >&2
+    return 1
+  fi
+  if [ -r ~/tmp/zsh_html/zsh.html ]; then
+    URL=file://$HOME/tmp/zsh_html/zsh_toc.html
+  else
+    URL=http://zsh.sourceforge.net/Doc/Release/zsh_toc.html
+  fi
+  echo Visiting online help at $URL.
+  sleep 2
+  $browser $URL
+}
 
-  fnd () { find . ${=1:+-name "${@}"}; }
+fnd () { find . ${=1:+-name "${@}"}; } #{{{2
 
-  fndr () { find . -name ${=@:?Give an argument.} -delete; }
+fndr () { find . -name ${=@:?Give an argument.} -delete; } #{{{2
 
-  h () {
-    whence -w $@ | while read line; do
-      case ${line##*: } in
-        alias) alias ${line%:*};;
-        builtin|function|keyword)
-          whence -afv ${line%:*};;
-        command)
-          man ${line%:*} || info ${line%:*}
-          if [ $? -ne 0 ]; then
-            FILE=`which ${line%:*}`
-            case `file --mime --dereference --brief "$FILE"` in
-              text/*|application/x-sh)
-                if [ 50 -gt `wc -l <"$FILE"` ]; then cat "$FILE"
-                else echo "$FILE is quite a long text file. I will not cat it."
-	       	fi
-                ;;
-              application/*)
-                echo "$FILE is a compiled executable or unsupported format."
-                echo "It does not have a man page installed. Try '${line%:*} --help' or '-h'."
-                ;;
-            esac
-          fi
-          ;;
-        none) echo "Not found: ${line%:*}";;
-      esac
-    done
-  }
+h () { #{{{2
+  whence -w $@ | while read line; do
+    case ${line##*: } in
+      alias) alias ${line%:*};;
+      builtin|function|keyword)
+	whence -afv ${line%:*};;
+      command)
+	man ${line%:*} || info ${line%:*}
+	if [ $? -ne 0 ]; then
+	  FILE=`which ${line%:*}`
+	  case `file --mime --dereference --brief "$FILE"` in
+	    text/*|application/x-sh)
+	      if [ 50 -gt `wc -l <"$FILE"` ]; then cat "$FILE"
+	      else echo "$FILE is quite a long text file. I will not cat it."
+	      fi
+	      ;;
+	    application/*)
+	      echo "$FILE is a compiled executable or unsupported format."
+	      echo "It does not have a man page installed. Try '${line%:*} --help' or '-h'."
+	      ;;
+	  esac
+	fi
+	;;
+      none) echo "Not found: ${line%:*}";;
+    esac
+  done
+}
 
-  comp () {
-    local oldshwordsplit=
-    if setopt | grep -q '^shwordsplit$'; then
-      oldshwordsplit=shwordsplit
-    else
-      oldshwordsplit=noshwordsplit
-    fi
-    setopt shwordsplit
-    type ${1%% *} > /dev/null 2>&1 || return 2
-    type ${2%% *} > /dev/null 2>&1 || return 3
-    printf 1
-    time ( for ((i=0; i<${3:-10}; i++)); do $1; done > /dev/null 2>&1 )
-    printf 2
-    time ( for ((i=0; i<${3:-10}; i++)); do $2; done > /dev/null 2>&1 )
-    setopt $oldshwordsplit
-  }
-
-fi
+comp () { #{{{2
+  local oldshwordsplit=
+  if setopt | grep -q '^shwordsplit$'; then
+    oldshwordsplit=shwordsplit
+  else
+    oldshwordsplit=noshwordsplit
+  fi
+  setopt shwordsplit
+  type ${1%% *} > /dev/null 2>&1 || return 2
+  type ${2%% *} > /dev/null 2>&1 || return 3
+  printf 1
+  time ( for ((i=0; i<${3:-10}; i++)); do $1; done > /dev/null 2>&1 )
+  printf 2
+  time ( for ((i=0; i<${3:-10}; i++)); do $2; done > /dev/null 2>&1 )
+  setopt $oldshwordsplit
+}
