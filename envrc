@@ -1,18 +1,14 @@
-##############################################################################
-# file:		envrc
-# author:	luc
-# vim:          spelllang=en filetype=sh
-# description:	This file is meant to set environment variables which are
-#		needed for all shells. Shell specific variables should be set
-#		in the appropriate file (like ~/.bashrc or ~/.zshrc).
-# credits:	many thanks to the people from
-#		http://crunchbanglinux.org/forums/topic/1093/post-your-bashrc/
-#		http://bodhizazen.net/Tutorials/envrc
-##############################################################################
+# envrc file by luc
+# vim: spelllang=en filetype=sh
+# This file is meant to set environment variables which are needed for all
+# shells. Shell specific variables should be set in the appropriate file (like
+# ~/.bashrc or ~/.zshrc).
+# credits:  many thanks to the people from
+#	    http://crunchbanglinux.org/forums/topic/1093/post-your-bashrc/
+#	    http://bodhizazen.net/Tutorials/envrc
 
-##############################################################################
 # PATH and INFOPATH
-##############################################################################
+###################
 if [ "$ZSH_NAME" = zsh ]; then setopt SH_WORD_SPLIT; fi
 set_var_from_file () {
   # The file should contain the values for the variable one per line. They
@@ -40,9 +36,8 @@ unset -f set_var_from_file
 
 if [ "$ZSH_NAME" = zsh ]; then unsetopt SH_WORD_SPLIT; fi
 
-##############################################################################
 # all systems
-##############################################################################
+#############
 # pager stuff
 PAGER=`command which vimpager most | head -1`
 if [ -n $PAGER ]; then
@@ -88,9 +83,8 @@ export EDITOR="transparent-gvim.sh --tab '+call luc.misc.RemoteEditor(0)'"
 export HISTSIZE=2000
 export PYTHONSTARTUP=~/.pystartup
 
-##############################################################################
 # systems specific
-##############################################################################
+##################
 case `uname` in
   LINUX|Linux|linux) ;;
   Darwin) # MacOS X
@@ -101,7 +95,7 @@ case `uname` in
     export LANG=en_US.UTF-8
     export COPY_EXTENDED_ATTRIBUTES_DISABLE BROWSER HTMLPAGER
 
-    if [ -z "$GPG_AGENT_INFO" ] && which gpg-agent | grep -q MacGPG2; then
+    if [ -z "$GPG_AGENT_INFO" ] && which -a gpg-agent | grep -q MacGPG2; then
       #pid=`psgrep -n -o pid,args gpg-agent`
       #if [ "$ZSH_NAME" = zsh ]; then
       #  pid=`echo $=pid`
