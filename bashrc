@@ -82,8 +82,13 @@ unset BREW PREFIX
 unset RS HI UL {F,B}{N,R,G,Y,B,P,C,W}		# dont clutter env
 
 ##############################################################################
-# moving these function definitions from .alias
+# moving these function and alias definitions from .alias
 ##############################################################################
+alias hgrep='history | grep'
+alias histhead='history | \
+		  awk '\''{a[$2]++}END{for(i in a){print a[i]" "i}}'\'' | \
+		  sort -rn | \
+		  head'
 
 comp () { #compare the speed of two ($1, $2) commands (loop $3 times)
   #if [ $# -ne 3 ]; then return 1; fi
