@@ -17,9 +17,33 @@
 # brew is not installed.
 BREW=`brew --prefix 2>/dev/null`
 
+# zsh arrays (fignore, fpath) {{{1
+
+# file endings to ignore for completion
+fignore=($fignore '~' .o .bak '.sw?')
+
+# zle stuff
+zle_highlight=(region:bg=green special:bg=blue suffix:fg=red isearch:fg=yellow)
+
+# functions for completion
+for trypath in                       \
+    /usr/local/share/zsh-completions \
+    $ZDOTDIR/functions               \
+  ; do
+  if [[ -d $trypath ]]; then
+    fpath=($trypath $fpath)
+  fi
+done
+
 # files to be sourced (and similar) {{{1
-if [[ -r $ZDOTDIR/aliases ]]; then . $ZDOTDIR/aliases; fi
-if [[ -r $ZDOTDIR/private ]]; then . $ZDOTDIR/private; fi
+for file in                                                         \
+    $ZDOTDIR/aliases                                                \
+    $ZDOTDIR/private                                                \
+    $BREW/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+  ; do
+  if [[ -r $file ]]; then source $file; fi
+done
+
 if [[ -r $BREW/etc/profile.d/z.sh ]]; then
   # read man z
   _Z_CMD=j . $BREW/etc/profile.d/z.sh
@@ -37,24 +61,6 @@ elif [[ -r $BREW/etc/autojump.sh ]]; then
   #export AUTOJUMP_KEEP_SYMLINKS=1
   . $BREW/etc/autojump.sh
 fi
-
-# zsh arrays (fignore, fpath) {{{1
-
-# file endings to ignore for completion
-fignore=(${fignore[@]} '~' .o .bak .swp)
-
-# zle stuff
-zle_highlight=(region:bg=green special:bg=blue suffix:fg=red isearch:fg=yellow)
-
-# functions for completion
-for trypath in \
-    /usr/local/share/zsh-completions \
-    $ZDOTDIR/functions \
-  ; do
-  if [[ -d $trypath ]]; then
-    fpath=($trypath $fpath)
-  fi
-done
 
 # prompt {{{1
 # functions for the prompt {{{2
@@ -90,7 +96,7 @@ fi
 
 # contolling the history
 HISTFILE=$ZDOTDIR/histfile
-HISTSIZE=10000
+HISTSIZE=15000
 SAVEHIST=10000
 setopt hist_ignore_all_dups
 setopt hist_expire_dups_first
@@ -99,6 +105,8 @@ setopt hist_reduce_blanks
 setopt hist_save_no_dups
 setopt hist_ignore_space
 #setopt hist_verify
+setopt share_history
+setopt extended_history
 
 # options
 setopt extended_glob
@@ -157,12 +165,14 @@ fi
 
 # layout {{{2
 
-zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' list-prompt \
+  %SAt %p: Hit TAB for more, or the character to insert%s
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' file-sort name
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' menu select=long
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' select-prompt \
+  %SScrolling active: current selection at %p%s
 
 # performemce {{{2
 
@@ -178,7 +188,8 @@ zstyle ':completion:*' ignore-parents parent pwd ..
 #TODO
 zstyle ':completion:*:cd:*' ignored-patterns .
 zstyle ':completion:*' list-suffixes true
-zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
+zstyle ':completion:*' matcher-list \
+  '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
 zstyle ':completion:*' original false
 zstyle ':completion:*' squeeze-slashes true
 zstyle ':completion:*' verbose true
@@ -209,16 +220,20 @@ hosts=(
   ${=${${(f)"$(cat {/etc/ssh_,{~/.ssh/,/var/lib/misc/ssh_}known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ }
   ${${(@M)${(f)"$(cat ~/.netrc(N) /dev/null)"}:#machine *}#machine }
 )
+# remove entries which are just an ip address
+hosts=(${hosts//<->.<->.<->.<->/})
+
 if [[ $#hosts -gt 0 ]]; then
   zstyle ':completion:*:hosts' hosts $hosts
   # from http://serverfault.com/questions/170346
   #zstyle ':completion:*:ssh:*' hosts $hosts
   #zstyle ':completion:*:slogin:*' hosts $hosts
-  zstyle ':completion:*(ssh|scp):*:users' ignored-patterns daemon _*
 fi
+zstyle ':completion:*(ssh|scp):*:users' ignored-patterns daemon _*
 
-# TODO
-# from https://maze.io/2008/08/03/remote-tabcompletion-using-openssh-and-zsh {{{3
+# TODO {{{3
+# from
+# https://maze.io/2008/08/03/remote-tabcompletion-using-openssh-and-zsh
 ## ssh, scp, ping, host
 #zstyle ':completion:*:scp:*' tag-order \
 #      'hosts:-host hosts:-domain:domain hosts:-ipaddr:IP\ address *'
@@ -278,6 +293,7 @@ function +vi-git-add-untracked-files () {
 autoload -Uz compinit
 compinit
 compdef gpg2=gpg
+compdef colordiff=diff
 
 # aoutoloading stuff {{{1
 autoload colors
@@ -301,5 +317,7 @@ zmodload zsh/sched
 zmodload zsh/zprof
 
 #  unset local variables and last steps {{{1
-source $BREW/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 unset BREW
+
+# display todo items to the user {{{1
+todo.sh list
