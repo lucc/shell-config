@@ -25,11 +25,11 @@ alias nload='nload -i 6144 -o 1024'
 alias diff=colordiff
 
 # view documentation {{{2
-alias info='transparent-gvim.sh --info'
+#alias info='transparent-gvim.sh --info'
 #alias man='transparent-gvim.sh --man'
-alias perldoc='transparent-gvim.sh --perldoc'
-alias phpdoc='transparent-gvim.sh --php'
-alias pydoc='transparent-gvim.sh --pydoc'
+#alias perldoc='transparent-gvim.sh --perldoc'
+#alias phpdoc='transparent-gvim.sh --php'
+#alias pydoc='transparent-gvim.sh --pydoc'
 
 # searching the internet {{{2
 alias c:='internet_search.sh -f'
@@ -74,6 +74,7 @@ alias D='date +%F'
 alias m=ncmpcpp
 alias play='mpc play'
 alias pause='mpc pause'
+alias p='mpc toggle'
 
 alias hgrep='history 1 | grep'
 alias histhead='history 1 | \
@@ -84,6 +85,10 @@ alias -s com=urlopen
 alias -s org=urlopen
 alias -s net=urlopen
 alias -s de=urlopen
+
+alias -- +='todo.sh add'
+alias -- ++='todo.sh list'
+alias -- '+-=todo.sh do'
 
 # alias (system specific) {{{1
 
@@ -287,3 +292,4 @@ comp () { #{{{2
   time ( for ((i=0; i<${3:-10}; i++)); do $2; done > /dev/null 2>&1 )
   setopt $oldshwordsplit
 }
+
