@@ -54,6 +54,12 @@ alias up='date +"%F `uptime`"'
 alias bk='backup.make fullbk'
 alias uz=aunpack
 
+# music {{{2
+alias m=ncmpcpp
+alias play='mpc play'
+alias pause='mpc pause'
+alias p='mpc toggle'
+
 # other {{{2
 alias ctw-muc='ctw GMXX0087'
 alias garbage='while ! read -t 1; do
@@ -64,17 +70,16 @@ alias garbage='while ! read -t 1; do
 alias gtype='gtypist ktde.typ'
 alias tex=latexmk
 #alias tmp='cd ~/tmp'
+
 alias maillog='cat ~/log/fetchmail.log | tail'
 alias maillog='syslog -k Sender fetchmail -k Time ge -1h | tail'
 alias mlog='syslog -k Sender fetchmail -k Time ge -10m'
 alias mlog='syslog -k Sender com.apple.launchd.peruser.$UID -k Time ge -10m'
 alias mail='mail||mutt'
+
 alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
 alias D='date +%F'
-alias m=ncmpcpp
-alias play='mpc play'
-alias pause='mpc pause'
-alias p='mpc toggle'
+
 
 alias hgrep='history 1 | grep'
 alias histhead='history 1 | \
@@ -291,5 +296,13 @@ comp () { #{{{2
   printf 2
   time ( for ((i=0; i<${3:-10}; i++)); do $2; done > /dev/null 2>&1 )
   setopt $oldshwordsplit
+}
+
+fixperm () { #{{{2
+  if [ $# -eq 0 ]; then set .; fi
+  find "$@"                                \
+    \( -type f -exec chmod 600 {} + \) -or \
+    \( -type d -exec chmod 700 {} + \)
+  xattr -rd com.apple.quarantine "$@"
 }
 

@@ -320,4 +320,4 @@ zmodload zsh/zprof
 unset BREW
 
 # display todo items to the user {{{1
-todo.sh list
+#todo.sh list
