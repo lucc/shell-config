@@ -81,7 +81,7 @@ fi
 
 export EDITOR="transparent-gvim.sh --tab '+call luc.misc.RemoteEditor(0)'"
 export HISTSIZE=2000
-export PYTHONSTARTUP=~/.pystartup
+export PYTHONSTARTUP=~/.config/shell/pystartup
 
 # systems specific
 ##################

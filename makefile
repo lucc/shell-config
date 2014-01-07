@@ -11,7 +11,6 @@ CONFIGS = \
 	  latexmkrc$(SEP).latexmkrc     \
 	  nload$(SEP).nload             \
 	  profile$(SEP).profile         \
-	  pystartup$(SEP).pystartup     \
 	  rtorrent.rc$(SEP).rtorrent.rc \
 	  tmux.conf$(SEP).tmux.conf     \
 	  zshenv$(SEP).zshenv           \
