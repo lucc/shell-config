@@ -9,7 +9,7 @@
 
 # PATH and INFOPATH
 ###################
-if [ `uname` = Darwin ]; then
+if [ `uname` = Darwin ]; then
   if [ "$ZSH_NAME" = zsh ]; then setopt SH_WORD_SPLIT; fi
   set_var_from_file () {
     # The file should contain the values for the variable one per line. They
