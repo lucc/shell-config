@@ -41,7 +41,7 @@ fi
 # all systems
 #############
 # pager stuff
-PAGER=`command which vimpager most | head -1`
+PAGER=`command which vimpager most 2>/dev/null | head -1`
 if [ -n $PAGER ]; then
   export PAGER
 else
