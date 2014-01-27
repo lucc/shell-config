@@ -46,7 +46,7 @@ done
 
 if [[ -r $BREW/etc/profile.d/z.sh ]]; then
   # read man z
-  _Z_CMD=j . $BREW/etc/profile.d/z.sh
+  _Z_CMD=j source $BREW/etc/profile.d/z.sh
   autoload add-zsh-hook
   add-zsh-hook chpwd _z_precmd
   unalias j
@@ -56,10 +56,10 @@ if [[ -r $BREW/etc/profile.d/z.sh ]]; then
   }
 elif [[ -r /usr/share/autojump/autojump.sh ]]; then
   #export AUTOJUMP_KEEP_SYMLINKS=1
-  . /usr/share/autojump/autojump.sh
+  source /usr/share/autojump/autojump.sh
 elif [[ -r $BREW/etc/autojump.sh ]]; then
   #export AUTOJUMP_KEEP_SYMLINKS=1
-  . $BREW/etc/autojump.sh
+  source $BREW/etc/autojump.sh
 fi
 
 # prompt {{{1
@@ -76,7 +76,8 @@ function right-prompt-function () {
 
 #function chpwd () { _z --add "$(pwd -P)"; }
 #function precmd () { _z --add "$(pwd -P)"; }
-precmd () { vcs_info }
+add-zsh-hook precmd vcs_info
+#precmd () { vcs_info }
 
 # main prompt {{{2
 
@@ -135,6 +136,7 @@ bindkey -M viins '\e[B' down-line-or-search
 bindkey -M vicmd '\e[B' down-line-or-search
 
 if [[ `uname` = Darwin ]]; then
+  # FIXME: how can I communicate this through a ssh session?
   bindkey -M viins '\e[H' beginning-of-line
   bindkey -M vicmd '\e[H' beginning-of-line
   bindkey -M viins '\e[F' end-of-line
@@ -158,6 +160,16 @@ elif [[ `uname` = Linux ]]; then
     bindkey -M vicmd '\eOH' beginning-of-line
     bindkey -M viins '\eOF' end-of-line
     bindkey -M vicmd '\eOF' end-of-line
+  fi
+  if [[ -r /etc/arch-release ]] && [[ -n "$SSH_CLIENT" -a -n "$SSH_CONNECTION" -a -n "$SSH_TTY" ]]; then
+    bindkey -M viins '\e[H' beginning-of-line
+    bindkey -M vicmd '\e[H' beginning-of-line
+    bindkey -M viins '\e[F' end-of-line
+    bindkey -M vicmd '\e[F' end-of-line
+    bindkey -M viins '\e[1;2C' vi-forward-word
+    bindkey -M vicmd '\e[1;2C' vi-forward-word
+    bindkey -M viins '\e[1;2D' vi-backward-word
+    bindkey -M vicmd '\e[1;2D' vi-backward-word
   fi
 fi
 
