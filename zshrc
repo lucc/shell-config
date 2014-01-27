@@ -44,6 +44,9 @@ for file in                                                         \
   if [[ -r $file ]]; then source $file; fi
 done
 
+# tempfix, wrong place
+autoload add-zsh-hook
+
 if [[ -r $BREW/etc/profile.d/z.sh ]]; then
   # read man z
   _Z_CMD=j source $BREW/etc/profile.d/z.sh
@@ -161,7 +164,7 @@ elif [[ `uname` = Linux ]]; then
     bindkey -M viins '\eOF' end-of-line
     bindkey -M vicmd '\eOF' end-of-line
   fi
-  if [[ -r /etc/arch-release ]] && [[ -n "$SSH_CLIENT" -a -n "$SSH_CONNECTION" -a -n "$SSH_TTY" ]]; then
+  if [[ -r /etc/arch-release ]] && [[ ! -z "$SSH_CLIENT" && ! -z "$SSH_CONNECTION" && ! -z "$SSH_TTY" ]]; then
     bindkey -M viins '\e[H' beginning-of-line
     bindkey -M vicmd '\e[H' beginning-of-line
     bindkey -M viins '\e[F' end-of-line
