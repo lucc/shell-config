@@ -67,7 +67,7 @@ shopt -s checkwinsize 	# check window size after a process completes
 shopt -u force_fignore 	# don't complete w/ <TAB> iff other files available
 shopt -s extglob 	# ?: "<=1", *: "any", +: "<0", @: "=", !: "not"
 #shopt -s gnu_errfmt 	# what would it do??
-#shopt -s hostcomplete 	# why is this sop buggy??
+#shopt -s hostcomplete 	# why is this so buggy??
 
 ##############################################################################
 # TODO
@@ -118,12 +118,14 @@ h () {
 	  case `file --mime --dereference --brief "$FILE"` in
 	    text/*|application/x-sh)
 	      if [ 50 -gt `wc -l <"$FILE"` ]; then cat "$FILE"
-	      else echo "$FILE is quite a long text file. I will not cat it."
+	      else
+		echo "$FILE is quite a long text file. I will not cat it."
+		echo "You can manually run 'cat $FILE'."
 	      fi
 	      ;;
 	    application/*)
-	      echo "$FILE is a compiled executable or unsupported format."
-	      echo "It does not have a man page installed. Try '$FILE --help' or '-h'."
+	      echo "$FILE is a compiled executable or unsupported format but"
+	      echo "no man page is installed. Try '$FILE --help' or '-h'."
 	      ;;
 	  esac
 	fi
