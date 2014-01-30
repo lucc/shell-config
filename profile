@@ -308,12 +308,29 @@ case "`uname`" in
 esac
 
 # unset all functions again
-unset -f                      \
-  system_arch_linux           \
-  system_mac_osx              \
-  system_open_bsd             \
-  set_var_from_file           \
-  export_standard_env         \
-  export_PAGER                \
-  export_DISPLAY              \
-  export_GPG_AGENT_INFO       \
+# FIXME:
+# This list can be automated with
+#   unset -f `grep '^.* () {$' "$0" | cut -f 1 -d \(`
+# with the only problem that $0 only works in executed scripts and there
+# doesn't seem to be an equivalent for sourced scripts.
+unset -f                        \
+  add_to_var                    \
+  default_profile_on_mint_linux \
+  export_DISPLAY                \
+  export_GPG_AGENT_INFO         \
+  export_PAGER                  \
+  export_PATH                   \
+  export_standard_env           \
+  export_to_launchd             \
+  host_ifi                      \
+  host_math                     \
+  set_infopath                  \
+  set_manpath                   \
+  set_var_from_file             \
+  shell_test_bash               \
+  shell_test_zsh                \
+  sort_pathlike_string          \
+  source_rc_file                \
+  system_arch_linux             \
+  system_mac_osx                \
+  system_open_bsd               \
