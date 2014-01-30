@@ -10,6 +10,8 @@
 #
 # Many thanks to these people for helpful information:
 # [1] http://www.novell.com/coolsolutions/feature/11251.html
+# [2] http://crunchbanglinux.org/forums/topic/1093/post-your-bashrc/
+# [3] http://bodhizazen.net/Tutorials/envrc
 #
 # TODO:  call the code in the correct order such that PATH is set correctly
 # whenever needed.
@@ -104,7 +106,7 @@ set_var_from_file () {
   # colon delimited.
   local var="$1" file="$2" item=
   # get the original value of the variable
-  eval local tmp='$'"$var"
+  eval local tmp=\$"$var"
   cat "$file" | while read line; do
     # if line starts with # discard it
     if echo "$line" | grep '^[[:space:]]*#' >/dev/null ; then continue; fi
@@ -114,10 +116,8 @@ set_var_from_file () {
     # only add existing dirs
     if [ -d "$item" ]; then tmp="$item:$tmp"; fi
   done
-  # remove all duplicates
-  tmp="`printf %s "$tmp" | awk -v RS=: -v ORS=: '!path[$0]{path[$0]=1;print}'`"
-  # export the result
-  eval export "$var=${tmp%:}"
+  # remove all duplicates, export the result
+  eval export "$var=`sort_pathlike_string $tmp`"
 }
 add_to_var () {
   local varname="$1"
@@ -230,6 +230,7 @@ export_DISPLAY () {
   fi
 }
 export_GPG_AGENT_INFO () {
+  # this should be system independent
   if [ -r "$HOME/.gpg-agent-info" ]; then
     . "$HOME/.gpg-agent-info"
     export GPG_AGENT_INFO
@@ -262,6 +263,7 @@ set_infopath () {
 export_standard_env
 export_PATH
 export_PAGER
+export_GPG_AGENT_INFO
 
 # select the correct functions for this system
 case "`uname`" in
@@ -298,7 +300,7 @@ case "`uname`" in
     ;;
   Darwin) # MacOS X
     system_mac_osx
-    if [ "$1" = --launchd -o "$1" = launchd ]; then
+    if [ "$1" = --launchd ] || [ "$1" = launchd ]; then
       export_to_launchd
     fi
     ;;
