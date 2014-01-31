@@ -5,6 +5,7 @@
 #               with zsh and might not work with any other shell.
 # credits:	many thanks to the people from
 #		http://crunchbanglinux.org/forums/topic/1093/post-your-bashrc/
+# TODO: merge into zshrc
 
 # general aliases {{{1
 alias cp='cp -ip'
