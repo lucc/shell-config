@@ -12,6 +12,19 @@
 # and the zsh manual:
 #          http://zsh.sourceforge.net/Doc/
 
+# TODO: from bashrc {{{1
+## make less more friendly for non-text input files, see lesspipe(1)
+#if [[ -x /usr/bin/lesspipe ]]; then eval "$(lesspipe)"
+#elif [[ -x $BREW/bin/lesspipe.sh ]]; then eval "$(lesspipe.sh)"
+#fi
+# TODO: from bashrc {{{1
+#if [[ -r $BREW/etc/bash_completion ]]; then . $BREW/etc/bash_completion; fi
+# TODO: from bashrc {{{1
+#if [[ -r $BREW/etc/profile.d/z.sh ]]; then _Z_CMD=j . $BREW/etc/profile.d/z.sh; fi
+# TODO: from bashrc {{{1
+# this and dircolors in general
+#if [ "$TERM" != "dumb" ]; then eval "`dircolors -b`"; fi
+
 # local variables (unset at eof) {{{1
 # This variable will expand to the nullstring if we are not on Mac OS X or
 # brew is not installed.
