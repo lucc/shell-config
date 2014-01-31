@@ -1,0 +1,30 @@
+# vim: filetype=zsh
+
+color_field () { printf "$fg[$1]$2$reset_color $3\n" "$@[4,-1]"; }
+blue () { printf "$fg[blue]$1$reset_color $2\n" "$@[3,-1]"; }
+green () { printf "$fg[green]$1$reset_color $2\n" "$@[3,-1]"; }
+clear
+blue Date: `date +"%F %H:%M:%S"`
+echo -n "$fg[blue]Uptime:$reset_color "
+uptime | sed -E 's/[ 0-9:]*up ([0-9days,.: ]*), [0-9]* user.*/\1/;s/ +/ /g'
+echo
+green Machine
+blue Host: `hostname`
+blue Arch: `machine`
+echo
+green System
+blue Kern: `uname -s`
+blue Vers: `uname -r`
+echo
+green Shell
+blue Shell: `ps -o command= -p $$`
+blue Running: %02d:%02d:%02d $((SECONDS/3600%24)) $((SECONDS/60%60)) \
+  $((SECONDS%60))
+blue SHLVL: $SHLVL
+echo -n "$fg[blue]Jobs:$reset_color"
+if [ `jobs|wc -l` -ne 0 ]; then echo; jobs; else echo " None"; fi
+echo ""
+green Processes
+pstree `ps -o ppid= $$`
+w | tail +3
+

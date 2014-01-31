@@ -1,0 +1,26 @@
+# vim: filetype=zsh
+
+clear
+date +"$fg[red]Date:$reset_color %F %H:%M:%S$reset_color"
+echo "$fg[red]Uptime:$reset_color `uptime | \
+  sed -E 's/[ 0-9:]*up ([0-9days,.: ]*), [0-9]* user.*/\1/;s/ +/ /g'`"
+echo ""
+echo "$fg[green]Machine$reset_color"
+echo "$fg[green]Host:$reset_color `hostname`"
+echo "$fg[green]Arch:$reset_color `machine`"
+echo ""
+echo "$fg[blue]System$reset_color"
+echo "$fg[blue]Kern:$reset_color `uname -s`"
+echo "$fg[blue]Vers:$reset_color `uname -r`"
+echo ""
+echo "$fg[yellow]Shell$reset_color"
+echo "$fg[yellow]Shell:$reset_color `ps -o command= -p $$`"
+printf "$fg[yellow]Running:$reset_color %02d:%02d:%02d\n" $((SECONDS/3600%24)) $((SECONDS/60%60)) \
+  $((SECONDS%60))
+echo "$fg[yellow]SHLVL:$reset_color $SHLVL"
+echo -n "$fg[yellow]Jobs in backround:$reset_color"
+if [ `jobs|wc -l` -ne 0 ]; then echo; jobs; else echo " None"; fi
+echo ""
+echo "$fg[magenta]Processes$reset_color"
+pstree `ps -o ppid= $$`
+w | tail +3
