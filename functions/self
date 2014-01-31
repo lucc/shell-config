@@ -1,0 +1,16 @@
+# vim: filetype=zsh
+
+date +"%F %H:%M:%S `hostname` is running `uname -sr`"
+#echo;
+w
+#echo;
+echo -n "`ps -o command= -p $$`: running for "
+if [ $SECONDS -gt $((24*3600)) ]; then
+  echo -n "$(($SECONDS/3600/24)) days and "
+fi
+printf "%02d:%02d:%02d (SHLVL=$SHLVL)\n" $((SECONDS/3600%24)) \
+  $((SECONDS/60%60)) $((SECONDS%60))
+#echo
+echo "Jobs in backround:"
+if [ `jobs|wc -l` -ne 0 ]; then jobs; else echo "None"; fi
+

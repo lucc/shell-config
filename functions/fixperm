@@ -1,0 +1,6 @@
+# vim: ft=zsh
+if [ $# -eq 0 ]; then set .; fi
+find "$@"                                \
+  \( -type f -exec chmod 600 {} + \) -or \
+  \( -type d -exec chmod 700 {} + \)
+xattr -rd com.apple.quarantine "$@"
