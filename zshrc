@@ -333,6 +333,3 @@ zmodload zsh/zprof
 
 #  unset local variables and last steps {{{1
 unset BREW
-
-# display todo items to the user {{{1
-#todo.sh list

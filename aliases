@@ -6,9 +6,7 @@
 # credits:	many thanks to the people from
 #		http://crunchbanglinux.org/forums/topic/1093/post-your-bashrc/
 
-# alias (all systems) {{{1
-
-# general aliases {{{2
+# general aliases {{{1
 alias cp='cp -ip'
 alias grep='grep --color=auto'
 #alias l='ls -l --time-style=full-iso'
@@ -24,14 +22,14 @@ alias mkdir='mkdir -p'
 alias nload='nload -i 6144 -o 1024'
 alias diff=colordiff
 
-# view documentation {{{2
+# view documentation {{{1
 #alias info='transparent-gvim.sh --info'
 #alias man='transparent-gvim.sh --man'
 #alias perldoc='transparent-gvim.sh --perldoc'
 #alias phpdoc='transparent-gvim.sh --php'
 #alias pydoc='transparent-gvim.sh --pydoc'
 
-# searching the internet {{{2
+# searching the internet {{{1
 alias c:='internet_search.sh -f'
 alias g:='internet_search.sh -g'
 alias l:='internet_search.sh -l'
@@ -41,11 +39,11 @@ alias s='internet_search.sh -d'
 alias q='internet_search.sh -d'
 alias ip='curl --silent http://luc42.lima-city.de/ip.php'
 
-# connecting to remote servers {{{2
+# connecting to remote servers {{{1
 alias lima='ftp ftp.lima-city.de'
 alias limalog="PAGER=/bin/cat ftp -Vi ftp.lima-city.de <<<more\ .log$'\n'quit"
 
-# backup and statistics {{{2
+# backup and statistics {{{1
 alias b='battery.sh -v'
 alias t='statistics.sh -td ~'
 alias tbz2='tar -cjv --exclude .DS_Store'
@@ -54,13 +52,13 @@ alias up='date +"%F `uptime`"'
 alias bk='backup.make fullbk'
 alias uz=aunpack
 
-# music {{{2
+# music {{{1
 alias m=ncmpcpp
 alias play='mpc play'
 alias pause='mpc pause'
 alias p='mpc toggle'
 
-# other {{{2
+# other {{{1
 alias ctw-muc='ctw GMXX0087'
 alias garbage='while ! read -t 1; do
 		 head -c 1000000 /dev/random | \
@@ -95,9 +93,8 @@ alias -- +='todo.sh add'
 alias -- ++='todo.sh list'
 alias -- '+-=todo.sh do'
 
-# alias (system specific) {{{1
-
-if [ `uname` = "Darwin" ] ; then # (Mac OS X, 10.6) {{{2
+# Mac OS X specific aliases {{{1
+if [ `uname` = Darwin ] ; then
   alias dl='cd $HOME/Downloads && wget'
   #play go
   alias igo='(wine c:/Program\ Files/igowin/igowin.exe &) >/dev/null 2>&1'
@@ -119,7 +116,8 @@ if [ `uname` = "Darwin" ] ; then # (Mac OS X, 10.6) {{{2
     alias -s pdf=open
     alias e='for v in ~v/*~/Volumes/System(N); diskutil unmount $v'
     urlopen () { open "http://$*"; }
-elif [ `uname` = Linux ]; then #{{{2
+# Linux specific aliases {{{1
+elif [ `uname` = Linux ]; then
   alias pstree='pstree -n'
 fi
 
