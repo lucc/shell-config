@@ -20,8 +20,6 @@
 # TODO: from bashrc {{{1
 #if [[ -r $BREW/etc/bash_completion ]]; then . $BREW/etc/bash_completion; fi
 # TODO: from bashrc {{{1
-#if [[ -r $BREW/etc/profile.d/z.sh ]]; then _Z_CMD=j . $BREW/etc/profile.d/z.sh; fi
-# TODO: from bashrc {{{1
 # this and dircolors in general
 #if [ "$TERM" != "dumb" ]; then eval "`dircolors -b`"; fi
 
@@ -83,6 +81,7 @@ done
 # tempfix, wrong place
 autoload add-zsh-hook
 
+# autojump or similar {{{2
 if [[ -r $BREW/etc/profile.d/z.sh ]]; then
   # read man z
   _Z_CMD=j source $BREW/etc/profile.d/z.sh
@@ -123,7 +122,7 @@ function date-in-different-time-zone () {
   if [[ $(date +%F) != $(TZ=$timezone date +%F) ]]; then
     TZ=$timezone date +%F
   fi
-  TZ=$timezone date +%H:%M:%S
+  TZ=$timezone date +%H:%M
 }
 
 #function chpwd () { _z --add "$(pwd -P)"; }
@@ -134,14 +133,31 @@ add-zsh-hook precmd vcs_info
 # main prompt {{{2
 
 # PS1 prompt
-PS1="[ %(!.%F{red}.%F{green})%n%F{cyan}@%F{blue}%m%f | %F{cyan}%1~%f | %D{%H:%M:%S} ] "
+PS1='[ '                                               # frame
+PS1+='%(!.%F{red}.%F{green})'                          # user=green, root=red
+PS1+='%n%F{cyan}@%F{blue}%m%f'                         # user and host info
+PS1+=' | '                                             # delimiter
+PS1+='%F{cyan}%1~%f'                                   # working directory
+PS1+=' | '                                             # delimiter
+#PS1+='%D{%H:%M:%S}'                                    # current time
+PS1+='%D{%H:%M:%S} (BKK: $(TZ=Asia/Bangkok date +%R))' # current time+Bangkok
+PS1+=' ] '                                             # frame
 
 # RPS1 prompt
-RPROMPT='%(?.$(right-prompt-function).%F{red}Error: %?)'
+RPROMPT='%(?.'                      # if $? = 0
+RPROMPT+='$vcs_info_msg_0_ '        #   info about version control system
+if [[ $(uname) = Darwin ]]; then    #   if OS X
+  RPROMPT+='$(battery.sh -bce zsh)' #	  battery information
+fi                                  #   fi
+RPROMPT+='.'                        # else
+RPROMPT+='%F{red}Error: %?'         #   error message
+RPROMPT+=')'                        # fi
 
 # If we are in Conque Term inside Vim use a different prompt
-if [[ "$CONQUE" -eq 1 ]]; then
-  PS1="[ %F{green}%n%F{cyan}@%F{blue}%m%f | %F{cyan}%1~%f | %(?.%D{%H:%M:%S}.%F{red}Error %?%f) ] "
+if [[ $CONQUE -eq 1 ]]; then
+  PS1='[ %F{green}%n%F{cyan}@%F{blue}%m%f '       # user and host info
+  PS1+='| %F{cyan}%1~%f '                         # working directory
+  PS1+='| %(?.%D{%H:%M:%S}.%F{red}Error %?%f) ] ' # curren time or error
   unset RPROMPT
 fi
 
