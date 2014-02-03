@@ -48,6 +48,27 @@ for trypath in                       \
   fi
 done
 
+# $PATH {{{1
+for dir in /usr/local/MacGPG2/bin                            \
+           /Applications/LilyPond.app/Contents/Resources/bin \
+           /usr/local/share/python3                          \
+           /usr/texbin                                       \
+           /sbin                                             \
+           /bin                                              \
+           /usr/bin                                          \
+           /usr/sbin                                         \
+           /usr/local/bin                                    \
+           /usr/local/sbin                                   \
+           /opt/X11/bin                                      \
+           /usr/X11/bin                                      \
+           /Users/luc/src/shell                              \
+	   /Users/luc/.cabal/bin                             \
+  ; do
+  if [[ -d $dir && $PATH != *$dir* ]]; then
+    PATH=$dir:$PATH
+  fi
+done
+
 # files to be sourced (and similar) {{{1
 for file in                                                         \
     $ZDOTDIR/aliases                                                \
@@ -84,7 +105,7 @@ fi
 # functions to dispay info in the prompts
 function right-prompt-function () {
   if [[ `uname` = Darwin ]]; then
-    echo "${vcs_info_msg_0_} `battery.sh -bce zsh`"
+    echo "${vcs_info_msg_0_} `battery.sh -ubce zsh`"
   else
     echo "$vcs_info_msg_0_"
   fi
