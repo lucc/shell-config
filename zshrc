@@ -48,7 +48,30 @@ for trypath in                       \
   fi
 done
 
+# $PATH {{{1
+#for dir in /usr/local/MacGPG2/bin                            \
+#           /Applications/LilyPond.app/Contents/Resources/bin \
+#           /usr/local/share/python3                          \
+#           /usr/texbin                                       \
+#           /sbin                                             \
+#           /bin                                              \
+#           /usr/bin                                          \
+#           /usr/sbin                                         \
+#           /usr/local/bin                                    \
+#           /usr/local/sbin                                   \
+#           /opt/X11/bin                                      \
+#           /usr/X11/bin                                      \
+#           /Users/luc/src/shell                              \
+#           /Users/luc/.cabal/bin                             \
+#  ; do
+#  if [[ -d $dir && $PATH != *$dir* ]]; then
+#    PATH=$dir:$PATH
+#  fi
+#done
+
 # files to be sourced (and similar) {{{1
+[[ -r ~/.profile ]] && source ~/.profile
+
 for file in                                                         \
     $ZDOTDIR/aliases                                                \
     $ZDOTDIR/private                                                \

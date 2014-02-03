@@ -18,7 +18,12 @@
 # TODO:  parse command line to be able to call this script with arguments
 
 # If not running interactively, don't do anything
-[ -z "$PS1" ] && return
+if [ `uname` = Darwin ] && [ "$1" = --launchd ]; then
+  : # TODO
+  echo 'TODO!' >&2
+elif [ -z "$PS1" ]; then
+  return
+fi
 
 default_profile_on_mint_linux () {
   # ~/.profile: executed by the command interpreter for login shells.
@@ -47,6 +52,7 @@ default_profile_on_mint_linux () {
 # We will now define several functions to set up the correct environment for
 # different systems.
 system_arch_linux () {
+  :
 }
 system_mac_osx () {
   for file in ~/.config/env/*; do set_var_from_file "${file##*/}" "$file"; done
@@ -92,6 +98,7 @@ host_math () {
   fi
 }
 host_ifi () {
+  :
 }
 # helper function
 sort_pathlike_string () {
@@ -300,7 +307,7 @@ case "`uname`" in
     ;;
   Darwin) # MacOS X
     system_mac_osx
-    if [ "$1" = --launchd ] || [ "$1" = launchd ]; then
+    if [ "$1" = --launchd ] || [ "$1" = launchd ]; then
       export_to_launchd
     fi
     ;;
