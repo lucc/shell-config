@@ -70,11 +70,24 @@ fi
 
 # functions to dispay info in the prompts
 function right-prompt-function () {
-  if [[ `uname` = Darwin ]]; then
-    echo "${vcs_info_msg_0_} `battery.sh -bce zsh`"
-  else
-    echo "$vcs_info_msg_0_"
+  echo -n $vcs_info_msg_0_
+  [[ $(uname) = Darwin ]] && echo -n " $(battery.sh -bce zsh)"
+  echo -n \ BKK: $(date-in-different-time-zone Asia/Bangkok)
+
+  #if [[ `uname` = Darwin ]]; then
+  #  echo "${vcs_info_msg_0_} `battery.sh -bce zsh`"
+  #else
+  #  echo "$vcs_info_msg_0_"
+  #fi
+  #echo Simone: $(date-in-different-time-zone Asia/Bangkok)
+}
+
+function date-in-different-time-zone () {
+  local timezone=$1
+  if [[ $(date +%F) != $(TZ=$timezone date +%F) ]]; then
+    TZ=$timezone date +%F
   fi
+  TZ=$timezone date +%H:%M:%S
 }
 
 #function chpwd () { _z --add "$(pwd -P)"; }
