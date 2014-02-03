@@ -36,7 +36,7 @@ fignore=($fignore '~' .o .bak '.sw?')
 # zle stuff
 zle_highlight=(region:bg=green special:bg=blue suffix:fg=red isearch:fg=yellow)
 
-# functions for completion
+# functions for completion and user defined functions
 for trypath in                       \
     /usr/local/share/zsh-completions \
     $ZDOTDIR/functions               \
@@ -46,28 +46,18 @@ for trypath in                       \
   fi
 done
 
-# $PATH {{{1
-#for dir in /usr/local/MacGPG2/bin                            \
-#           /Applications/LilyPond.app/Contents/Resources/bin \
-#           /usr/local/share/python3                          \
-#           /usr/texbin                                       \
-#           /sbin                                             \
-#           /bin                                              \
-#           /usr/bin                                          \
-#           /usr/sbin                                         \
-#           /usr/local/bin                                    \
-#           /usr/local/sbin                                   \
-#           /opt/X11/bin                                      \
-#           /usr/X11/bin                                      \
-#           /Users/luc/src/shell                              \
-#           /Users/luc/.cabal/bin                             \
-#  ; do
-#  if [[ -d $dir && $PATH != *$dir* ]]; then
-#    PATH=$dir:$PATH
-#  fi
-#done
+# autoloading and modules {{{1
+autoload -Uz add-zsh-hook
+autoload -Uz colors && colors
+#autoload -Uz checkmail
+autoload -Uz run-help
+autoload -Uz vcs_info
+autoload -Uz compinit
 
-# files to be sourced (and similar) {{{1
+zmodload zsh/sched
+zmodload zsh/zprof
+
+# files to be sourced {{{1
 [[ -r ~/.profile ]] && source ~/.profile
 
 for file in                                                         \
@@ -78,17 +68,12 @@ for file in                                                         \
   if [[ -r $file ]]; then source $file; fi
 done
 
-# tempfix, wrong place
-autoload add-zsh-hook
-
 # autojump or similar {{{2
 if [[ -r $BREW/etc/profile.d/z.sh ]]; then
   # read man z
   _Z_CMD=j source $BREW/etc/profile.d/z.sh
-  autoload add-zsh-hook
   add-zsh-hook chpwd _z_precmd
   unalias j
-  autoload colors && colors
   function j () {
     _z $@ 2>&1 && echo $fg[red]`pwd`$reset_color
   }
@@ -315,7 +300,6 @@ zstyle ':completion:*:(ssh|scp):*:hosts-ipaddr' ignored-patterns \
 #      )'
 
 # VCS stuff {{{2
-autoload -Uz vcs_info
 zstyle ':vcs_info:*' actionformats '%F{cyan}%s%F{green}%c%u%b%F{blue}%a%f'
 ####TODO
 zstyle ':vcs_info:*' formats       '%F{cyan}%s%F{green}%c%u%b%f'
@@ -342,16 +326,11 @@ function +vi-git-add-untracked-files () {
 }
 
 # starting the completion system {{{2
-autoload -Uz compinit
 compinit
 compdef gpg2=gpg
 compdef colordiff=diff
 
-# aoutoloading stuff {{{1
-autoload colors
-#autoload checkmail
-unalias run-help
-autoload run-help
+# run-help and other stuff {{{1
 HELPDIR=~/zsh_help
 bindkey -M viins '\C-h' run-help
 bindkey -M vicmd '\C-h' run-help
@@ -363,10 +342,6 @@ bindkey -M vicmd '\C-h' run-help
 hash -d t=~/tmp
 hash -d u=~/uni
 hash -d v=/Volumes
-
-# load zsh modules {{{1
-zmodload zsh/sched
-zmodload zsh/zprof
 
 #  unset local variables and last steps {{{1
 unset BREW
