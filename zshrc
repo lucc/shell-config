@@ -101,38 +101,10 @@ elif [[ -r $BREW/etc/autojump.sh ]]; then
 fi
 
 # prompt {{{1
-# functions for the prompt {{{2
 
-# functions to dispay info in the prompts
-function right-prompt-function () {
-  echo -n $vcs_info_msg_0_
-  [[ $(uname) = Darwin ]] && echo -n " $(battery.sh -bce zsh)"
-  echo -n \ BKK: $(date-in-different-time-zone Asia/Bangkok)
-
-  #if [[ `uname` = Darwin ]]; then
-  #  echo "${vcs_info_msg_0_} `battery.sh -bce zsh`"
-  #else
-  #  echo "$vcs_info_msg_0_"
-  #fi
-  #echo Simone: $(date-in-different-time-zone Asia/Bangkok)
-}
-
-function date-in-different-time-zone () {
-  local timezone=$1
-  if [[ $(date +%F) != $(TZ=$timezone date +%F) ]]; then
-    TZ=$timezone date +%F
-  fi
-  TZ=$timezone date +%H:%M
-}
-
-#function chpwd () { _z --add "$(pwd -P)"; }
-#function precmd () { _z --add "$(pwd -P)"; }
 add-zsh-hook precmd vcs_info
-#precmd () { vcs_info }
 
-# main prompt {{{2
-
-# PS1 prompt
+# PS1 prompt {{{2
 PS1='[ '                                               # frame
 PS1+='%(!.%F{red}.%F{green})'                          # user=green, root=red
 PS1+='%n%F{cyan}@%F{blue}%m%f'                         # user and host info
@@ -143,7 +115,7 @@ PS1+=' | '                                             # delimiter
 PS1+='%D{%H:%M:%S} (BKK: $(TZ=Asia/Bangkok date +%R))' # current time+Bangkok
 PS1+=' ] '                                             # frame
 
-# RPS1 prompt
+# RPS1 prompt {{{2
 RPROMPT='%(?.'                      # if $? = 0
 RPROMPT+='$vcs_info_msg_0_ '        #   info about version control system
 if [[ $(uname) = Darwin ]]; then    #   if OS X
@@ -153,7 +125,7 @@ RPROMPT+='.'                        # else
 RPROMPT+='%F{red}Error: %?'         #   error message
 RPROMPT+=')'                        # fi
 
-# If we are in Conque Term inside Vim use a different prompt
+# If we are in Conque Term inside Vim use a different prompt {{{2
 if [[ $CONQUE -eq 1 ]]; then
   PS1='[ %F{green}%n%F{cyan}@%F{blue}%m%f '       # user and host info
   PS1+='| %F{cyan}%1~%f '                         # working directory
