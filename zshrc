@@ -91,7 +91,7 @@ if [[ -r $BREW/etc/profile.d/z.sh ]]; then
   unalias j
   autoload colors && colors
   function j () {
-    _z "$@" 2>&1 && echo $fg[red]`pwd`$reset_color
+    _z $@ 2>&1 && echo $fg[red]`pwd`$reset_color
   }
 elif [[ -r /usr/share/autojump/autojump.sh ]]; then
   #export AUTOJUMP_KEEP_SYMLINKS=1
@@ -198,7 +198,7 @@ if [[ `uname` = Darwin ]]; then
   bindkey -M viins '\e[1;2D' vi-backward-word
   bindkey -M vicmd '\e[1;2D' vi-backward-word
 elif [[ `uname` = Linux ]]; then
-  if [[ "$TERM" =~ rxvt ]]; then
+  if [[ $TERM =~ rxvt ]]; then
     bindkey -M viins '\e[7~' beginning-of-line
     bindkey -M vicmd '\e[7~' beginning-of-line
     bindkey -M viins '\e[8~' end-of-line
@@ -213,7 +213,7 @@ elif [[ `uname` = Linux ]]; then
     bindkey -M viins '\eOF' end-of-line
     bindkey -M vicmd '\eOF' end-of-line
   fi
-  if [[ -r /etc/arch-release ]] && [[ ! -z "$SSH_CLIENT" && ! -z "$SSH_CONNECTION" && ! -z "$SSH_TTY" ]]; then
+  if [[ -r /etc/arch-release ]] && [[ ! -z $SSH_CLIENT && ! -z $SSH_CONNECTION && ! -z $SSH_TTY ]]; then
     bindkey -M viins '\e[H' beginning-of-line
     bindkey -M vicmd '\e[H' beginning-of-line
     bindkey -M viins '\e[F' end-of-line
