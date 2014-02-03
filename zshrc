@@ -54,6 +54,9 @@ autoload -Uz run-help
 autoload -Uz vcs_info
 autoload -Uz compinit
 
+# autoloading user defined functions
+autoload -Uz $ZDOTDIR/functions/*(:t)
+
 zmodload zsh/sched
 zmodload zsh/zprof
 
