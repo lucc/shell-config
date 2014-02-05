@@ -13,13 +13,6 @@
 #          http://zsh.sourceforge.net/Doc/
 
 # TODO: from bashrc {{{1
-## make less more friendly for non-text input files, see lesspipe(1)
-#if [[ -x /usr/bin/lesspipe ]]; then eval "$(lesspipe)"
-#elif [[ -x $BREW/bin/lesspipe.sh ]]; then eval "$(lesspipe.sh)"
-#fi
-# TODO: from bashrc {{{1
-#if [[ -r $BREW/etc/bash_completion ]]; then . $BREW/etc/bash_completion; fi
-# TODO: from bashrc {{{1
 # this and dircolors in general
 #if [ "$TERM" != "dumb" ]; then eval "`dircolors -b`"; fi
 
@@ -61,6 +54,7 @@ zmodload zsh/sched
 zmodload zsh/zprof
 
 # files to be sourced {{{1
+#
 [[ -r ~/.profile ]] && source ~/.profile
 
 for file in                                                         \
@@ -70,6 +64,13 @@ for file in                                                         \
   ; do
   if [[ -r $file ]]; then source $file; fi
 done
+
+## make less more friendly for non-text input files, see lesspipe(1)
+if command which -s lesspipe; then
+  eval "$(lesspipe)"
+elif command which -s lesspipe.sh; then
+  eval "$(lesspipe.sh)"
+fi
 
 # autojump or similar {{{2
 if [[ -r $BREW/etc/profile.d/z.sh ]]; then
@@ -99,8 +100,8 @@ PS1+='%n%F{cyan}@%F{blue}%m%f'                         # user and host info
 PS1+=' | '                                             # delimiter
 PS1+='%F{cyan}%1~%f'                                   # working directory
 PS1+=' | '                                             # delimiter
-#PS1+='%D{%H:%M:%S}'                                    # current time
-PS1+='%D{%H:%M:%S} (BKK: $(TZ=Asia/Bangkok date +%R))' # current time+Bangkok
+PS1+='%D{%H:%M:%S}'                                    # current time
+#PS1+='%D{%H:%M:%S} (BKK: $(TZ=Asia/Bangkok date +%R))' # current time+Bangkok
 PS1+=' ] '                                             # frame
 
 # RPS1 prompt {{{2
