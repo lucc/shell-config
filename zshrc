@@ -66,9 +66,9 @@ for file in                                                         \
 done
 
 ## make less more friendly for non-text input files, see lesspipe(1)
-if command which -s lesspipe; then
+if whence -p lesspipe &>/dev/null; then
   eval "$(lesspipe)"
-elif command which -s lesspipe.sh; then
+elif whence -p lesspipe.sh &>/dev/null; then
   eval "$(lesspipe.sh)"
 fi
 

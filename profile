@@ -179,7 +179,7 @@ export_PATH () {
     $HOME/bin                                         \
 }
 export_PAGER () {
-  if command which -s vimpager; then
+  if which vimpager >/dev/null 2>&1; then
     export PAGER=vimpager
   else
     # TODO
