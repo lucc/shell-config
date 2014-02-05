@@ -179,10 +179,10 @@ export_PATH () {
     $HOME/bin                                         \
 }
 export_PAGER () {
-  PAGER=`command which vimpager most 2>/dev/null | head -1`
-  if [ -n $PAGER ]; then
-    export PAGER
+  if command which -s vimpager; then
+    export PAGER=vimpager
   else
+    # TODO
     unset PAGER
     # default pager program should be "less"
     # FIXME this is bash syntax. zsh and sh seem to accept it as well.
