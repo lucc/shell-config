@@ -64,10 +64,10 @@ system_arch_linux () {
   :
 }
 system_mac_osx () {
-  for file in ~/.config/env/*; do set_var_from_file "${file##*/}" "$file"; done
+  #for file in ~/.config/env/*; do set_var_from_file "${file##*/}" "$file"; done
 
   # do not work with ._* files
-  export EDITOR="transparent-gvim.sh --tab '+call luc.misc.RemoteEditor(0)'"
+  export EDITOR='gvim.sh --editor'
   export COPY_EXTENDED_ATTRIBUTES_DISABLE=true
   export BROWSER=browser # script installed with brew (uses "open")
   export LANG=en_US.UTF-8
@@ -173,42 +173,10 @@ source_rc_file () {
 }
 # functions to set environment variables
 export_PATH () {
-  # This function duplicates some of the os and host checks because it has to
-  # be called early for the PATH variable to be set correctly for the other
-  # functions.
-
-  if [ "`uname`" = Darwin ]; then
-    # try to add the bin directory for brew(1). (This will add /bin again, if
-    # bre is not installed)
-    PATH="`brew --prefix 2>/dev/null`/bin:$PATH"
-  else
-    : Dont add anything special
-  fi
-
-  if [ -d "$HOME/bin" ]; then export PATH="$HOME/bin:$PATH"; fi
-
-  # sort and export PATH
-  export PATH="`sort_pathlike_string $PATH`"
-
-  return
-
-  # old set_path function from setenv.sh
-  add_to_var PATH            \
-    /usr/local/share/python3 \
-    /usr/texbin              \
-    /sbin                    \
-    /bin                     \
-    /usr/bin                 \
-    /usr/sbin                \
-    /usr/local/bin           \
-    /usr/local/sbin          \
-    /opt/X11/bin             \
-    /usr/X11/bin             \
-    /opt/local/bin           \
-    /opt/local/sbin          \
-    $HOME/src/shell          \
-    $HOME/.cabal/bin         \
-
+  add_to_var PATH                                     \
+    /Applications/LilyPond.app/Contents/Resources/bin \
+    $HOME/.cabal/bin                                  \
+    $HOME/bin                                         \
 }
 export_PAGER () {
   PAGER=`command which vimpager most 2>/dev/null | head -1`
