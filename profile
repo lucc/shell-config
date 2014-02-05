@@ -248,6 +248,7 @@ export_standard_env
 export_PATH
 export_PAGER
 export_GPG_AGENT_INFO
+export_DISPLAY
 
 # select the correct functions for this system
 case "`uname`" in
