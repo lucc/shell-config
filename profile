@@ -18,11 +18,20 @@
 # TODO:  parse command line to be able to call this script with arguments
 
 # If not running interactively, don't do anything
-if [ `uname` = Darwin ] && [ "$1" = --launchd ]; then
-  : # TODO
-  echo 'TODO!' >&2
-elif [ -z "$PS1" ]; then
-  return
+for arg; do
+  case "$arg" in
+    --launchd|launchd)
+      if [ `uname` = Darwin ]; then
+	echo TODO >&2
+      else
+	echo Error: Exporting to launchd is only possible on OS X. >&2
+	return 2 || exit 2
+      fi
+      ;;
+  esac
+done
+if   [ `uname` = Darwin ] && [ "$1" = --launchd ]; then echo 'TODO!' >&2
+elif [ -z "$PS1" ]; then return
 fi
 
 default_profile_on_mint_linux () {
@@ -138,6 +147,7 @@ add_to_var () {
   eval export $varname=`sort_pathlike_string "$tmp"`
 }
 export_to_launchd () {
+  # FIXME this doesnt work
   for var in                           \
       PATH                             \
       MANPATH                          \
@@ -254,12 +264,11 @@ export_standard_env () {
   export PYTHONSTARTUP=~/.config/shell/pystartup
 }
 set_manpath () {
-  # old function from setenv.sh (osx)
-  # TODO
+  # TODO old function from setenv.sh (osx)
   :
 }
 set_infopath () {
-  # old function from setenv.sh (osx)
+  # TODO old function from setenv.sh (osx)
   add_to_var INFOPATH                      \
     /usr/local/share/info                  \
     /usr/share/info                        \
@@ -301,9 +310,7 @@ case "`uname`" in
 	host_ifi
 	;;
     esac
-
     # startx ??
-
     ;;
   Darwin) # MacOS X
     system_mac_osx
