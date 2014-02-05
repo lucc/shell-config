@@ -161,15 +161,15 @@ export_to_launchd () {
 }
 shell_test_bash () {
   # test if this shell is bash
-  [ "${BASH-no}" != no ]
+  [ "${BASH-no}" != no ] && [ -n "$BASH_VERSION" ]
 }
 shell_test_zsh () {
   # test if this shell is zsh
   [ "$ZSH_NAME" = zsh ]
 }
 source_rc_file () {
-  shell_test_bash && [ -r ~/.bashrc ] && source ~/.bashrc
-  shell_test_zsh && [ -r "ZDOTDIR/.zshrc" ] && source "$ZDOTDIR/.zshrc"
+  shell_test_bash && [ -r ~/.bashrc ]         && source ~/.bashrc
+  shell_test_zsh  && [ -r "$ZDOTDIR/.zshrc" ] && source "$ZDOTDIR/.zshrc"
 }
 # functions to set environment variables
 export_PATH () {
