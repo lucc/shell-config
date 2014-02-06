@@ -64,6 +64,17 @@ system_arch_linux () {
   :
 }
 system_mac_osx () {
+  # Fix PATH for OS X:  When using brew /usr/local/bin should be befor
+  # /usr/bin in order for the brewed vim to override the system vim.
+  if [ -x /usr/local/bin/brew ]; then
+    add_to_var PATH                                     \
+      /usr/local/bin                                    \
+      /Applications/LilyPond.app/Contents/Resources/bin \
+      $HOME/.cabal/bin                                  \
+      $HOME/bin                                         \
+
+  fi
+
   #for file in ~/.config/env/*; do set_var_from_file "${file##*/}" "$file"; done
 
   # do not work with ._* files
