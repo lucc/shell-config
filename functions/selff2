@@ -7,7 +7,7 @@ echo "$fg[red]Uptime:$reset_color `uptime | \
 echo ""
 echo "$fg[green]Machine$reset_color"
 echo "$fg[green]Host:$reset_color `hostname`"
-echo "$fg[green]Arch:$reset_color `machine`"
+echo "$fg[green]Arch:$reset_color `uname -m`"
 echo ""
 echo "$fg[blue]System$reset_color"
 echo "$fg[blue]Kern:$reset_color `uname -s`"
@@ -23,4 +23,4 @@ if [ `jobs|wc -l` -ne 0 ]; then echo; jobs; else echo " None"; fi
 echo ""
 echo "$fg[magenta]Processes$reset_color"
 pstree `ps -o ppid= $$`
-w | tail +3
+w | tail -n +3
