@@ -60,7 +60,7 @@ zmodload zsh/zprof
 for file in                                                         \
     $ZDOTDIR/aliases                                                \
     $ZDOTDIR/private                                                \
-    $BREW/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+    ${BREW:-/usr}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
   ; do
   if [[ -r $file ]]; then source $file; fi
 done
