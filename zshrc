@@ -17,9 +17,19 @@
 #if [ "$TERM" != "dumb" ]; then eval "`dircolors -b`"; fi
 
 # local variables (unset at eof) {{{1
-# This variable will expand to the nullstring if we are not on Mac OS X or
-# brew is not installed.
-BREW=`brew --prefix 2>/dev/null`
+typeset -A vars
+case `uname` in
+  Darwin)
+    # This variable will expand to the nullstring if we are not on Mac OS X or
+    # brew is not installed.
+    vars[prefix]=`brew --prefix 2>/dev/null`
+    vars[syn]=${vars[prefix]}/share/zsh-syntax-highlighting/
+    vars[syn]+=zsh-syntax-highlighting.zsh
+    ;;
+  Linux)
+    vars[syn]=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    ;;
+esac
 
 # zsh arrays (fignore, fpath) {{{1
 
@@ -54,16 +64,10 @@ zmodload zsh/sched
 zmodload zsh/zprof
 
 # files to be sourced {{{1
-#
-[[ -r ~/.profile ]] && source ~/.profile
 
-for file in                                                         \
-    $ZDOTDIR/aliases                                                \
-    $ZDOTDIR/private                                                \
-    ${BREW:-/usr}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
-  ; do
-  if [[ -r $file ]]; then source $file; fi
-done
+for file in ~/.profile       \
+	    $ZDOTDIR/aliases
+do if [[ -r $file ]]; then source $file; fi; done
 
 ## make less more friendly for non-text input files, see lesspipe(1)
 if whence -p lesspipe &>/dev/null; then
@@ -73,20 +77,25 @@ elif whence -p lesspipe.sh &>/dev/null; then
 fi
 
 # autojump or similar {{{2
-if [[ -r $BREW/etc/profile.d/z.sh ]]; then
+if [[ -r $vars[prefix]/etc/profile.d/z.sh ]]; then
   # read man z
-  _Z_CMD=j source $BREW/etc/profile.d/z.sh
+  _Z_CMD=j source ${vars[prefix]}/etc/profile.d/z.sh
   add-zsh-hook chpwd _z_precmd
   unalias j
   function j () {
-    _z $@ 2>&1 && echo $fg[red]`pwd`$reset_color
+    _z $@ 2>&1 && echo ${fg[red]}`pwd`$reset_color
   }
 elif [[ -r /usr/share/autojump/autojump.sh ]]; then
   #export AUTOJUMP_KEEP_SYMLINKS=1
   source /usr/share/autojump/autojump.sh
-elif [[ -r $BREW/etc/autojump.sh ]]; then
+elif [[ -r ${vars[prefix]}/etc/autojump.sh ]]; then
   #export AUTOJUMP_KEEP_SYMLINKS=1
-  source $BREW/etc/autojump.sh
+  source $vars[prefix]/etc/autojump.sh
+fi
+
+# syntax highlighting {{{2
+if [[ -r ${vars[syn]} ]]; then
+  source ${vars[syn]}
 fi
 
 # prompt {{{1
@@ -190,7 +199,11 @@ elif [[ `uname` = Linux ]]; then
     bindkey -M viins '\eOF' end-of-line
     bindkey -M vicmd '\eOF' end-of-line
   fi
-  if [[ -r /etc/arch-release ]] && [[ ! -z $SSH_CLIENT && ! -z $SSH_CONNECTION && ! -z $SSH_TTY ]]; then
+  if [[   -r /etc/arch-release && \
+        ! -z $SSH_CLIENT       && \
+        ! -z $SSH_CONNECTION   && \
+        ! -z $SSH_TTY             \
+     ]]; then
     bindkey -M viins '\e[H' beginning-of-line
     bindkey -M vicmd '\e[H' beginning-of-line
     bindkey -M viins '\e[F' end-of-line
@@ -348,4 +361,4 @@ hash -d u=~/uni
 hash -d v=/Volumes
 
 #  unset local variables and last steps {{{1
-unset BREW
+unset vars
