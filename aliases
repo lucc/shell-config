@@ -55,8 +55,10 @@ alias uz=aunpack
 
 # music {{{1
 # aliases to use mpd on raspberry pi
-alias ncmpcpp='ncmpcpp --host pi.local'
-alias mpc='mpc --host pi.local'
+if [[ `hostname` != pi ]]; then
+  alias ncmpcpp='ncmpcpp --host pi.local'
+  alias mpc='mpc --host pi.local'
+fi
 alias m=ncmpcpp
 alias play='mpc play'
 alias pause='mpc pause'
