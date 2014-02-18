@@ -23,13 +23,13 @@ case `uname` in
     # This variable will expand to the nullstring if we are not on Mac OS X or
     # brew is not installed.
     vars[prefix]=`brew --prefix 2>/dev/null`
-    vars[syn]=${vars[prefix]}/share/zsh-syntax-highlighting/
-    vars[syn]+=zsh-syntax-highlighting.zsh
+    vars[syn]=${vars[prefix]}/share/
     ;;
   Linux)
-    vars[syn]=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    vars[syn]=/usr/share/zsh/plugins/
     ;;
 esac
+vars[syn]+=zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # zsh arrays (fignore, fpath) {{{1
 
