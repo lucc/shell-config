@@ -1,16 +1,26 @@
 # vim: ft=zsh
 
-local oldshwordsplit=
-if setopt | grep -q '^shwordsplit$'; then
-  oldshwordsplit=shwordsplit
+# check the first argument and decide if we should redirect stdout and stderr
+if [[ $1 = -n ]]; then
+  local output=
+  shift
 else
-  oldshwordsplit=noshwordsplit
+  local output='>& /dev/null'
 fi
-setopt shwordsplit
+
+## save the current setting of shwordsplit
+#local oldshwordsplit=
+#if setopt | grep -q '^shwordsplit$'; then
+#  oldshwordsplit=shwordsplit
+#else
+#  oldshwordsplit=noshwordsplit
+#fi
+
+#setopt shwordsplit
 type ${1%% *} > /dev/null 2>&1 || return 2
 type ${2%% *} > /dev/null 2>&1 || return 3
 printf 1
-time ( for ((i=0; i<${3:-10}; i++)); do $1; done > /dev/null 2>&1 )
+eval "time ( for ((i=0; i<${3:-10}; i++)); do $1; done $out )"
 printf 2
-time ( for ((i=0; i<${3:-10}; i++)); do $2; done > /dev/null 2>&1 )
-setopt $oldshwordsplit
+eval "time ( for ((i=0; i<${3:-10}; i++)); do $2; done $out )"
+#setopt $oldshwordsplit
