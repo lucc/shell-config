@@ -99,8 +99,15 @@ if [[ -r ${vars[syn]} ]]; then
 fi
 
 # prompt {{{1
+function execution-time-helper-function () {
+  (( _start = $SECONDS ))
+  (( _threshold = _start + 10 ))
+}
+typeset -i _threshold
+typeset -i _start
 
 add-zsh-hook precmd vcs_info
+add-zsh-hook preexec execution-time-helper-function
 
 # PS1 prompt {{{2
 PS1='[ '                                               # frame
@@ -114,14 +121,21 @@ PS1+='%D{%H:%M:%S}'                                    # current time
 PS1+=' ] '                                             # frame
 
 # RPS1 prompt {{{2
-RPROMPT='%(?.'                      # if $? = 0
-RPROMPT+='$vcs_info_msg_0_ '        #   info about version control system
-if [[ $(uname) = Darwin ]]; then    #   if OS X
-  RPROMPT+='$(battery.sh -bce zsh)' #	  battery information
-fi                                  #   fi
-RPROMPT+='.'                        # else
-RPROMPT+='%F{red}Error: %?'         #   error message
-RPROMPT+=')'                        # fi
+RPROMPT='%(?.'                                    # if $? = 0
+RPROMPT+='%(${_threshold}S.'                      #   if _threshold < SECONDS
+RPROMPT+='%F{yellow}'                             #     switch color
+RPROMPT+='Time: $((SECONDS-_start))%f'            #     duration of command
+RPROMPT+='.)'                                     #   else, fi
+RPROMPT+='${vcs_info_msg_0_:+ $vcs_info_msg_0_}'  #   version control system
+if [[ $(uname) = Darwin ]]; then                  #   if OS X
+  RPROMPT+=' $(battery.sh -bce zsh)'              #     battery information
+fi                                                #   fi
+RPROMPT+='.'                                      # else
+RPROMPT+='%F{yellow}'                             #   switch color
+RPROMPT+='Time: $((SECONDS-_start)) '             #   duration of command
+RPROMPT+='%F{red}'                                #   switch color
+RPROMPT+='Error: %?'                              #   error message
+RPROMPT+=')'                                      # fi
 
 # If we are in Conque Term inside Vim use a different prompt {{{2
 if [[ $CONQUE -eq 1 ]]; then
