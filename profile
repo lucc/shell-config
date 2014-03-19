@@ -113,8 +113,10 @@ host_math () {
   fi
 
   if [ -n "$SSH_CLIENT" ]; then
-    calendar
-    exec zsh
+    #calendar
+    if ! shell_test_zsh; then
+      exec zsh
+    fi
   fi
 }
 host_ifi () {
@@ -188,6 +190,7 @@ export_PATH () {
     /Applications/LilyPond.app/Contents/Resources/bin \
     $HOME/.cabal/bin                                  \
     $HOME/bin                                         \
+
 }
 export_PAGER () {
   if which vimpager >/dev/null 2>&1; then
@@ -271,9 +274,9 @@ case "`uname`" in
       : Arch Linux
     elif test -e /etc/debian_version; then
       # Debian or derivate (Ubuntu)
-      if grep Debian < /etc/issue; then
+      if grep -q Debian < /etc/issue; then
 	: Debian GNU/Linux
-      elif grep Ubuntu < /etc/issue; then
+      elif grep -q Ubuntu < /etc/issue; then
 	: Ubuntu
       else
 	: unknown Debian
