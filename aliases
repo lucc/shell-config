@@ -31,13 +31,13 @@ alias diff=colordiff
 #alias pydoc='transparent-gvim.sh --pydoc'
 
 # searching the internet {{{1
-alias c:='internet_search.sh -f'
-alias g:='internet_search.sh -g'
-alias l:='internet_search.sh -l'
-alias w:='internet_search.sh -w'
-alias y:='internet_search.sh -y'
-alias s='internet_search.sh -d'
-alias q='internet_search.sh -d'
+alias c:='internet-search.sh -f'
+alias g:='internet-search.sh -g'
+alias l:='internet-search.sh -l'
+alias w:='internet-search.sh -w'
+alias y:='internet-search.sh -y'
+alias s='internet-search.sh -d'
+alias q='internet-search.sh -d'
 alias ip='curl --silent http://luc42.lima-city.de/ip.php'
 
 # connecting to remote servers {{{1
