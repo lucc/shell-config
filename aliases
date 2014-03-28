@@ -98,6 +98,7 @@ alias -s de=urlopen
 alias -- +='todo.sh add'
 alias -- ++='todo.sh list'
 alias -- '+-=todo.sh do'
+alias -- '?=git status --short'
 
 # Mac OS X specific aliases {{{1
 if [ `uname` = Darwin ] ; then
@@ -118,10 +119,11 @@ if [ `uname` = Darwin ] ; then
   alias sp='open -a System\ Preferences'
   alias quit_finder='osascript -e tell\ app\ \"Finder\"\ to\ quit'
   alias d='display.scpt iterm'
-    alias -s jpg=open
-    alias -s pdf=open
-    alias e='for v in ~v/*~/Volumes/System(N); diskutil unmount $v'
-    urlopen () { open "http://$*"; }
+  alias -s jpg=open
+  alias -s pdf=open
+  alias e='for v in ~v/*~/Volumes/System(N); diskutil unmount $v'
+  urlopen () { open "http://$*"; }
+  alias suspenduser='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
 # Linux specific aliases {{{1
 elif [ `uname` = Linux ]; then
   alias pstree='pstree -n'

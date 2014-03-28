@@ -373,6 +373,8 @@ bindkey -M vicmd '\C-h' run-help
 hash -d t=~/tmp
 hash -d u=~/uni
 hash -d v=/Volumes
+hash -d p=~/uni/philosophie
+hash -d x=~/.config/secure/xml
 
 #  unset local variables and last steps {{{1
 unset vars
