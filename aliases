@@ -1,0 +1,132 @@
+# file:		aliases                                                   {{{1
+# author:	luc
+# vim:          spelllang=en filetype=zsh foldmethod=marker
+# description:  This file contains aliases and functions.  They are tested
+#               with zsh and might not work with any other shell.
+# credits:	many thanks to the people from
+#		http://crunchbanglinux.org/forums/topic/1093/post-your-bashrc/
+# TODO: merge into zshrc
+
+# general aliases {{{1
+alias cp='cp -ip'
+alias grep='grep --color=auto'
+#alias l='ls -l --time-style=full-iso'
+alias l='ls -l'
+alias L='ls -l --time-style=+%F\ %H:%M:%S'
+alias lr='tree -Chuapl' # replacement for ls -lR
+alias ls='ls --color=auto'
+alias la='ls -A'
+alias lla='l -A'
+alias mv='mv -i'
+alias scp='scp -p'
+alias mkdir='mkdir -p'
+alias nload='nload -i 6144 -o 1024'
+alias diff=colordiff
+alias qmv='qmv --format=destination-only'
+
+# view documentation {{{1
+#alias info='transparent-gvim.sh --info'
+#alias man='transparent-gvim.sh --man'
+#alias perldoc='transparent-gvim.sh --perldoc'
+#alias phpdoc='transparent-gvim.sh --php'
+#alias pydoc='transparent-gvim.sh --pydoc'
+
+# searching the internet {{{1
+alias c:='internet-search.sh -f'
+alias g:='internet-search.sh -g'
+alias l:='internet-search.sh -l'
+alias w:='internet-search.sh -w'
+alias y:='internet-search.sh -y'
+alias s='internet-search.sh -d'
+alias q='internet-search.sh -d'
+alias ip='curl --silent http://luc42.lima-city.de/ip.php'
+
+# connecting to remote servers {{{1
+alias lima='ftp ftp.lima-city.de'
+alias limalog="PAGER=/bin/cat ftp -Vi ftp.lima-city.de <<<more\ html/.log$'\n'quit"
+
+# backup and statistics {{{1
+alias b='battery.sh -v'
+alias t='statistics.sh -td ~'
+alias tbz2='tar -cjv --exclude .DS_Store'
+alias tgz='tar -czv --exclude .DS_Store'
+alias up='date +"%F `uptime`"'
+alias bk='backup.make fullbk'
+alias uz=aunpack
+
+# music {{{1
+# aliases to use mpd on raspberry pi
+if [[ `hostname` != pi ]]; then
+  alias ncmpcpp='ncmpcpp --host pi.local'
+  alias mpc='mpc --host pi.local'
+fi
+alias m=ncmpcpp
+alias play='mpc play'
+alias pause='mpc pause'
+alias p='mpc toggle'
+
+# other {{{1
+alias ctw-muc='ctw GMXX0087'
+alias garbage='while ! read -t 1; do
+		 head -c 1000000 /dev/random | \
+		   hexdump -C | \
+		   grep --color=auto "42.*42.*42"
+	       done; unset REPLY'
+alias gtype='gtypist ktde.typ'
+alias tex=latexmk
+#alias tmp='cd ~/tmp'
+
+alias maillog='cat ~/log/fetchmail.log | tail'
+alias maillog='syslog -k Sender fetchmail -k Time ge -1h | tail'
+alias mlog='syslog -k Sender fetchmail -k Time ge -10m'
+alias mlog='syslog -k Sender com.apple.launchd.peruser.$UID -k Time ge -10m'
+alias mail='mail||mutt'
+
+alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
+alias D='date +%F'
+
+
+alias hgrep='history 1 | grep'
+alias histhead='history 1 | \
+		  awk '\''{a[$2]++}END{for(i in a){print a[i]" "i}}'\'' | \
+		  sort -rn | \
+		  head'
+alias -s com=urlopen
+alias -s org=urlopen
+alias -s net=urlopen
+alias -s de=urlopen
+
+alias -- +='todo.sh add'
+alias -- ++='todo.sh list'
+alias -- '+-=todo.sh do'
+alias -- '?=git status --short'
+
+# Mac OS X specific aliases {{{1
+if [ `uname` = Darwin ] ; then
+  alias dl='cd $HOME/Downloads && wget'
+  #play go
+  alias igo='(wine c:/Program\ Files/igowin/igowin.exe &) >/dev/null 2>&1'
+  alias l='ls -l'
+  alias L='ls -lT'
+  alias ls='ls -G'
+  alias pstree='pstree -g3'
+  alias pst='pstree `ps -o ppid= $$` `pgrep tmux`'
+  alias psu='pstree -u $USER'
+  alias timemachine=/System/Library/CoreServices/backupd.bundle/Contents/Resources/backupd-helper
+  #alias f=mdfind
+  alias o=open
+  alias app='open -a'
+  alias truecrypt=/Applications/TrueCrypt.app/Contents/MacOS/TrueCrypt
+  alias sp='open -a System\ Preferences'
+  alias quit_finder='osascript -e tell\ app\ \"Finder\"\ to\ quit'
+  alias d='display.scpt iterm'
+  alias -s jpg=open
+  alias -s pdf=open
+  alias e='for v in ~v/*~/Volumes/System(N); diskutil unmount $v'
+  urlopen () { open "http://$*"; }
+  alias suspenduser='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
+# Linux specific aliases {{{1
+elif [ `uname` = Linux ]; then
+  alias pstree='pstree -n'
+fi
+
