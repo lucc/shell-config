@@ -103,6 +103,42 @@ fi
 # homesick for automatic dotfiles setup {{{2
 source ~/.homesick/repos/homeshick/homeshick.sh
 
+# VCS info stuff {{{1
+zstyle ':vcs_info:*' actionformats '%F{cyan}%s%F{green}%c%u%b%F{blue}%a%f'
+####TODO
+zstyle ':vcs_info:*' formats       '%F{cyan}%s%F{green}%c%u%b%f'
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+zstyle ':vcs_info:*' enable git svn cvs hg
+# change color if changes exist (with %c and %u)
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' stagedstr '%F{yellow}'
+zstyle ':vcs_info:*' unstagedstr '%F{red}'
+
+# functions that can be used to change the defaults of the vcs-info code {{{2
+# turn the name 'git' into '±' {{{3
+function +vi-git-string() {
+  hook_com[vcs]='±'
+}
+
+function +vi-hg-string() {
+  hook_com[vcs]='☿'
+}
+
+# Add information about untracked files to the branch information {{{3
+# idea from http://briancarper.net/blog/570
+function +vi-git-add-untracked-files () {
+  if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
+    hook_com[branch]+='%F{red}?%f'
+  fi
+}
+
+# register the functions with the correct hooks
+zstyle ':vcs_info:git+set-message:*' hooks \
+  git-add-untracked-files                  \
+  git-string                               \
+
+zstyle ':vcs_info:hg+set-message:*' hooks hg-string
+
 # prompt {{{1
 function execution-time-helper-function () {
   (( _start = $SECONDS ))
@@ -121,6 +157,7 @@ PS1+='%n%F{cyan}@%F{blue}%m%f'                         # user and host info
 PS1+=' | '                                             # delimiter
 PS1+='%F{cyan}%1~%f'                                   # working directory
 PS1+=' | '                                             # delimiter
+PS1+='${vcs_info_msg_0_:+$vcs_info_msg_0_ | }'         # VCS info with delim.
 PS1+='%D{%H:%M:%S}'                                    # current time
 #PS1+='%D{%H:%M:%S} (BKK: $(TZ=Asia/Bangkok date +%R))' # current time+Bangkok
 PS1+=' ] '                                             # frame
@@ -131,7 +168,6 @@ RPROMPT+='%(${_threshold}S.'                      #   if _threshold < SECONDS
 RPROMPT+='%F{yellow}'                             #     switch color
 RPROMPT+='Time: $((SECONDS-_start))%f'            #     duration of command
 RPROMPT+='.)'                                     #   else, fi
-RPROMPT+='${vcs_info_msg_0_:+ $vcs_info_msg_0_}'  #   version control system
 if [[ $(uname) = Darwin ]]; then                  #   if OS X
   RPROMPT+=' $(battery.sh -bce zsh)'              #     battery information
 fi                                                #   fi
@@ -334,32 +370,6 @@ zstyle ':completion:*:(ssh|scp):*:hosts-ipaddr' ignored-patterns \
 #      ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2>/dev/null))"}%%\#*}
 #      ${=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
 #      )'
-
-# VCS stuff {{{2
-zstyle ':vcs_info:*' actionformats '%F{cyan}%s%F{green}%c%u%b%F{blue}%a%f'
-####TODO
-zstyle ':vcs_info:*' formats       '%F{cyan}%s%F{green}%c%u%b%f'
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-zstyle ':vcs_info:*' enable git svn cvs hg
-# change color if changes exist (with %c and %u)
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' stagedstr '%F{yellow}'
-zstyle ':vcs_info:*' unstagedstr '%F{red}'
-
-# turn the name 'git' into '±' {{{3
-#zstyle ':vcs_info:git+set-message:*' hooks fixgitstring
-function +vi-fixgitstring() {
-  hook_com[vcs]='±'
-}
-
-# Add information about untracked files to the branch information {{{3
-# idea from http://briancarper.net/blog/570
-zstyle ':vcs_info:git+set-message:*' hooks git-add-untracked-files
-function +vi-git-add-untracked-files () {
-  if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
-    hook_com[branch]+='%F{red}!%f'
-  fi
-}
 
 # starting the completion system {{{2
 compinit
