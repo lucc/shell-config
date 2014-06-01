@@ -1,0 +1,89 @@
+# vim: filetype=zsh
+
+# functions {{{1
+color_field () { printf "$fg[$1]$2$reset_color $3\n" "$@[4,-1]"; }
+blue () { printf "$fg[blue]$1$reset_color $2\n" "$@[3,-1]"; }
+green () { printf "$fg[green]$1$reset_color $2\n" "$@[3,-1]"; }
+
+color () {
+  local NEWLINE=true
+  while getopts n FLAG; do
+    case $FLAG in
+      n)
+	NEWLINE=false;;
+    esac
+  done
+  shift $((OPTIND-1))
+  echo -n $fg[$1]$2$reset_color
+  shift 2
+  echo -n \ $@
+  if $NEWLINE; then
+    echo
+  fi
+}
+
+
+# clear the screen first
+clear
+
+# print date and uptime
+color blue Date: `date '+%F %T'`
+color blue Uptime: `uptime | sed -E 's/[ 0-9:]*up ([0-9days,.: ]*), [0-9]* user.*/\1/;s/ +/ /g'`
+
+echo
+
+# machine information
+color green Machine
+color blue Host: `hostname`
+color blue Arch: `machine`
+
+echo
+
+color green System
+color blue Kern: `uname -s`
+color blue Vers: `uname -r`
+
+echo
+
+color green Shell
+color blue Shell: `ps -o command= -p $$`
+color blue Running: %02d:%02d:%02d $((SECONDS/3600%24)) $((SECONDS/60%60)) \
+  $((SECONDS%60))
+color blue SHLVL: $SHLVL
+echo -n "$fg[blue]Jobs:$reset_color"
+if [ `jobs|wc -l` -ne 0 ]; then echo; jobs; else echo " None"; fi
+
+echo
+
+color green Processes
+pstree `ps -o ppid= $$`
+w | tail +3
+
+return
+
+### old version
+
+clear
+date +"$fg[red]Date:$reset_color %F %H:%M:%S$reset_color"
+echo "$fg[red]Uptime:$reset_color `uptime | \
+  sed -E 's/[ 0-9:]*up ([0-9days,.: ]*), [0-9]* user.*/\1/;s/ +/ /g'`"
+echo ""
+echo "$fg[green]Machine$reset_color"
+echo "$fg[green]Host:$reset_color `hostname`"
+echo "$fg[green]Arch:$reset_color `uname -m`"
+echo ""
+echo "$fg[blue]System$reset_color"
+echo "$fg[blue]Kern:$reset_color `uname -s`"
+echo "$fg[blue]Vers:$reset_color `uname -r`"
+echo ""
+echo "$fg[yellow]Shell$reset_color"
+echo "$fg[yellow]Shell:$reset_color `ps -o command= -p $$`"
+printf "$fg[yellow]Running:$reset_color %02d:%02d:%02d\n" $((SECONDS/3600%24)) $((SECONDS/60%60)) \
+  $((SECONDS%60))
+echo "$fg[yellow]SHLVL:$reset_color $SHLVL"
+echo -n "$fg[yellow]Jobs in backround:$reset_color"
+if [ `jobs|wc -l` -ne 0 ]; then echo; jobs; else echo " None"; fi
+echo ""
+echo "$fg[magenta]Processes$reset_color"
+pstree `ps -o ppid= $$`
+w | tail -n +3
