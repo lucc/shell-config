@@ -1,0 +1,82 @@
+#compdef launchctl
+
+_init_all_jobs() {
+  #all_jobs=(${${${(f)"$(launchctl list)"}[2,-1]}##*$'\t'})
+  all_jobs=(a b c)
+}
+
+local -a _1st_arguments
+_1st_arguments=(
+  'load:Load configuration files and/or directories'
+  'unload:Unload configuration files and/or directories'
+  'start:Start specified job'
+  'stop:Stop specified job'
+  'submit:Submit a job from the command line'
+  'remove:Remove specified job'
+  'bootstrap:Bootstrap launchd'
+  'list:List jobs and information about jobs'
+  'setenv:Set an environmental variable in launchd'
+  'unsetenv:Unset an environmental variable in launchd'
+  'getenv:Get an environmental variable from launchd'
+  'export:Export shell settings from launchd'
+  'debug:Set the WaitForDebugger flag for the target job to true.'
+  'limit:View and adjust launchd resource limits'
+  'stdout:Redirect standard out to the given path'
+  'stderr:Redirect standard error to the given path'
+  'shutdown:Prepare for system shutdown'
+  'singleuser:Switch to single-user mode'
+  'getrusage:Get resource usage statistics from launchd'
+  'log:Adjust the logging level or mask of launchd'
+  'umask:Change umask'
+  'bsexec:Execute a process within a different Mach bootstrap subset'
+  'bslist:List Mach bootstrap services and optional servers'
+  'bstree:Show the entire Mach bootstrap tree. Requires root privileges.'
+  'managerpid:Print the PID of the launchd managing this Mach bootstrap.'
+  'manageruid:Print the UID of the launchd managing this Mach bootstrap.'
+  'managername:Print the name of this Mach bootstrap.'
+  'exit:Exit the interactive invocation of launchctl'
+  'quit:Quit the interactive invocation of launchctl'
+  'help:This help output'
+  #'asuser:Execute a subcommand in the given user'\''s context.'
+)
+
+local expl
+local -a _all_jobs
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "launchctl subcommand" _1st_arguments
+  return
+fi
+
+local -a all_jobs
+
+case "$words[1]" in
+  load|unload)
+    _arguments \
+      '(-w)-w[]' \
+      '(-F)-F[]' && return 0
+    ;;
+  start|stop|list|remove)
+    _init_all_jobs
+    _wanted _all_jobs expl 'running jobs' compadd -a _all_jobs
+    ;;
+#  list|ls)
+#    _arguments \
+#      '(--unbrewed)--unbrewed[files in brew --prefix not controlled by brew]' \
+#      '(--versions)--versions[list all installed versions of a formula]' \
+#      '1: :->forms' &&  return 0
+#
+#      if [[ "$state" == forms ]]; then
+#        _brew_installed_formulae
+#        _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae
+#      fi ;;
+#  install|home|homepage|log|info|abv|uses|cat|deps|edit|options)
+#    _brew_all_formulae
+#    _wanted formulae expl 'all formulae' compadd -a formulae ;;
+#  remove|rm|uninstall|unlink|cleanup|link|ln)
+#    _brew_installed_formulae
+#    _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae ;;
+#  upgrade)
+#    _brew_outdated_formulae
+#    _wanted outdated_formulae expl 'outdated formulae' compadd -a outdated_formulae ;;
+esac
