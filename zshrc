@@ -11,13 +11,18 @@
 #          https://maze.io/2008/08/03/remote-tabcompletion-using-openssh-and-zsh
 # and the zsh manual:
 #          http://zsh.sourceforge.net/Doc/
+# README:  This file is modularized in many functions which are called if
+#          apropriate at the end and then unset at EOF.
 
 # TODO: from bashrc {{{1
 # this and dircolors in general
 #if [ "$TERM" != "dumb" ]; then eval "`dircolors -b`"; fi
 
 # local variables (unset at eof) {{{1
+# an array of strings each of which will be evaled at EOF
+typeset -a at_exit
 typeset -A vars
+at_exit+='unset vars'
 case `uname` in
   Darwin)
     # This variable will expand to the nullstring if we are not on Mac OS X or
@@ -31,7 +36,63 @@ case `uname` in
 esac
 vars[syn]+=zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# local functions to set up stuff {{{1
+# functions to set up the prompt {{{2
+function full-colour-ps1 () {
+  PS1='[ '                                              # frame
+  PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
+  PS1+='%n%F{cyan}@%F{blue}%m%f'                        # user and host info
+  PS1+=' | '                                            # delimiter
+  PS1+='%F{cyan}%1~%f'                                  # working directory
+  PS1+=' | '                                            # delimiter
+  PS1+='${vcs_info_msg_0_:+$vcs_info_msg_0_ | }'        # VCS info with delim.
+  PS1+='%D{%H:%M:%S}'                                   # current time
+  PS1+=' ] '                                            # frame
+}
+at_exit+='unfunction full-colour-ps1'
+function stand-alone-colour-ps1 () {
+  PS1='[ '                                              # frame
+  PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
+  PS1+='%n%F{cyan}@%F{blue}%m%f'                        # user and host info
+  PS1+=' | '                                            # delimiter
+  PS1+='%F{cyan}%1~%f'                                  # working directory
+  PS1+=' | '                                            # delimiter
+  PS1+='${vcs_info_msg_0_:+$vcs_info_msg_0_ | }'        # VCS info with delim.
+  PS1+='%(?.%D{%H:%M:%S}.%F{red}Error %?%f)'            # curren time or error
+  PS1+=' ] '                                            # frame
+}
+at_exit+='unfunction stand-alone-colour-ps1'
+function stand-alone-monochrome-ps1 () {
+  PS1='[ '                                              # frame
+  PS1+='%n@%m'                                          # user and host info
+  PS1+=' | '                                            # delimiter
+  PS1+='%1~'                                            # working directory
+  PS1+=' | '                                            # delimiter
+  PS1+='%(?.%D{%H:%M:%S}.Error %?)'                     # curren time or error
+  PS1+=' ] '                                            # frame
+}
+at_exit+='unfunction stand-alone-monochrome-ps1'
+function full-colour-rps1 () {
+  RPROMPT='%(?.'                                   # if $? = 0
+  RPROMPT+='%(${_threshold}S.'                     #   if _threshold < SECONDS
+  RPROMPT+='%F{yellow}'                            #     switch color
+  RPROMPT+='Time: $((SECONDS-_start))%f'           #     duration of command
+  RPROMPT+='.)'                                    #   else, fi
+  if [[ $(uname) = Darwin ]]; then                 #   if OS X
+    RPROMPT+=' $(battery.sh -bce zsh)'             #     battery information
+  fi                                               #   fi
+  RPROMPT+='.'                                     # else
+  RPROMPT+='%F{yellow}'                            #   switch color
+  RPROMPT+='Time: $((SECONDS-_start)) '            #   duration of command
+  RPROMPT+='%F{red}'                               #   switch color
+  RPROMPT+='Error: %?'                             #   error message
+  RPROMPT+=')'                                     # fi
+}
+at_exit+='unfunction full-colour-rps1'
+
 # zsh arrays (fignore, fpath) {{{1
+
+module_path=($module_path /usr/local/lib/zpython)
 
 # file endings to ignore for completion
 fignore=($fignore '~' .o .bak '.sw?')
@@ -49,6 +110,7 @@ for trypath in                              \
     fpath=($trypath $fpath)
   fi
 done
+at_exit+='unset trypath'
 
 # autoloading and modules {{{1
 autoload -Uz add-zsh-hook
@@ -63,12 +125,14 @@ autoload -Uz $ZDOTDIR/functions/*(:t)
 
 zmodload zsh/sched
 zmodload zsh/zprof
+#zmodload zsh/zpython
 
 # files to be sourced {{{1
 
 for file in ~/.profile       \
 	    $ZDOTDIR/aliases
 do if [[ -r $file ]]; then source $file; fi; done
+at_exit+='unset file'
 
 ## make less more friendly for non-text input files, see lesspipe(1)
 if whence -p lesspipe &>/dev/null; then
@@ -87,6 +151,7 @@ if [[ -r $vars[prefix]/etc/profile.d/z.sh ]]; then
   function j () {
     _z $@ 2>&1 && echo ${fg[red]}`pwd`$reset_color
   }
+  at_exit+='compctl -U -K _z_zsh_tab_completion j'
 elif [[ -r /usr/share/autojump/autojump.sh ]]; then
   #export AUTOJUMP_KEEP_SYMLINKS=1
   source /usr/share/autojump/autojump.sh
@@ -150,40 +215,16 @@ typeset -i _start
 add-zsh-hook precmd vcs_info
 add-zsh-hook preexec execution-time-helper-function
 
-# PS1 prompt {{{2
-PS1='[ '                                               # frame
-PS1+='%(!.%F{red}.%F{green})'                          # user=green, root=red
-PS1+='%n%F{cyan}@%F{blue}%m%f'                         # user and host info
-PS1+=' | '                                             # delimiter
-PS1+='%F{cyan}%1~%f'                                   # working directory
-PS1+=' | '                                             # delimiter
-PS1+='${vcs_info_msg_0_:+$vcs_info_msg_0_ | }'         # VCS info with delim.
-PS1+='%D{%H:%M:%S}'                                    # current time
-#PS1+='%D{%H:%M:%S} (BKK: $(TZ=Asia/Bangkok date +%R))' # current time+Bangkok
-PS1+=' ] '                                             # frame
-
-# RPS1 prompt {{{2
-RPROMPT='%(?.'                                    # if $? = 0
-RPROMPT+='%(${_threshold}S.'                      #   if _threshold < SECONDS
-RPROMPT+='%F{yellow}'                             #     switch color
-RPROMPT+='Time: $((SECONDS-_start))%f'            #     duration of command
-RPROMPT+='.)'                                     #   else, fi
-if [[ $(uname) = Darwin ]]; then                  #   if OS X
-  RPROMPT+=' $(battery.sh -bce zsh)'              #     battery information
-fi                                                #   fi
-RPROMPT+='.'                                      # else
-RPROMPT+='%F{yellow}'                             #   switch color
-RPROMPT+='Time: $((SECONDS-_start)) '             #   duration of command
-RPROMPT+='%F{red}'                                #   switch color
-RPROMPT+='Error: %?'                              #   error message
-RPROMPT+=')'                                      # fi
-
-# If we are in Conque Term inside Vim use a different prompt {{{2
+# If we are in Conque Term inside Vim use a different prompt
 if [[ $CONQUE -eq 1 ]]; then
-  PS1='[ %F{green}%n%F{cyan}@%F{blue}%m%f '       # user and host info
-  PS1+='| %F{cyan}%1~%f '                         # working directory
-  PS1+='| %(?.%D{%H:%M:%S}.%F{red}Error %?%f) ] ' # curren time or error
+  stand-alone-colour-ps1
   unset RPROMPT
+elif [[ $TERM = dump ]]; then
+  stand-alone-monochrome-ps1
+  unset RPROMPT
+else
+  full-colour-ps1
+  full-colour-rps1
 fi
 
 # options {{{1
@@ -389,7 +430,10 @@ hash -d t=~/tmp
 hash -d u=~/uni
 hash -d v=/Volumes
 hash -d p=~/uni/philosophie
-hash -d x=~/.config/secure/xml
+hash -d y=~/.config/secure/yaml
 
 #  unset local variables and last steps {{{1
-unset vars
+set -x
+for at_exit_job in $at_exit; eval ${=at_exit_job}
+unset at_exit
+set +x
