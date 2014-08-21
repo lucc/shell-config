@@ -9,7 +9,7 @@
 
 # general aliases {{{1
 alias cp='cp -ip'
-alias grep='grep --color=auto'
+alias grep='grep --extended-regexp --color=auto'
 #alias l='ls -l --time-style=full-iso'
 alias l='ls -l'
 alias L='ls -l --time-style=+%F\ %H:%M:%S'
