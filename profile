@@ -243,7 +243,7 @@ export_standard_env () {
   export EDITOR=vim
   export HISTSIZE=2000
   export HTMLPAGER='elinks --dump'
-  export PYTHONSTARTUP=~/.config/shell/pystartup
+  export PYTHONSTARTUP=~/.config/pystartup
 }
 set_manpath () {
   # TODO old function from setenv.sh (osx)
