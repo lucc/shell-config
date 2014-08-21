@@ -332,7 +332,7 @@ function zshrc-set-up-syntax-highlighting () {
   local location
   case $ZSHRC_SET_UP_UNAME in
     Darwin)
-      location=$ZSHRC_SET_UP_PREFIX/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      location=$ZSHRC_SET_UP_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
       ;;
     Linux)
       location=/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
