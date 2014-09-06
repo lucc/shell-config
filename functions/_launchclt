@@ -5,6 +5,9 @@ _init_all_jobs() {
   all_jobs=(a b c)
 }
 
+typeset -A opt_args
+local context state line
+
 local -a _1st_arguments
 _1st_arguments=(
   'load:Load configuration files and/or directories'
