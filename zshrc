@@ -9,6 +9,7 @@
 #          http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt
 #          http://www.sourceguru.net/ssh-host-completion-zsh-stylee
 #          https://maze.io/2008/08/03/remote-tabcompletion-using-openssh-and-zsh
+#          http://grml.org/zsh-pony
 # and the zsh manual:
 #          http://zsh.sourceforge.net/Doc/
 # README:  This file is modularized in many functions which are called if
@@ -18,6 +19,14 @@
 # TODO:    autoload -U throw catch
 
 # helper functions {{{1
+
+function zrc-test-osx () {
+  [[ $(uname) = Darwin ]]
+}
+
+function zrc-test-linux () {
+  :
+}
 
 function zrc-source () {
   if [[ -r $1 ]]; then
@@ -528,34 +537,23 @@ function zrc-zstyle-todo () {
   zstyle ':completion:*' mailboxes ~/mail
 }
 
-function zrc-zstyle-hosts () {
-  # many thanks to http://www.sourceguru.net/ssh-host-completion-zsh-stylee
-  # other ideas:
-  #              sed -n '/\*/d;/^Host/s/^Host[=\t ]*//p' ~/.ssh/config
-  #              awk '{print $1}' ~/.ssh/known_hosts | tr ',' '\n'
-  #              sed -n '/^machine/s/^machine //p' ~/.netrc
-  #
-  # this looks for the files /etc/ssh_hosts /etc/ssh_hosts2 ~/.ssh/known_hosts
-  # ~/.ssh/known_hosts2 ...
-  hosts=(
-    # is there already something saved in $hosts?
-    $hosts
-    # from http://serverfault.com/questions/170346
-    ${${${(@M)${(f)"$(cat ~/.ssh/config(N) /dev/null)"}:#Host *}#Host }:#*[*?]*}
-    ${=${${(f)"$(cat {/etc/ssh_,{~/.ssh/,/var/lib/misc/ssh_}known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ }
-    ${${(@M)${(f)"$(cat ~/.netrc(N) /dev/null)"}:#machine *}#machine }
-  )
-  # remove entries which are just an ip address
+function zrc-zstyle-hosts () { # new {{{2
+  local -a hosts netrc known_hosts ssh_config
+  zrc-parse-ssh-config
+  zrc-parse-known-hosts
+  zrc-parse-netrc
+  hosts=($ssh_config $known_hosts $netrc)
   hosts=(${hosts//<->.<->.<->.<->/})
-
   if [[ $#hosts -gt 0 ]]; then
     zstyle ':completion:*:hosts' hosts $hosts
     # from http://serverfault.com/questions/170346
     #zstyle ':completion:*:ssh:*' hosts $hosts
     #zstyle ':completion:*:slogin:*' hosts $hosts
   fi
-  zstyle ':completion:*(ssh|scp):*:users' ignored-patterns daemon _*
+  zrc-zstyle-hosts-patterns
+}
 
+function zrc-zstyle-hosts-patterns () {
   # TODO
   # from
   # https://maze.io/2008/08/03/remote-tabcompletion-using-openssh-and-zsh
@@ -575,17 +573,40 @@ function zrc-zstyle-hosts () {
 	'<->.<->.<->.<->' '^*.*' '*@*'
   zstyle ':completion:*:(ssh|scp):*:hosts-ipaddr' ignored-patterns \
 	'^<->.<->.<->.<->' '127.0.0.<->'
+  #zstyle -e ':completion:*:(ssh|scp):*' hosts 'reply=( some hosts )'
   #zstyle ':completion:*:(ssh|scp):*:users' ignored-patterns \
   #      adm bin daemon halt lp named shutdown sync
-  #
-  ## If you also want tab completion of the hosts listed in your
-  ## ~/.ssh/known_hosts and /etc/hosts files, you can add:
-  #zstyle -e ':completion:*:(ssh|scp):*' hosts 'reply=(
-  #      ${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) \
-  #                      /dev/null)"}%%[# ]*}//,/ }
-  #      ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2>/dev/null))"}%%\#*}
-  #      ${=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
-  #      )'
+  zstyle ':completion:*(ssh|scp):*:users' ignored-patterns daemon _*
+}
+
+function zrc-parse-netrc () {
+  netrc=(${${(@M)${(f)"$(cat ~/.netrc(N) /dev/null)"}:#machine *}#machine })
+  # sed -n '/^machine/s/^machine //p' ~/.netrc
+}
+
+function zrc-parse-known-hosts () {
+  # many thanks to http://www.sourceguru.net/ssh-host-completion-zsh-stylee
+  known_hosts=(${=${${(f)"$(cat {/etc/ssh_,{~/.ssh/,/var/lib/misc/ssh_}known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })
+  known_hosts=(
+  $(
+    awk '
+      !/^#/ &&
+      !/([12]?[0-9]?[0-9]\.){3}[12]?[0-9]?[0-9]/ &&
+      !/([0-9a-f]{0,4}:){7}[0-9a-f]{0,4}/ {
+        gsub(","," ",$1)
+        gsub("[][]","",$1)
+        print $1
+      }' {/etc/ssh_,{~/.ssh/,/var/lib/misc/ssh_}known_}hosts(|2)(N) /dev/null
+  )
+  )
+  # TODO ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2>/dev/null))"}%%\#*}
+}
+
+function zrc-parse-ssh-config () {
+  # from http://serverfault.com/questions/170346
+  ssh_config=(${${${(@M)${(f)"$(cat ~/.ssh/config(N) /dev/null)"}:#Host *}#Host }:#*[*?]*})
+  # ${=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
+  # sed -n '/\*/d;/^Host/s/^Host[=\t ]*//p' ~/.ssh/config
 }
 
 function zrc-compinit () {
