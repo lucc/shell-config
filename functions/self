@@ -22,40 +22,56 @@ color () {
   fi
 }
 
+color () {
+  local color=''
+  local format='%s'
+  local newline='\n'
+  local FLAG
+  while getopts c:f:n FLAG; do
+    case $FLAG in
+      c) color=$fg[$OPTARG];;
+      f) format=$OPTARG;;
+      n) newline='';;
+    esac
+  done
+  shift $((OPTIND-1))
+  builtin printf $color$format$reset_color$newline $@
+}
+
 
 # clear the screen first
 clear
 
 # print date and uptime
-color blue Date: `date '+%F %T'`
-color blue Uptime: `uptime | sed -E 's/[ 0-9:]*up ([0-9days,.: ]*), [0-9]* user.*/\1/;s/ +/ /g'`
+color -c blue "Date: `date '+%F %T'`"
+color -c blue "Uptime: `uptime | sed -E 's/[ 0-9:]*up ([0-9days,.: ]*), [0-9]* user.*/\1/;s/ +/ /g'`"
 
 echo
 
 # machine information
-color green Machine
-color blue Host: `hostname`
-color blue Arch: `machine`
+color -c green Machine
+color -c blue "Host: `hostname`"
+color -c blue "Arch: `machine`"
 
 echo
 
-color green System
-color blue Kern: `uname -s`
-color blue Vers: `uname -r`
+color -c green System
+color -c blue "Kern: `uname -s`"
+color -c blue "Vers: `uname -r`"
 
 echo
 
-color green Shell
-color blue Shell: `ps -o command= -p $$`
-color blue Running: %02d:%02d:%02d $((SECONDS/3600%24)) $((SECONDS/60%60)) \
-  $((SECONDS%60))
-color blue SHLVL: $SHLVL
-echo -n "$fg[blue]Jobs:$reset_color"
+color -c green Shell
+color -c blue "Shell: `ps -o command= -p $$`"
+color -c blue -f "%s %02d:%02d:%02d" Running: $((SECONDS/3600%24)) \
+  $((SECONDS/60%60)) $((SECONDS%60))
+color -c blue "SHLVL: $SHLVL"
+color -nc blue Jobs:
 if [ `jobs|wc -l` -ne 0 ]; then echo; jobs; else echo " None"; fi
 
 echo
 
-color green Processes
+color -c green Processes
 pstree `ps -o ppid= $$`
 w | tail +3
 
