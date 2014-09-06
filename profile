@@ -5,18 +5,10 @@
 # sourced once on login the size and complexity should not be a performance
 # issue.  The code is modularized in functions which will be unset at EOF.
 #
-# This file MUST be interpreted by sh.  If you use zsh source it with
-# $ emulate sh -c 'source ~/.profile'
-#
 # Many thanks to these people for helpful information:
 # [1] http://www.novell.com/coolsolutions/feature/11251.html
 # [2] http://crunchbanglinux.org/forums/topic/1093/post-your-bashrc/
 # [3] http://bodhizazen.net/Tutorials/envrc
-#
-# TODO: call the code in the correct order such that PATH is set correctly
-#       whenever needed.
-# TODO: parse command line to be able to call this script with arguments (but
-#       what does it do then?)
 
 # helper function
 _profile_helper_sort_pathlike_string () {
@@ -69,19 +61,19 @@ _profile_helper_export_to_launchd () {
     fi
   done
 }
-_profile_helper_shell_test_bash () {
+_profile_test_bash () {
   # test if this shell is bash
   [ "${BASH-no}" != no ] && [ -n "$BASH_VERSION" ]
 }
-_profile_helper_shell_test_zsh () {
+_profile_test_zsh () {
   # test if this shell is zsh
   [ "$ZSH_NAME" = zsh ]
 }
-_profile_helper_source_rc_file () {
-  _profile_helper_shell_test_bash && _profile_helper_try_to_source_file ~/.bashrc
-  _profile_helper_shell_test_zsh  && _profile_helper_try_to_source_file "$ZDOTDIR/.zshrc"
+_profile_shell_rc_file () {
+  _profile_test_bash && _profile_source ~/.bashrc
+  _profile_test_zsh  && _profile_source "$ZDOTDIR/.zshrc"
 }
-_profile_helper_try_to_source_file () {
+_profile_source () {
   if [ -r "$1" ]; then
     source "$1"
     return 0
@@ -100,15 +92,7 @@ _profile_default_profile_on_mint_linux () {
   # the default umask is set in /etc/profile; for setting the umask
   # for ssh logins, install and configure the libpam-umask package.
   #umask 022
-
-  # if running bash
-  if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    _profile_helper_try_to_source_file "$HOME/.bashrc"
-  fi
-
-  # set PATH so it includes user's private bin if it exists
-  _profile_helper_add_to_var PATH "$HOME/bin"
+  :
 }
 # We will now define several functions to set up the correct environment for
 # different systems.
@@ -174,7 +158,7 @@ _profile_host_math () {
 
   if [ -n "$SSH_CLIENT" ]; then
     #calendar
-    if ! _profile_helper_shell_test_zsh; then
+    if ! _profile_test_zsh; then
       exec zsh
     fi
   fi
@@ -241,7 +225,7 @@ _profile_export_standard_env () {
   export EDITOR=vim
   export HISTSIZE=2000
   export HTMLPAGER='elinks --dump'
-  export PYTHONSTARTUP=~/.config/pystartup
+  #export PYTHONSTARTUP=~/.config/pystartup
 }
 _profile_set_manpath () {
   # TODO old function from setenv.sh (osx)
