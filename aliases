@@ -85,8 +85,24 @@ alias mail='mail||mutt'
 alias testmail='mutt                \
   -e source\ ~/.mutt/profiles/webde \
   -s "Test subject $RANDOM"         \
-  `emails.sh lucas|sed -n 2p`       \
+  `emails.sh -e lucas|sort|sed "1,2d;7d"` \
   <<<"Test body $RANDOM"'
+  #`emails.sh lucas|sed -n 2p`       \
+alias testmail='for rec in `emails.sh -e lucas|sort|sed "1,2d;7d"`; do \
+                  mutt -e source\ ~/.mutt/profiles/webde               \
+                       -s "Test subject $RANDOM"                       \
+                       $rec <<<"Test body $RANDOM"
+                done'
+alias testmail='mutt -e "source ~/.mutt/profiles/webde"               \
+		     `emails.sh -e lucas|sort|sed "1,2d;7d;s/^/-b /"` \
+		     -s "Test subject $RANDOM"                        \
+		     <<<"Test body $RANDOM"'
+alias sms='mutt -e "source ~/.mutt/profiles/webde" \
+                -e "unhook *"                      \
+                -e "set editor = touch"            \
+                -e "unset crypt_autosign"          \
+                -e "macro compose q <exit>n<exit>" \
+                -e "push m"'
 
 alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
 alias D='date +%F'
