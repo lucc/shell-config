@@ -34,12 +34,13 @@ alias qmv='qmv --format=destination-only'
 
 # searching the internet {{{1
 alias c:='internet-search.sh -f'
-alias g:='internet-search.sh -g'
-alias l:='internet-search.sh -l'
-alias w:='internet-search.sh -w'
-alias y:='internet-search.sh -y'
-alias s='internet-search.sh -d'
-alias q='internet-search.sh -d'
+#alias g:='internet-search.sh -g'
+#alias l:='internet-search.sh -l'
+#alias w:='internet-search.sh -w'
+#alias y:='internet-search.sh -y'
+#alias s='internet-search.sh -d'
+#alias q='internet-search.sh -d'
+alias q='surfraw duckduckgo'
 alias ip='curl --silent http://luc42.lima-city.de/ip.php'
 
 # connecting to remote servers {{{1

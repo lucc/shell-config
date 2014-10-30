@@ -47,6 +47,17 @@ _profile_helper_add_to_var () {
   done
   eval export $varname=`_profile_helper_sort_pathlike_string "$tmp"`
 }
+_profile_helper_append_to_var () {
+  local varname="$1" dir
+  eval local tmp=\$$varname
+  shift
+  for dir; do
+    if [ -d "$dir" ]; then
+      tmp=$tmp:$dir
+    fi
+  done
+  eval export $varname=`_profile_helper_sort_pathlike_string "$tmp"`
+}
 _profile_helper_export_to_launchd () {
   local var VARS
   VARS="$VARS PATH"
@@ -137,6 +148,7 @@ _profile_system_mac_osx_fix_path_for_brew () {
       $HOME/.cabal/bin                                  \
       $HOME/bin                                         \
 
+    _profile_helper_append_to_var PATH /usr/local/opt/surfraw/lib/surfraw
   fi
 }
 _profile_system_mac_osx_env_from_file () {
