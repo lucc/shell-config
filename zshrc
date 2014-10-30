@@ -632,6 +632,10 @@ function zrc-meta-prompt () {
     # vim Conque term plugin
     zrc-stand-alone-colour-ps1
     unset RPROMPT
+  elif [[ $VIMSHELL -eq 1 ]]; then
+    # vim "vimshell" plugin
+    zrc-stand-alone-colour-ps1
+    unset RPROMPT
   else
     # hopefully a color terminal
     zrc-full-colour-ps1
@@ -639,9 +643,18 @@ function zrc-meta-prompt () {
   fi
 }
 
+# set up antigen {{{1
+function zrc-antigen () {
+  local p
+  for p in ~/vcs/antigen; do
+    zrc-source $p/antigen.zsh
+  done
+}
+
 # call the functions {{{1
 
 zrc-source-files
+zrc-antigen
 
 zrc-meta-prompt
 

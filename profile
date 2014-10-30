@@ -114,7 +114,7 @@ _profile_system_mac_osx () {
   # do not work with ._* files
   export EDITOR='gvim.sh --editor'
   export COPY_EXTENDED_ATTRIBUTES_DISABLE=true
-  export BROWSER=browser # script installed with brew (uses "open")
+  #export BROWSER=browser # script installed with brew (uses "open")
   export LANG=en_US.UTF-8
   _profile_system_mac_osx_fix_path_for_brew
   _profile_system_mac_osx_gpg_setup
