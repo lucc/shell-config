@@ -389,8 +389,8 @@ function zrc-run-help () {
   autoload -Uz run-help
   unalias run-help
   HELPDIR=$ZDOTDIR/help
-  bindkey -M viins '\C-h' run-help
-  bindkey -M vicmd '\C-h' run-help
+  bindkey -M viins '\C-xh' run-help
+  bindkey -M vicmd '\C-xh' run-help
   # install the files when needed
   if [[ ! -d $HELPDIR ]]; then
     ( zrc-install-run-help && \

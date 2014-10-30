@@ -226,10 +226,20 @@ _profile_export_GPG_AGENT_INFO () {
   # this should be system independent
   if [ -r "$HOME/.gpg-agent-info" ]; then
     . "$HOME/.gpg-agent-info"
-    export GPG_AGENT_INFO
     #export SSH_AUTH_SOCK
     GPG_TTY="`tty`"
+  elif [ -S "$HOME/S.gpg-agent" ]; then
+    local pid
+    pid=`pgrep gpg-agent`
+    if [ `echo "$pid" | wc -l` -ne 1 ]; then
+      return 1
+    fi
+    GPG_AGENT_INFO="$HOME/.gnupg/S.gpg-agent:$pid:1"
+    GPG_TTY="`tty`"
+  else
+    return 1
   fi
+  export GPG_AGENT_INFO
 }
 _profile_export_standard_env () {
   # set some widely used environment variables to default values which can be
