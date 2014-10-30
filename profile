@@ -80,6 +80,10 @@ _profile_test_zsh () {
   # test if this shell is zsh
   [ "$ZSH_NAME" = zsh ]
 }
+_profile_test_ssh () {
+  # test if the current shell is started from ssh
+  [ -n "$SSH_CONNECTION" ]
+}
 _profile_shell_rc_file () {
   _profile_test_bash && _profile_source ~/.bashrc
   _profile_test_zsh  && _profile_source "$ZDOTDIR/.zshrc"
@@ -178,6 +182,20 @@ _profile_host_math () {
 _profile_host_ifi () {
   :
 }
+_profile_host_mbp () {
+  # only for Linux systems
+  if ! _profile_test_ssh; then
+    echo -n "Do you want a full start? [Y|n]"
+    zsh -c 'read -t 10 -q'
+    local ret=$?
+    if [ $ret -eq 0 -o $ret -eq 2 ]; then
+      fetchmail
+      eval `gpg-agent --daemon`
+      eval `ssh-agent`
+      exec startx
+    fi
+  fi
+}
 # functions to set environment variables
 _profile_export_PATH () {
   _profile_helper_add_to_var PATH                     \
@@ -275,7 +293,7 @@ case "`uname`" in
     # detecting Linux distros: [1]
     if test -e /etc/arch-release; then
       #grep Arch < /etc/issue
-      : Arch Linux
+      _profile_system_arch_linux
     elif test -e /etc/debian_version; then
       # Debian or derivate (Ubuntu)
       if grep -q Debian < /etc/issue; then
@@ -295,6 +313,9 @@ case "`uname`" in
 	;;
       *.cip.ifi.lmu.de)
 	_profile_host_ifi
+	;;
+      mbp*)
+	_profile_host_mbp
 	;;
     esac
     # startx ??

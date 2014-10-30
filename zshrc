@@ -425,7 +425,7 @@ function zrc-zmodload () {
 
 function zrc-source-files () {
   local file
-  for file in ~/.profile $ZDOTDIR/aliases; do
+  for file in $ZDOTDIR/aliases; do
     zrc-source $file
   done
 }
