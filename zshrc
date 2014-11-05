@@ -501,6 +501,10 @@ function zrc-homeshick () {
   zrc-source ~/.homesick/repos/homeshick/homeshick.sh
 }
 
+function zrc-gpg-setup () {
+  export GPG_TTY=$(tty)
+}
+
 # other {{{1
 
 function zrc-todo-from-bashrc () {
@@ -696,6 +700,7 @@ zrc-zmodload
 zrc-lesspipe
 zrc-autojump-decision
 zrc-homeshick
+zrc-gpg-setup
 
 zrc-compinit
 
