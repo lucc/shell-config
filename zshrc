@@ -58,6 +58,12 @@ function zrc-add-exit-hook () {
   ZRC_AT_EXIT_FUNCTIONS+=$1
 }
 
+function zrc-vi-bindkey () {
+  # bind the given key to the given function in the viins and vicmd maps
+  bindkey -M viins $1 $2
+  bindkey -M vicmd $1 $2
+}
+
 # local variables {{{1
 ZRC_UNAME=$(uname)
 # Will expand to the nullstring if we are not on Mac OS X or brew is not
@@ -100,98 +106,109 @@ function zrc-interesting-options () {
 
 function zrc-keymap () {
   bindkey -v
-  zrc-search-keys
+  typeset -g -A key
   zrc-keys-terminfo
-  case $ZRC_UNAME in
-    Darwin) zrc-keys-iterm-arrows;;
-    Linux)
-      if [[   -r /etc/arch-release && \
-	    ! -z $SSH_CLIENT       && \
-	    ! -z $SSH_CONNECTION   && \
-	    ! -z $SSH_TTY             \
-          ]]; then
-        zrc-keys-ssh
-      fi
-      ;;
-  esac
-  zrc-keys-history-substring
-  zrc-keys-edit-command-line
-  if [[ $ZRC_UNAME = Linux && $(hostname) = mbp && $TERM = xterm ]]; then
-    # some ad hoc corrections
-    bindkey -M viins '\e[H' beginning-of-line
-    bindkey -M vicmd '\e[H' beginning-of-line
-    bindkey -M viins '\e[F' end-of-line
-    bindkey -M vicmd '\e[F' end-of-line
+  zrc-keys-manual-corrections
+  if [[   -r /etc/arch-release && \
+	! -z $SSH_CLIENT       && \
+	! -z $SSH_CONNECTION   && \
+	! -z $SSH_TTY             \
+      ]]; then
+    zrc-keys-ssh
   fi
-}
-
-function zrc-search-keys () {
-  bindkey -M viins '\C-r' history-incremental-pattern-search-backward
-  bindkey -M vicmd '\C-r' history-incremental-pattern-search-backward
-  bindkey -M viins '\C-s' history-incremental-pattern-search-forward
-  bindkey -M vicmd '\C-s' history-incremental-pattern-search-forward
+  zrc-bind-basic-keys
+  zrc-history-substring-search-keys
+  zrc-keys-edit-command-line
+  zrc-search-keys
 }
 
 function zrc-keys-terminfo () {
   zmodload zsh/terminfo
-  bindkey -M viins $terminfo[kcuu1] up-line-or-search
-  bindkey -M vicmd $terminfo[kcuu1] up-line-or-search
-  bindkey -M viins $terminfo[kcud1] down-line-or-search
-  bindkey -M vicmd $terminfo[kcud1] down-line-or-search
-  bindkey -M viins $terminfo[khome] beginning-of-line
-  bindkey -M vicmd $terminfo[khome] beginning-of-line
-  bindkey -M viins $terminfo[kend]  end-of-line
-  bindkey -M vicmd $terminfo[kend]  end-of-line
-  bindkey -M viins $terminfo[kRIT]  vi-forward-word
-  bindkey -M vicmd $terminfo[kRIT]  vi-forward-word
-  bindkey -M viins $terminfo[kLFT]  vi-backward-word
-  bindkey -M vicmd $terminfo[kLFT]  vi-backward-word
+  # plain arrows
+  key[Up]=$terminfo[kcuu1]
+  key[Down]=$terminfo[kcud1]
+  key[Left]=$terminfo[kcub1]
+  key[Right]=$terminfo[kcuf1]
+  # shifted arrows
+  key[ShiftUp]=$terminfo[kPRV]   # TODO not right in urxvt
+  key[ShiftDown]=$terminfo[kNXT] # TODO not right in urxvt
+  key[ShiftLeft]=$terminfo[kLFT]
+  key[ShiftRight]=$terminfo[kRIT]
+  # fn-arrows
+  key[PageUp]=$terminfo[kpp]
+  key[PageDown]=$terminfo[knp]
+  key[Home]=$terminfo[khome]
+  key[End]=$terminfo[kend]
+  # shifted fn-arrows
+  key[ShiftPageUp]=  # Not possible?
+  key[ShiftPageDown]=  # Not possible?
+  key[ShiftHome]=$terminfo[kHOME]
+  key[ShiftEnd]=$terminfo[kEND]
+  # delete and such
+  key[Backspace]=$terminfo[kbs]
+  key[Delete]=$terminfo[kdch1]
+  key[ShiftBackspace]= # TODO
+  key[ShiftDelete]=$terminfo[kDC] # TODO
 }
 
-function zrc-keys-history-substring () {
-  zrc-source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh || \
-    zrc-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh || \
+function zrc-keys-manual-corrections () {
+  if [[ $ZRC_UNAME = Darwin ]]; then
+    zrc-keys-manual-corrections-xterm
+    if [[ ! -z $ITERM_APP ]]; then # TODO
+      key[Up]='\e[A'
+      key[Down]='\e[B'
+      key[Home]='\e[H'
+      key[End]='\e[F'
+    fi
+  elif [[ $ZRC_UNAME = Linux ]]; then
+    if [[ $TERM = xterm ]]; then
+      zrc-keys-manual-corrections-xterm
+    elif [[ $TERM = urxvt || $TERM = rxvt-unicode-256color ]]; then
+      key[ShiftUp]='\e[a'
+      key[ShiftDown]='\e[b'
+    fi
+  else
+    echo Unknown system: $ZRC_UNAME >&2
     return
-  if [[ $ZRC_UNAME = Darwin || ( $ZRC_UNAME = Linux && $TERM = xterm ) ]]; then
-    bindkey -M viins '\e[1;2A' history-substring-search-up
-    bindkey -M vicmd '\e[1;2A' history-substring-search-up
-    bindkey -M viins '\e[1;2B' history-substring-search-down
-    bindkey -M vicmd '\e[1;2B' history-substring-search-down
   fi
 }
 
-function zrc-keys-history-substring-iterm () {
-  bindkey -M viins '\e[A' history-substring-search-up
-  bindkey -M vicmd '\e[A' history-substring-search-up
-  bindkey -M viins '\e[B' history-substring-search-down
-  bindkey -M vicmd '\e[B' history-substring-search-down
-}
-
-function zrc-keys-iterm-arrows () {
-  # all the codes that are not conforming with the terminfo version
-  bindkey -M viins '\e[A' up-line-or-search
-  bindkey -M vicmd '\e[A' up-line-or-search
-  bindkey -M viins '\e[B' down-line-or-search
-  bindkey -M vicmd '\e[B' down-line-or-search
-  bindkey -M viins '\e[H' beginning-of-line
-  bindkey -M vicmd '\e[H' beginning-of-line
-  bindkey -M viins '\e[F' end-of-line
-  bindkey -M vicmd '\e[F' end-of-line
-  function zrc-keyvars-iterm () {
-    HOME_KEY='\e[H'
-    END_KEY='\e[F'
-  }
+function zrc-keys-manual-corrections-xterm () {
+  key[Up]='\e[A'
+  key[Down]='\e[B'
+  key[Home]='\e[H'
+  key[End]='\e[F'
+  key[ShiftUp]='\e[1;2A'
+  key[ShiftDown]='\e[1;2B'
 }
 
 function zrc-keys-ssh () {
-  bindkey -M viins '\e[H' beginning-of-line
-  bindkey -M vicmd '\e[H' beginning-of-line
-  bindkey -M viins '\e[F' end-of-line
-  bindkey -M vicmd '\e[F' end-of-line
-  bindkey -M viins '\e[1;2C' vi-forward-word
-  bindkey -M vicmd '\e[1;2C' vi-forward-word
-  bindkey -M viins '\e[1;2D' vi-backward-word
-  bindkey -M vicmd '\e[1;2D' vi-backward-word
+  key[Home]='\e[H'
+  key[End]='\e[F' end-of-line
+  key[ShiftRight]='\e[1;2C' vi-forward-word
+  key[ShiftLeft]='\e[1;2D' vi-backward-word
+}
+
+function zrc-bind-basic-keys () {
+  zrc-vi-bindkey $key[Up]         up-line-or-search
+  zrc-vi-bindkey $key[Down]       down-line-or-search
+  zrc-vi-bindkey $key[Home]       beginning-of-line
+  zrc-vi-bindkey $key[End]        end-of-line
+  zrc-vi-bindkey $key[ShiftLeft]  vi-backward-word
+  zrc-vi-bindkey $key[ShiftRight] vi-forward-word
+}
+
+function zrc-history-substring-search-keys () {
+  zrc-source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh || \
+    zrc-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh || \
+    return
+  zrc-vi-bindkey $key[ShiftUp]   history-substring-search-up
+  zrc-vi-bindkey $key[ShiftDown] history-substring-search-down
+}
+
+function zrc-search-keys () {
+  zrc-vi-bindkey '\C-r' history-incremental-pattern-search-backward
+  zrc-vi-bindkey '\C-s' history-incremental-pattern-search-forward
 }
 
 function zrc-keys-edit-command-line () {
