@@ -128,6 +128,28 @@ _profile_source () {
   fi
 }
 
+# functions to start programs
+_profile_start_gpg_agent () {
+  # TODO find running agents
+  if true; then
+    eval `gpg-agent --daemon`
+  else
+    # TODO find the correct environment variables
+  fi
+}
+_profile_start_ssh_agent () {
+  # TODO find running agents
+  if true; then
+    eval `ssh-agent`
+  else
+    # TODO find the correct environment variables
+  fi
+}
+_profile_start_pop_daemon () {
+  # if fetchmail is already runnng this will just awake it once and not do any
+  # harm
+  FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 fetchmail
+}
 _profile_default_profile_on_mint_linux () {
   # ~/.profile: executed by the command interpreter for login shells.
   # This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
@@ -217,9 +239,9 @@ _profile_host_mbp () {
   # only for Linux systems
   if ! _profile_test_ssh; then
     if _profile_helper_ask_yes "Do you want a full start?"; then
-      fetchmail
-      eval `gpg-agent --daemon`
-      eval `ssh-agent`
+      _profile_start_pop_daemon
+      _profile_start_gpg_agent
+      _profile_start_ssh_agent
       exec startx
     fi
   fi
@@ -272,8 +294,6 @@ _profile_export_GPG_AGENT_INFO () {
   # this should be system independent
   if [ -r "$HOME/.gpg-agent-info" ]; then
     . "$HOME/.gpg-agent-info"
-    #export SSH_AUTH_SOCK
-    GPG_TTY="`tty`"
   elif [ -S "$HOME/S.gpg-agent" ]; then
     local pid
     pid=`pgrep gpg-agent`
@@ -281,7 +301,6 @@ _profile_export_GPG_AGENT_INFO () {
       return 1
     fi
     GPG_AGENT_INFO="$HOME/.gnupg/S.gpg-agent:$pid:1"
-    GPG_TTY="`tty`"
   else
     return 1
   fi
@@ -291,7 +310,7 @@ _profile_export_standard_env () {
   # set some widely used environment variables to default values which can be
   # overriden in the specialized functions
   export EDITOR=vim
-  export HISTSIZE=2000
+  #export HISTSIZE=2000
   export HTMLPAGER='elinks --dump'
   #export PYTHONSTARTUP=~/.config/pystartup
 }
