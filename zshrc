@@ -116,6 +116,13 @@ function zrc-keymap () {
   esac
   zrc-keys-history-substring
   zrc-keys-edit-command-line
+  if [[ $ZRC_UNAME = Linux && $(hostname) = mbp && $TERM = xterm ]]; then
+    # some ad hoc corrections
+    bindkey -M viins '\e[H' beginning-of-line
+    bindkey -M vicmd '\e[H' beginning-of-line
+    bindkey -M viins '\e[F' end-of-line
+    bindkey -M vicmd '\e[F' end-of-line
+  fi
 }
 
 function zrc-search-keys () {
