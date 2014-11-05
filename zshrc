@@ -149,8 +149,10 @@ function zrc-keys-terminfo () {
 }
 
 function zrc-keys-history-substring () {
-  zrc-source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh || return
-  if [[ $ZRC_UNAME = Darwin ]]; then
+  zrc-source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh || \
+    zrc-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh || \
+    return
+  if [[ $ZRC_UNAME = Darwin || ( $ZRC_UNAME = Linux && $TERM = xterm ) ]]; then
     bindkey -M viins '\e[1;2A' history-substring-search-up
     bindkey -M vicmd '\e[1;2A' history-substring-search-up
     bindkey -M viins '\e[1;2B' history-substring-search-down
@@ -449,7 +451,8 @@ function zrc-lesspipe () {
 function zrc-autojump () {
   #export AUTOJUMP_KEEP_SYMLINKS=1
   zrc-source /usr/share/autojump/autojump.sh || \
-    zrc-source $ZRC_PREFIX/etc/autojump.sh
+    zrc-source $ZRC_PREFIX/etc/autojump.sh   || \
+    zrc-source /etc/profile.d/autojump.zsh
 }
 
 function zrc-rupa-z () {
@@ -467,6 +470,15 @@ function zrc-rupa-z () {
       compctl -U -K _z_zsh_tab_completion j
     }
     zrc-add-exit-hook j-completion-at-exit-function
+  fi
+}
+
+function zrc-autojump-decision () {
+  if which autojump >/dev/null 2>&1; then
+    zrc-autojump
+  # TODO How to find rupa's z?
+  elif which hans; then
+    zrc-rupa-z
   fi
 }
 
@@ -682,7 +694,7 @@ zrc-run-help
 zrc-directory-hash-table
 zrc-zmodload
 zrc-lesspipe
-zrc-rupa-z
+zrc-autojump-decision
 zrc-homeshick
 
 zrc-compinit
