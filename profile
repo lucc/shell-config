@@ -72,6 +72,37 @@ _profile_helper_export_to_launchd () {
     fi
   done
 }
+_profile_helper_ask_timeout () {
+  # $1 the question
+  # $2 the timeout (optional)
+  # this function will set the variable "answer" for the caller
+  local opts="-t ${2:-5}"
+  echo -n "$1"
+  if _profile_test_zsh; then
+    read -k 1 ${=opts} answer
+  elif _profile_test_bash; then
+    read -n 1 $opts answer
+  else
+    echo ERROR >&2
+    return 99
+  fi
+}
+_profile_helper_ask_yes () {
+  # $1 the question
+  # $2 the timeout (optional)
+  local answer=
+  local question="$1 [Y|n] "
+  _profile_helper_ask_timeout "$question" $2
+  [ "$answer" = Y -o "$answer" = y -o "$answer" = $'\n' -o -z "$answer" ]
+}
+_profile_helper_ask_no () {
+  # $1 the question
+  # $2 the timeout (optional)
+  local answer=
+  local question="$1 [y|N] "
+  _profile_helper_ask_timeout "$question" $2
+  [ "$answer" = Y -o "$answer" = y ]
+}
 _profile_test_bash () {
   # test if this shell is bash
   [ "${BASH-no}" != no ] && [ -n "$BASH_VERSION" ]
@@ -185,10 +216,7 @@ _profile_host_ifi () {
 _profile_host_mbp () {
   # only for Linux systems
   if ! _profile_test_ssh; then
-    echo -n "Do you want a full start? [Y|n]"
-    zsh -c 'read -t 10 -q'
-    local ret=$?
-    if [ $ret -eq 0 -o $ret -eq 2 ]; then
+    if _profile_helper_ask_yes "Do you want a full start?"; then
       fetchmail
       eval `gpg-agent --daemon`
       eval `ssh-agent`
