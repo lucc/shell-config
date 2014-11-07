@@ -422,6 +422,23 @@ function zrc-run-help () {
     ( zrc-install-run-help && \
         zrc-compile-run-help ) &
   fi
+  # further helper functions
+  autoload run-help-git
+  autoload run-help-openssl
+  autoload run-help-sudo
+  function run-help-ssh () {
+    emulate -LR zsh
+    local -a args
+    # Delete the "-l username" option
+    zparseopts -D -E -a args l:
+    # Delete other options, leaving: host command
+    args=(${@:#-*})
+    if [[ ${#args} -lt 2 ]]; then
+      man ssh
+    else
+      run-help $args[2]
+    fi
+  }
 }
 
 # functions to set xxx {{{1
