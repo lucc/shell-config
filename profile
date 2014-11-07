@@ -139,10 +139,16 @@ _profile_start_gpg_agent () {
 }
 _profile_start_ssh_agent () {
   # TODO find running agents
-  if true; then
-    eval `ssh-agent`
+  if [ -n "$SSH_AGENT_PID" ]; then
+    if grep -q '^ssh-agent' /proc/$SSH_AGENT_PID/cmdline; then
+      # TODO check SSH_SOCKET ...
+      return
+    else
+      error
+    fi
   else
-    # TODO find the correct environment variables
+    # TODO check SSH_SOCKET
+    eval `ssh-agent`
   fi
 }
 _profile_start_pop_daemon () {
