@@ -154,6 +154,7 @@ _profile_start_ssh_agent () {
 _profile_start_pop_daemon () {
   # if fetchmail is already runnng this will just awake it once and not do any
   # harm
+  FETCHMAILHOME=${XDG_CONFIG_HOME:-$HOME/.config}/fetchmail \
   FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 fetchmail
 }
 _profile_default_profile_on_mint_linux () {
@@ -320,6 +321,22 @@ _profile_export_standard_env () {
   export HTMLPAGER='elinks --dump'
   #export PYTHONSTARTUP=~/.config/pystartup
 }
+_profile_export_special_env () {
+  # force some programs to load their configuration from ~/.config
+  local dir="${XDG_CONFIG_HOME:-$HOME/.config}"
+  export TIGRC_USER="$dir/tig/tigrc"
+  export PASSWORD_STORE_DIR="$dir/pass"
+  export GNUPGHOME="$dir/gpg"
+  # see https://tlvince.com/vim-respect-xdg
+  export VIMINIT='let $MYVIMRC = "'"$dir/vim/vimrc"'" | source $MYVIMRC'
+  #export GVIMINIT='let MYGVIMRC = "'"$dir/vim/gvimrc"'" | source $MYGVIMRC'
+  export PENTADACTYL_INIT="source $dir/pentadactyl/pentadactylrc"
+  export PENTADACTYL_RUNTIME="$dir/pentadactyl"
+  export WINEPREFIX="$dir/wine"
+  export RXVT_SOCKET="$dir/urxvt/urxvtd-`hostname`"
+  export ELINKS_CONFDIR="$dir/elinks"
+  export SCREENRC="$dir/screen/screenrc"
+}
 _profile_set_manpath () {
   # TODO old function from setenv.sh (osx)
   :
@@ -338,6 +355,7 @@ _profile_export_PATH
 _profile_export_PAGER
 _profile_export_GPG_AGENT_INFO
 _profile_export_DISPLAY
+_profile_export_special_env
 
 # select the correct functions for this system
 case "`uname`" in
