@@ -106,6 +106,12 @@ _profile_helper_ask_no () {
 _profile_helper_logger () {
   logger -s -t .profile "$@"
 }
+_profile_helper_check_pid () {
+  # check if the pid in $1 is an instance of the program given as $2
+  # FIXME this is Linux specific
+  [ -r /proc/$1/exe ] || return 1
+  [ "`readlink /proc/$1/exe`" = "`which $2`" ]
+}
 _profile_test_bash () {
   # test if this shell is bash
   [ "${BASH-no}" != no ] && [ -n "$BASH_VERSION" ]
@@ -130,35 +136,76 @@ _profile_source () {
     return 1
   fi
 }
+_profile_export_var_from_file () {
+  if _profile_source "$1"; then
+    eval `cut -d = -f 1 < "$1" | xargs echo export`
+    return 0
+  else
+    return 1
+  fi
+}
 
 # functions to start programs
 _profile_start_gpg_agent () {
-  # TODO find running agents
-  if true; then
-    eval `gpg-agent --daemon`
-  else
-    # TODO find the correct environment variables
+  # This function looks for a running gpg-agent or starts one itself
+  local file="${GNUPGHOME:-$HOME/.gnupg}/.gpg-agent-info"
+  if [ -r "$file" ]; then
+    #_profile_helper_logger Found gpg info file at "$file".
+    if _profile_helper_check_pid `cut -f 2 -d : < "$file"` gpg-agent; then
+      #_profile_helper_logger Found running gpg-agent.
+      _profile_export_var_from_file "$file"
+    else
+      #_profile_helper_logger Removing lingering info file.
+      rm "$file"
+    fi
   fi
+  if [ ! -f "$file" ]; then
+    # starting the daemon
+    #_profile_helper_logger Starting new gpg-agent.
+    gpg-agent --daemon --write-env-file "$file"
+    _profile_export_var_from_file "$file"
+  fi
+  # TODO is there any other way to find a daemon?
 }
 _profile_start_ssh_agent () {
-  # TODO find running agents
-  if [ -n "$SSH_AGENT_PID" ]; then
-    if grep -q '^ssh-agent' /proc/$SSH_AGENT_PID/cmdline; then
-      # TODO check SSH_SOCKET ...
+  local file=$HOME/.ssh/.ssh-agent-info
+  # first look for variables in the environment
+  if [ "$SSH_AGENT_PID" -a "$SSH_AUTH_SOCK" ]; then
+    #_profile_helper_logger Found lingering SSH_AGENT_PID.
+    export SSH_AGENT_PID SSH_AUTH_SOCK
+    if _profile_helper_check_pid $SSH_AGENT_PID ssh-agent; then
+      #_profile_helper_logger Found running ssh-agent.
       return
     else
-      error
+      #_profile_helper_logger Trying to kill ssh-agent.
+      eval `ssh-agent -k`
     fi
-  else
-    # TODO check SSH_SOCKET
-    eval `ssh-agent`
   fi
+  # look for a (custom) info file to source
+  if [ -r "$file" ]; then
+    #_profile_helper_logger Found info file at "$file".
+    _profile_export_var_from_file "$file"
+    if _profile_helper_check_pid $SSH_AGENT_PID ssh-agent; then
+      #_profile_helper_logger Found running ssh-agent.
+      return
+    else
+      #_profile_helper_logger Trying to kill ssh-agent.
+      eval `ssh-agent -k`
+    fi
+  fi
+  # really start ssh-agent
+  #_profile_helper_logger Starting new ssh-agent.
+  eval `ssh-agent`
+  touch "$file"
+  chmod 600 "$file"
+  echo SSH_AGENT_PID=$SSH_AGENT_PID >  "$file"
+  echo SSH_AUTH_SOCK=$SSH_AUTH_SOCK >> "$file"
 }
 _profile_start_pop_daemon () {
   # if fetchmail is already runnng this will just awake it once and not do any
   # harm
   FETCHMAILHOME=${XDG_CONFIG_HOME:-$HOME/.config}/fetchmail \
-  FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 fetchmail
+    FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 fetchmail
 }
 _profile_default_profile_on_mint_linux () {
   # ~/.profile: executed by the command interpreter for login shells.
@@ -189,15 +236,6 @@ _profile_system_mac_osx () {
 _profile_system_mac_osx_gpg_setup () {
   local pid
   if [ -z "$GPG_AGENT_INFO" ] && which -a gpg-agent | grep -q MacGPG2; then
-    #pid=`psgrep -n -o pid,args gpg-agent`
-    #if [ "$ZSH_NAME" = zsh ]; then
-    #  pid=`echo $=pid`
-    #  pid=${pid%% *}
-    #else
-    #  pid=`echo $pid`
-    #  pid=${pid% *}
-    #fi
-    #pid=`psgrep -n -o pid,args gpg-agent|grep -o '[0-9][0-9]\+'`
     pid="`launchctl list org.gpgtools.macgpg2.gpg-agent | \
       grep PID | grep --only-matching '[0-9]\+'`"
     if [ -S $HOME/.gnupg/S.gpg-agent ]; then
@@ -302,20 +340,22 @@ _profile_export_DISPLAY () {
   fi
 }
 _profile_export_GPG_AGENT_INFO () {
+  local info="${GNUPGHOME:-$HOME}/.gpg-agent-info"
+  local socket="${GNUPGHOME:-$HOME/.gnupg}/S.gpg-agent"
   # this should be system independent
-  if [ -r "$HOME/.gpg-agent-info" ]; then
-    . "$HOME/.gpg-agent-info"
-  elif [ -S "$HOME/S.gpg-agent" ]; then
+  if _profile_export_var_from_file "$info"; then
+    return 0
+  elif [ -S "$socket" ]; then
     local pid
     pid=`pgrep gpg-agent`
     if [ `echo "$pid" | wc -l` -ne 1 ]; then
       return 1
     fi
-    GPG_AGENT_INFO="$HOME/.gnupg/S.gpg-agent:$pid:1"
+    export GPG_AGENT_INFO="$socket:$pid:1"
+    return 0
   else
     return 1
   fi
-  export GPG_AGENT_INFO
 }
 _profile_export_standard_env () {
   # set some widely used environment variables to default values which can be
