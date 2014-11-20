@@ -1,4 +1,4 @@
 # zshenv file by luc
 
 # ZDOTDIR is used to find init files
-ZDOTDIR=$HOME/.homesick/repos/zsh
+ZDOTDIR=${XDG_CONFIG_HOME:-$HOME/.config}/zsh
