@@ -91,7 +91,7 @@ _profile_helper_ask_yes () {
   # $1 the question
   # $2 the timeout (optional)
   local answer=
-  local question="$1 [Y|n] "
+  local question="\e[31m$1\e[m [Y|n] "
   _profile_helper_ask_timeout "$question" $2
   [ "$answer" = Y -o "$answer" = y -o "$answer" = $'\n' -o -z "$answer" ]
 }
@@ -99,9 +99,12 @@ _profile_helper_ask_no () {
   # $1 the question
   # $2 the timeout (optional)
   local answer=
-  local question="$1 [y|N] "
+  local question="\e[31m$1\e[m [y|N] "
   _profile_helper_ask_timeout "$question" $2
   [ "$answer" = Y -o "$answer" = y ]
+}
+_profile_helper_logger () {
+  logger -s -t .profile "$@"
 }
 _profile_test_bash () {
   # test if this shell is bash
@@ -245,10 +248,11 @@ _profile_host_ifi () {
 _profile_host_mbp () {
   # only for Linux systems
   if ! _profile_test_ssh; then
-    if _profile_helper_ask_yes "Do you want a full start?"; then
-      _profile_start_pop_daemon
-      _profile_start_gpg_agent
-      _profile_start_ssh_agent
+    _profile_start_pop_daemon
+    # apearently not needed with gpg2? -> mutt does not work -> TODO
+    _profile_start_gpg_agent
+    _profile_start_ssh_agent
+    if _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
       exec startx
     fi
   fi
