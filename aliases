@@ -81,7 +81,6 @@ alias maillog='cat ~/log/fetchmail.log | tail'
 alias maillog='syslog -k Sender fetchmail -k Time ge -1h | tail'
 alias mlog='syslog -k Sender fetchmail -k Time ge -10m'
 alias mlog='syslog -k Sender com.apple.launchd.peruser.$UID -k Time ge -10m'
-alias mail='mail||mutt'
 alias testmail='mutt                \
   -e source\ ~/.mutt/profiles/webde \
   -s "Test subject $RANDOM"         \
@@ -97,12 +96,6 @@ alias testmail='mutt -e "source ~/.mutt/profiles/webde"               \
 		     `emails.sh -e lucas|sort|sed "1,2d;7d;s/^/-b /"` \
 		     -s "Test subject $RANDOM"                        \
 		     <<<"Test body $RANDOM"'
-alias sms='mutt -e "source ~/.mutt/profiles/webde" \
-                -e "unhook *"                      \
-                -e "set editor = touch"            \
-                -e "unset crypt_autosign"          \
-                -e "macro compose q <exit>n<exit>" \
-                -e "push m"'
 
 alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
 alias D='date +%F'
