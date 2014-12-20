@@ -3,3 +3,4 @@ histfile
 cache/
 help/
 *.swp
+.zkbd/
