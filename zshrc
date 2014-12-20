@@ -484,8 +484,9 @@ function zrc-lesspipe () {
 
 function zrc-autojump () {
   #export AUTOJUMP_KEEP_SYMLINKS=1
-  zrc-source /usr/share/autojump/autojump.sh || \
-    zrc-source $ZRC_PREFIX/etc/autojump.sh   || \
+  zrc-source /usr/share/autojump/autojump.zsh  || \
+    zrc-source /usr/share/autojump/autojump.sh || \
+    zrc-source $ZRC_PREFIX/etc/autojump.sh     || \
     zrc-source /etc/profile.d/autojump.zsh
 }
 
