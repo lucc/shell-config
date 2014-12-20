@@ -51,7 +51,7 @@ echo
 # machine information
 color -c green Machine
 color -c blue "Host: `hostname`"
-color -c blue "Arch: `machine`"
+color -c blue "Arch: `uname -m`"
 
 echo
 
@@ -73,7 +73,7 @@ echo
 
 color -c green Processes
 pstree `ps -o ppid= $$`
-w | tail +3
+w | tail -n +3
 
 return
 
