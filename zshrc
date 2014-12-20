@@ -745,4 +745,4 @@ zrc-run-exit-hooks
 # unset all local functions and variables {{{1
 
 unfunction $(functions|grep -E '^zrc-'|cut -f 1 -d ' ')
-unset $(set | grep '^ZRC_' | cut -f 1 -d =)
+unset $(set | grep -a '^ZRC_' | cut -f 1 -d =)
