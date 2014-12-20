@@ -377,6 +377,7 @@ _profile_export_special_env () {
   export GNUPGHOME="$dir/gpg"
   # see https://tlvince.com/vim-respect-xdg
   export VIMINIT='let $MYVIMRC = "'"$dir/vim/vimrc"'" | source $MYVIMRC'
+  export VIMPAGER_RC="$dir/vim/vimpagerrc"
   #export GVIMINIT='let MYGVIMRC = "'"$dir/vim/gvimrc"'" | source $MYGVIMRC'
   export PENTADACTYL_INIT="source $dir/pentadactyl/pentadactylrc"
   export PENTADACTYL_RUNTIME="$dir/pentadactyl"
@@ -384,6 +385,7 @@ _profile_export_special_env () {
   export RXVT_SOCKET="$dir/urxvt/urxvtd-`hostname`"
   export ELINKS_CONFDIR="$dir/elinks"
   export SCREENRC="$dir/screen/screenrc"
+  export NOTMUCH_CONFIG="$dir/notmuch/config"
 }
 _profile_set_manpath () {
   # TODO old function from setenv.sh (osx)
