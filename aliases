@@ -13,6 +13,7 @@ alias grep='grep --extended-regexp --color=auto'
 #alias l='ls -l --time-style=full-iso'
 alias l='ls -l'
 alias L='ls -l --time-style=+%F\ %H:%M:%S'
+alias lh='L -h'
 alias lr='tree -Chuapl' # replacement for ls -lR
 alias lr='tree -aCI .git'
 alias ls='ls --color=auto'
@@ -45,7 +46,9 @@ alias ip='curl --silent http://luc42.lima-city.de/ip.php'
 
 # connecting to remote servers {{{1
 alias lima='ftp ftp.lima-city.de'
-alias limalog="PAGER=/bin/cat ftp -Vi ftp.lima-city.de <<<more\ html/.log$'\n'quit"
+alias limalog='curl --silent --netrc ftp://ftp.lima-city.de/html/.log'
+
+alias sshpi='ssh $(curl --silent --netrc ftp://ftp.lima-city.de/ip)'
 
 # backup and statistics {{{1
 alias b='battery.sh -v'
@@ -57,10 +60,10 @@ alias bk='backup.make fullbk'
 
 # music {{{1
 # aliases to use mpd on raspberry pi
-if [[ `hostname` != pi ]]; then
-  alias ncmpcpp='ncmpcpp --host pi.local'
-  alias mpc='mpc --host pi.local'
-fi
+#if [[ `hostname` != pi ]]; then
+#  alias ncmpcpp='ncmpcpp --host pi.local'
+#  alias mpc='mpc --host pi.local'
+#fi
 alias m=ncmpcpp
 alias play='mpc play'
 alias pause='mpc pause'
@@ -106,10 +109,10 @@ alias histhead='history -n 1 | \
 		  awk '\''{a[$1]++}END{for(i in a){print a[i]" "i}}'\'' | \
 		  sort -rn | \
 		  head'
-alias -s com=urlopen
-alias -s org=urlopen
-alias -s net=urlopen
-alias -s de=urlopen
+alias -s com=xdg-open
+alias -s org=xdg-open
+alias -s net=xdg-open
+alias -s de=xdg-open
 
 alias -- '?=git status --short'
 
@@ -138,5 +141,7 @@ if [ `uname` = Darwin ] ; then
 # Linux specific aliases {{{1
 elif [ `uname` = Linux ]; then
   alias pstree='pstree -n'
+  alias o=xdg-open
+  alias cal='cal -3'
+  inetplay () { mplayer $(youtube-dl -g $1); }
 fi
-
