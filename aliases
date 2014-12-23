@@ -48,7 +48,8 @@ alias ip='curl --silent http://luc42.lima-city.de/ip.php'
 alias lima='ftp ftp.lima-city.de'
 alias limalog='curl --silent --netrc ftp://ftp.lima-city.de/html/.log'
 
-alias sshpi='ssh $(curl --silent --netrc ftp://ftp.lima-city.de/ip)'
+alias piip='curl --silent --netrc http://luc42.lima-city.de/ip.php?host=rpi'
+alias sshpi='ssh $(piip)'
 
 # backup and statistics {{{1
 alias b='battery.sh -v'
