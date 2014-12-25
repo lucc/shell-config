@@ -35,29 +35,20 @@ alias qmv='qmv --format=destination-only'
 
 # searching the internet {{{1
 alias c:='internet-search.sh -f'
-#alias g:='internet-search.sh -g'
-#alias l:='internet-search.sh -l'
-#alias w:='internet-search.sh -w'
-#alias y:='internet-search.sh -y'
-#alias s='internet-search.sh -d'
-#alias q='internet-search.sh -d'
 alias q='surfraw duckduckgo'
-alias ip='curl --silent http://luc42.lima-city.de/ip.php'
 
 # connecting to remote servers {{{1
 alias lima='ftp ftp.lima-city.de'
 alias limalog='curl --silent --netrc ftp://ftp.lima-city.de/html/.log'
 
-alias piip='curl --silent --netrc http://luc42.lima-city.de/ip.php?host=rpi'
+alias myip='curl --silent http://luc42.lima-city.de/ip.php'
+alias piip='curl --silent http://luc42.lima-city.de/ip.php?host=rpi'
 alias sshpi='ssh $(piip)'
 
 # backup and statistics {{{1
-alias b='battery.sh -v'
-alias t='statistics.sh -td ~'
 alias tbz2='tar -cjv --exclude .DS_Store --one-file-system'
 alias tgz='tar -czv --exclude .DS_Store --one-file-system'
 alias up='date +"%F `uptime`"'
-alias bk='backup.make fullbk'
 
 # music {{{1
 # aliases to use mpd on raspberry pi
@@ -81,10 +72,6 @@ alias gtype='gtypist ktde.typ'
 alias tex=latexmk
 #alias tmp='cd ~/tmp'
 
-alias maillog='cat ~/log/fetchmail.log | tail'
-alias maillog='syslog -k Sender fetchmail -k Time ge -1h | tail'
-alias mlog='syslog -k Sender fetchmail -k Time ge -10m'
-alias mlog='syslog -k Sender com.apple.launchd.peruser.$UID -k Time ge -10m'
 alias testmail='mutt                \
   -e source\ ~/.mutt/profiles/webde \
   -s "Test subject $RANDOM"         \
