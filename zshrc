@@ -336,6 +336,22 @@ function zrc-full-colour-rps1 () {
   zrc-execution-timer
 }
 
+function zrc-condensed-color-ps1 () {
+  PS1=
+  if [[ $SSH_CLIENT ]]; then
+    PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
+    PS1+='%n%F{cyan}@%F{blue}%m%f:'                       # user and host info
+  else
+    PS1+='%(!.%F{red}%n%F{cyan}@%F{blue}%m%f:.)'          # user=green, root=red
+  fi
+  PS1+='%F{cyan}%1~%f'                                  # working directory
+  PS1+='${vcs_info_msg_0_:+($vcs_info_msg_0_)}'        # VCS info with delim.
+  PS1+='%# '
+  zrc-vcs-info-zstyle
+  zrc-vcs-info-hooks
+  zrc-vcs-info-setup
+}
+
 # functions to set up zsh special variables {{{1
 
 function zrc-module-path () {
@@ -696,7 +712,7 @@ function zrc-meta-prompt () {
     unset RPROMPT
   else
     # hopefully a color terminal
-    zrc-full-colour-ps1
+    zrc-condensed-color-ps1
     zrc-full-colour-rps1
   fi
 }
