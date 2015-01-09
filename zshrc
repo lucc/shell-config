@@ -184,9 +184,9 @@ function zrc-keys-manual-corrections-xterm () {
 
 function zrc-keys-ssh () {
   key[Home]='\e[H'
-  key[End]='\e[F' end-of-line
-  key[ShiftRight]='\e[1;2C' vi-forward-word
-  key[ShiftLeft]='\e[1;2D' vi-backward-word
+  key[End]='\e[F'
+  key[ShiftRight]='\e[1;2C'
+  key[ShiftLeft]='\e[1;2D'
 }
 
 function zrc-bind-basic-keys () {
