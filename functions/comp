@@ -1,5 +1,21 @@
 # vim: ft=zsh
 
+if [[ $1 = -h ]]; then
+  cat <<-'EOF' >&2
+	Usage: comp [-n] shell-code-string-1  shell-code-string-2 [number]
+	       comp -h
+
+	 The shell code strings will be passed to eval, each executed number
+	 times (10 by default).  If -n is given the output of the commands is
+	 NOT supressed.
+
+	 With this you can compare the execution times of external commands,
+	 shell functions or literal shell code.
+
+	EOF
+  return
+fi
+
 # check the first argument and decide if we should redirect stdout and stderr
 if [[ $1 = -n ]]; then
   local output=
