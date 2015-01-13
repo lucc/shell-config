@@ -63,14 +63,10 @@ alias p='mpc toggle'
 
 # other {{{1
 alias ctw-muc='ctw GMXX0087'
-alias garbage='while ! read -t 1; do
-		 head -c 1000000 /dev/urandom | \
-		   hexdump -C | \
-		   grep --color=auto "42.*42.*42"
-	       done; unset REPLY'
-alias gtype='gtypist ktde.typ'
 alias tex=latexmk
-#alias tmp='cd ~/tmp'
+alias D='date +%F'
+alias hgrep='history 1 | grep'
+alias -- '?=git status --short'
 
 alias testmail='mutt                \
   -e source\ ~/.mutt/profiles/webde \
@@ -88,21 +84,24 @@ alias testmail='mutt -e "source ~/.mutt/profiles/webde"               \
 		     -s "Test subject $RANDOM"                        \
 		     <<<"Test body $RANDOM"'
 
-alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
-alias D='date +%F'
-
-
-alias hgrep='history 1 | grep'
+# games {{{1
 alias histhead='history -n 1 | \
 		  awk '\''{a[$1]++}END{for(i in a){print a[i]" "i}}'\'' | \
 		  sort -rn | \
 		  head'
+alias garbage='while ! read -t 1; do
+		 head -c 1000000 /dev/urandom | \
+		   hexdump -C | \
+		   grep --color=auto "42.*42.*42"
+	       done; unset REPLY'
+alias gtype='gtypist ktde.typ'
+alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
+
+# suffix aliases {{{1
 alias -s com=xdg-open
 alias -s org=xdg-open
 alias -s net=xdg-open
 alias -s de=xdg-open
-
-alias -- '?=git status --short'
 
 # Mac OS X specific aliases {{{1
 if [ `uname` = Darwin ] ; then
