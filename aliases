@@ -68,22 +68,6 @@ alias D='date +%F'
 alias hgrep='history 1 | grep'
 alias -- '?=git status --short'
 
-alias testmail='mutt                \
-  -e source\ ~/.mutt/profiles/webde \
-  -s "Test subject $RANDOM"         \
-  `emails.sh -e lucas|sort|sed "1,2d;7d"` \
-  <<<"Test body $RANDOM"'
-  #`emails.sh lucas|sed -n 2p`       \
-alias testmail='for rec in `emails.sh -e lucas|sort|sed "1,2d;7d"`; do \
-                  mutt -e source\ ~/.mutt/profiles/webde               \
-                       -s "Test subject $RANDOM"                       \
-                       $rec <<<"Test body $RANDOM"
-                done'
-alias testmail='mutt -e "source ~/.mutt/profiles/webde"               \
-		     `emails.sh -e lucas|sort|sed "1,2d;7d;s/^/-b /"` \
-		     -s "Test subject $RANDOM"                        \
-		     <<<"Test body $RANDOM"'
-
 # games {{{1
 alias histhead='history -n 1 | \
 		  awk '\''{a[$1]++}END{for(i in a){print a[i]" "i}}'\'' | \
