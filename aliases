@@ -73,11 +73,6 @@ alias histhead='history -n 1 | \
 		  awk '\''{a[$1]++}END{for(i in a){print a[i]" "i}}'\'' | \
 		  sort -rn | \
 		  head'
-alias garbage='while ! read -t 1; do
-		 head -c 1000000 /dev/urandom | \
-		   hexdump -C | \
-		   grep --color=auto "42.*42.*42"
-	       done; unset REPLY'
 alias gtype='gtypist ktde.typ'
 alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
 
