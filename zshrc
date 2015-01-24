@@ -558,6 +558,14 @@ function zrc-gpg-setup () {
 
 # other {{{1
 
+function zrc-calcurse-notifications () {
+  calcurse                                \
+    --todo                                \
+    --range=3                             \
+    --format-{recur-,}apt='%S  %m\n'      \
+    --format-{recur-,}event='*****  %m\n'
+}
+
 function zrc-todo-from-bashrc () {
   # this and dircolors in general
   if [ "$TERM" != "dumb" ]; then
@@ -754,6 +762,8 @@ zrc-homeshick
 zrc-gpg-setup
 
 zrc-compinit
+
+zrc-calcurse-notifications
 
 # execute the at exit hooks {{{1
 zrc-run-exit-hooks
