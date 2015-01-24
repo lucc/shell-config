@@ -146,17 +146,17 @@ function zrc-keys-terminfo () {
 
 function zrc-keys-manual-corrections () {
   # Collection of conditions and corrections for errors with terminfo
-  if [[ $ZRC_UNAME = Darwin ]]; then
-    zrc-keys-manual-corrections-xterm
-  elif [[ $ZRC_UNAME = Linux ]]; then
-    if [[ $TERM = xterm ]]; then
-      zrc-keys-manual-corrections-xterm
-    elif [[ $TERM = urxvt || $TERM = rxvt-unicode-256color ]]; then
+  if [[ $ZRC_UNAME = Linux ]]; then
+    if [[ $TERM = urxvt || $TERM = rxvt-unicode-256color ]]; then
       key[ShiftUp]='\e[a'
       key[ShiftDown]='\e[b'
     elif [[ $TMUX ]]; then
       zrc-keys-manual-corrections-tmux
+    elif [[ $TERM = xterm ]]; then
+      zrc-keys-manual-corrections-xterm
     fi
+  elif [[ $ZRC_UNAME = Darwin ]]; then
+    zrc-keys-manual-corrections-xterm
   else
     echo Unknown system: $ZRC_UNAME >&2
     return
