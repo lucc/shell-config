@@ -166,11 +166,22 @@ function zrc-keys-manual-corrections () {
     elif [[ $TERM = urxvt || $TERM = rxvt-unicode-256color ]]; then
       key[ShiftUp]='\e[a'
       key[ShiftDown]='\e[b'
+    elif [[ $TMUX ]]; then
+      zrc-keys-manual-corrections-tmux
     fi
   else
     echo Unknown system: $ZRC_UNAME >&2
     return
   fi
+}
+
+function zrc-keys-manual-corrections-tmux () {
+  key[Up]='\e[A'
+  key[Down]='\e[B'
+  key[ShiftUp]='\e[1;2A'
+  key[ShiftDown]='\e[1;2B'
+  key[ShiftLeft]='\e[1;2D'
+  key[ShiftRight]='\e[1;2C'
 }
 
 function zrc-keys-manual-corrections-xterm () {
