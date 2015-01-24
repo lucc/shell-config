@@ -145,6 +145,7 @@ function zrc-keys-terminfo () {
 }
 
 function zrc-keys-manual-corrections () {
+  # Collection of conditions and corrections for errors with terminfo
   if [[ $ZRC_UNAME = Darwin ]]; then
     zrc-keys-manual-corrections-xterm
     if [[ ! -z $ITERM_APP ]]; then # TODO
@@ -169,8 +170,7 @@ function zrc-keys-manual-corrections () {
 }
 
 function zrc-keys-manual-corrections-tmux () {
-  key[Up]='\e[A'
-  key[Down]='\e[B'
+  # this needs the tmux option "xterm-keys" set to "on"
   key[ShiftUp]='\e[1;2A'
   key[ShiftDown]='\e[1;2B'
   key[ShiftLeft]='\e[1;2D'
