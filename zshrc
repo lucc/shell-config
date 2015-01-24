@@ -148,12 +148,6 @@ function zrc-keys-manual-corrections () {
   # Collection of conditions and corrections for errors with terminfo
   if [[ $ZRC_UNAME = Darwin ]]; then
     zrc-keys-manual-corrections-xterm
-    if [[ ! -z $ITERM_APP ]]; then # TODO
-      key[Up]='\e[A'
-      key[Down]='\e[B'
-      key[Home]='\e[H'
-      key[End]='\e[F'
-    fi
   elif [[ $ZRC_UNAME = Linux ]]; then
     if [[ $TERM = xterm ]]; then
       zrc-keys-manual-corrections-xterm
