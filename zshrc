@@ -109,13 +109,6 @@ function zrc-keymap () {
   typeset -g -A key
   zrc-keys-terminfo
   zrc-keys-manual-corrections
-  if [[   -r /etc/arch-release && \
-	! -z $SSH_CLIENT       && \
-	! -z $SSH_CONNECTION   && \
-	! -z $SSH_TTY             \
-      ]]; then
-    zrc-keys-ssh
-  fi
   zrc-bind-basic-keys
   zrc-history-substring-search-keys
   zrc-keys-edit-command-line
