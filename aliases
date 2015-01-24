@@ -66,7 +66,7 @@ alias ctw-muc='ctw GMXX0087'
 alias tex=latexmk
 alias D='date +%F'
 alias hgrep='history 1 | grep'
-alias -- '?=git status --short'
+alias -- '?=if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) = true ]]; then git status --short; elif hg -q stat 2>/dev/null; then hg status; else echo Not under version control.; fi'
 
 # games {{{1
 alias histhead='history -n 1 | \
