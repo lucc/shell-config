@@ -207,6 +207,10 @@ _profile_start_pop_daemon () {
   FETCHMAILHOME=${XDG_CONFIG_HOME:-$HOME/.config}/fetchmail \
     FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 fetchmail
 }
+_profile_add_ssh_keys () {
+  SSH_ASKPASS=$HOME/bin/pass-as-ssh-askpass.sh \
+    ssh-add $HOME/.ssh/*id_rsa < /dev/null
+}
 _profile_default_profile_on_mint_linux () {
   # ~/.profile: executed by the command interpreter for login shells.
   # This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
@@ -291,7 +295,8 @@ _profile_host_mbp () {
     #_profile_start_gpg_agent
     # for mutt 1.5.23 (it will check if this variable exists)
     export GPG_AGENT_INFO='depricated since GPG 2.1'
-    _profile_start_ssh_agent
+    ###### _profile_start_ssh_agent
+    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket" #started by systemd
     #export SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket
     if _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
       #XINITRC=~/.config/xinit/xinitrc exec startx
