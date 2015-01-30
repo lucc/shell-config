@@ -43,7 +43,7 @@ alias limalog='curl --silent --netrc ftp://ftp.lima-city.de/html/.log'
 
 alias myip='curl --silent http://luc42.lima-city.de/ip.php'
 alias piip='curl --silent http://luc42.lima-city.de/ip.php?host=rpi'
-alias sshpi='ssh $(piip)'
+alias sshpi='ssh -p 4771 $(piip)'
 
 # backup and statistics {{{1
 alias tbz2='tar -cjv --exclude .DS_Store --one-file-system'
@@ -107,7 +107,7 @@ if [ `uname` = Darwin ] ; then
 # Linux specific aliases {{{1
 elif [ `uname` = Linux ]; then
   alias pstree='pstree -n'
-  alias o=xdg-open
   alias cal='cal -3'
   inetplay () { mplayer $(youtube-dl -g $1); }
+  o () { for arg; do xdg-open $arg &; disown; done; }
 fi
