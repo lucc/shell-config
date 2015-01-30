@@ -220,8 +220,8 @@ function zrc-keys-edit-command-line () {
 function zrc-execution-timer () {
   autoload -Uz add-zsh-hook
   # define the needed variables
-  typeset -i _threshold
-  typeset -i _start
+  typeset -ig _threshold=10
+  typeset -ig _start=0
   # define the needed function
   function execution-time-helper-function () {
     (( _start = $SECONDS ))
