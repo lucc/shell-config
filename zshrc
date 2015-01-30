@@ -336,7 +336,7 @@ function zrc-full-colour-rps1 () {
 
 function zrc-condensed-color-ps1 () {
   PS1=
-  if [[ $SSH_CLIENT ]]; then
+  if [[ $SSH_CONNECTION ]]; then
     PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
     PS1+='%n%F{cyan}@%F{blue}%m%f:'                       # user and host info
   else
