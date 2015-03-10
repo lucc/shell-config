@@ -309,6 +309,7 @@ _profile_export_PATH () {
   _profile_helper_add_to_var PATH                     \
     /Applications/LilyPond.app/Contents/Resources/bin \
     $HOME/.cabal/bin                                  \
+    $HOME/.local/bin                                  \
     $HOME/bin                                         \
 
 }
