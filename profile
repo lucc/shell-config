@@ -298,7 +298,7 @@ _profile_host_mbp () {
     ###### _profile_start_ssh_agent
     export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket" #started by systemd
     #export SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket
-    if _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
+    if [ "$TTY" = /dev/tty1 ] && _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
       #XINITRC=~/.config/xinit/xinitrc exec startx
       exec startx
     fi
