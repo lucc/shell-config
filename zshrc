@@ -150,7 +150,7 @@ function zrc-keys-manual-corrections () {
     if [[ $TERM = urxvt || $TERM = rxvt-unicode-256color ]]; then
       key[ShiftUp]='\e[a'
       key[ShiftDown]='\e[b'
-    elif [[ $TMUX ]]; then
+    elif [[ -n $TMUX ]]; then
       zrc-keys-manual-corrections-tmux
     elif [[ $TERM = xterm ]]; then
       zrc-keys-manual-corrections-xterm
