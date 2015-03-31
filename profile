@@ -144,7 +144,48 @@ _profile_export_var_from_file () {
     return 1
   fi
 }
-
+# functions to set up terminal colors on the linux vconsole
+_profile_colors_original_from_unix_se () {
+  # taken from http://unix.stackexchange.com/questions/55423, many thanks
+  # to mulllhausen
+  echo -en "\e]P0000000" #black
+  echo -en "\e]P1D75F5F" #darkred
+  echo -en "\e]P287AF5F" #darkgreen
+  echo -en "\e]P3D7AF87" #brown
+  echo -en "\e]P48787AF" #darkblue
+  echo -en "\e]P5BD53A5" #darkmagenta
+  echo -en "\e]P65FAFAF" #darkcyan
+  echo -en "\e]P7E5E5E5" #lightgrey
+  echo -en "\e]P82B2B2B" #darkgrey
+  echo -en "\e]P9E33636" #red
+  echo -en "\e]PA98E34D" #green
+  echo -en "\e]PBFFD75F" #yellow
+  echo -en "\e]PC7373C9" #blue
+  echo -en "\e]PDD633B2" #magenta
+  echo -en "\e]PE44C9C9" #cyan
+  echo -en "\e]PFFFFFFF" #white
+}
+_profile_colors_basic_solarized_dark () {
+  # taken from http://unix.stackexchange.com/questions/55423, many thanks
+  # to mulllhausen
+  echo -en "\E]P0002b36" #black
+  echo -en "\E]P1dc322f" #darkred
+  echo -en "\E]P2859900" #darkgreen
+  echo -en "\E]P3b58900" #brown
+  echo -en "\E]P4268bd2" #darkblue
+  echo -en "\E]P5d33682" #darkmagenta
+  echo -en "\E]P62aa198" #darkcyan
+  echo -en "\E]P7eee8d5" #lightgrey
+  echo -en "\E]P8002b36" #darkgrey
+  echo -en "\E]P9cb4b16" #red
+  echo -en "\E]PA586e75" #green
+  echo -en "\E]PB657b83" #yellow
+  echo -en "\E]PC839496" #blue
+  echo -en "\E]PD6c71c4" #magenta
+  echo -en "\E]PE93a1a1" #cyan
+  echo -en "\E]PFfdf6e3" #white
+  clear
+}
 # functions to start programs
 _profile_start_gpg_agent () {
   # This function looks for a running gpg-agent or starts one itself
@@ -301,6 +342,8 @@ _profile_host_mbp () {
     if [ "$TTY" = /dev/tty1 ] && _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
       #XINITRC=~/.config/xinit/xinitrc exec startx
       exec startx
+    elif [ "$TTY" != /dev/tty1 ]; then
+      : _profile_colors_basic_solarized_dark
     fi
   fi
 }
