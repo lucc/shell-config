@@ -752,7 +752,6 @@ zrc-syntax-highlighting
 zrc-keymap
 zrc-run-help
 
-zrc-directory-hash-table
 zrc-zmodload
 zrc-lesspipe
 zrc-autojump-decision
