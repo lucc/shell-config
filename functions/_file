@@ -1,0 +1,83 @@
+#compdef file
+# ------------------------------------------------------------------------------
+# This is free and unencumbered software released into the public domain.
+#
+# Anyone is free to copy, modify, publish, use, compile, sell, or
+# distribute this software, either in source code form or as a compiled
+# binary, for any purpose, commercial or non-commercial, and by any
+# means.
+#
+# In jurisdictions that recognize copyright laws, the author or authors
+# of this software dedicate any and all copyright interest in the
+# software to the public domain. We make this dedication for the benefit
+# of the public at large and to the detriment of our heirs and
+# successors. We intend this dedication to be an overt act of
+# relinquishment in perpetuity of all present and future rights to this
+# software under copyright law.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# For more information, please refer to <http://unlicense.org/>
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for file
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Lucas Hoffmann
+#
+# ------------------------------------------------------------------------------
+
+_arguments \
+  '(- *)--help[display this help and exit]' \
+  '(- *)'{-v,--version}'[output version information and exit]' \
+  '(-m --magic-file)'{-m,--magic-file}'[use LIST as a colon-separated list of magic number files]' \
+  '(-z --uncompress)'{-z,--uncompress}'[try to look inside compressed files]' \
+  '(-b --brief)'{-b,--brief}'[do not prepend filenames to output lines]' \
+  '(-c --checking-printout)'{-c,--checking-printout}'[print parsed form of the magic file]' \
+  '(-e --exclude)'{-e,--exclude}'[exclude given test]:test:((
+    apptype\:"EMX application type"
+    ascii\:"various types of text files"
+    encoding\:"different text encodings for soft magic tests"
+    tokens\:"ignored for backwards compatibility"
+    cdf\:"prints details of Compound Document Files"
+    compress\:"checks for, and looks inside, compressed files"
+    elf\:"prints ELF file details"
+    soft\:"consults magic files"
+    tar\:"examines tar files"
+     ))' \
+  '(-f --files-from)'{-f,--files-from}'[read the filenames to be examined from the given file]:file:_files' \
+  '(-F --separator)'{-F,--separator}'[use string as separator instead of ":"]:string' \
+  '(-i --mime --mime-type --mime-encoding)'{-i,--mime}'[output MIME type strings (--mime-type and --mime-encoding)]' \
+  '(--apple)--apple[output the Apple CREATOR/TYPE]' \
+  '(--mime-type)--mime-type[output the MIME type]' \
+  '(--mime-encoding)--mime-encoding[output the MIME encoding]' \
+  '(-k --keep-going)'{-k,--keep-going}"[don't stop at the first match]" \
+  '(-l --list)'{-l,--list}'[list magic strength]' \
+  '(-L --dereference)'{-L,--dereference}'[follow symlinks (default)]' \
+  '(-h --no-dereference)'{-h,--no-dereference}"[don't follow symlinks]" \
+  '(-n --no-buffer)'{-n,--no-buffer}'[do not buffer output]' \
+  '(-N --no-pad)'{-N,--no-pad}'[do not pad output]' \
+  '(-0 --print0)'{-0,--print0}'[terminate filenames with ASCII NUL]' \
+  '(-p --preserve-date)'{-p,--preserve-date}'[preserve access times on files]' \
+  '(-P --parameter)'{-P,--parameter}'[set file engine parameter limits]:parameter:((
+     indir\:"recursion limit for indirection (default 15)"
+     name\:"use limit for name/use magic (default 30)"
+     elf_notes\:"max ELF notes processed (default 256)"
+     elf_phnum\:"max ELF prog sections processed (default 128)"
+     elf_shnum\:"max ELF sections processed (default 32768)"))' \
+  '(-r --raw)'{-r,--raw}"[don't translate unprintable chars to \\ooo]" \
+  '(-s --special-files)'{-s,--special-files}'[treat special (block/char devices) files as ordinary ones]' \
+  '(-C --compile)'{-C,--compile}'[compile file specified by -m]' \
+  '(-d --debug)'{-d,--debug}'[print debugging messages]' \
+  '*:files:_files'

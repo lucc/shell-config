@@ -1,0 +1,74 @@
+#compdef amixer
+
+typeset -A opt_args
+local context state state_descr line
+local -a _data_types
+
+local -a options commands
+options=(
+  '(- *)'{-h,--help}'[show the help message]'
+  {-c,--card}'[select the card]:card number'
+  {-D,--device}'[select the device, default "default"]:device name'
+  {-d,--debug}'[debug mode]'
+  {-n,--nocheck}'[do not perform range checking]'
+  {-v,--version}'[print version of this program]'
+  {-q,--quiet}'[be quiet]'
+  {-i,--inactive}'[show also inactive controls]'
+  {-a,--abstract}'[select abstraction level (none or basic)]'
+  {-s,--stdin}'[read and execute commands from stdin sequentially]'
+  {-R,--raw-volume}'[use the raw value (default)]'
+  {-M,--mapped-volume}'[use the mapped volume]'
+)
+commands=('help:show syntax'
+	  'info:show information about a mixer device'
+	  'scontrols:show simple mixer controls'
+	  'scontents:shows simple mixer controls with contents'
+	  {,s}set':set the given simple mixer control'
+	  {,s}get':show the given simple mixer control'
+	  'controls:show card controls'
+	  'contents:show card controls with contents'
+	  'cset:set card control contents'
+	  'cget:show card control contents'
+	  )
+
+#       set or sset <SCONTROL> <PARAMETER> ...
+#              Sets  the simple mixer control contents. The parameter can be
+#              the volume either as a percentage from 0% to 100% with % suf-
+#              fix,  a  dB  gain  with dB suffix (like -12.5dB), or an exact
+#              hardware value.  The dB gain can be used only for  the  mixer
+#              elements  with  available  dB  information.   When plus(+) or
+#              minus(-) letter is appended after volume value, the volume is
+#              incremented  or  decremented  from the current value, respec-
+#              tively.
+#
+#              The parameters cap, nocap, mute, unmute, toggle are  used  to
+#              change  capture  (recording)  and muting for the group speci-
+#              fied.
+#
+#              The optional modifiers can be  put  as  extra  parameters  to
+#              specify the stream direction or channels to apply.  The modi-
+#              fiers playback and capture specify the stream, and the  modi-
+#              fiers  front,  rear, center, woofer are used to specify chan-
+#              nels to be changed.
+#
+#              A simple mixer control must be specified. Only one device can
+#              be controlled at a time.
+
+
+
+
+#  scontrols       show all mixer simple controls
+#  scontents	  show contents of all mixer simple controls (default command)
+#  sset sID P      set contents for one mixer simple control
+#  sget sID        get contents for one mixer simple control
+#  controls        show all controls for given card
+#  contents        show contents of all controls for given card
+#  cset cID P      set control contents for one control
+#  cget cID        get control contents for one control
+
+
+_arguments $options
+if (( CURRENT == 2 )); then
+  _describe -t commands 'commands' commands
+else
+fi
