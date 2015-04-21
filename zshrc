@@ -64,6 +64,16 @@ function zrc-vi-bindkey () {
   bindkey -M vicmd $1 $2
 }
 
+function zrc-filter-existing () {
+  # print all the arguments that exist (test -e)
+  for arg; do
+    if [[ -e $arg ]]; then
+      printf %s $arg
+    fi
+  done
+  print
+}
+
 # local variables {{{1
 ZRC_UNAME=$(uname)
 # Will expand to the nullstring if we are not on Mac OS X or brew is not
@@ -378,6 +388,7 @@ function zrc-fpath () {
       fpath=($trypath $fpath)
     fi
   done
+  #fpath=($(zrc-filter-existing $fpath))
 }
 
 # functions to set up the run-help function {{{1
