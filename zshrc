@@ -21,11 +21,11 @@
 # helper functions {{{1
 
 function zrc-test-osx () {
-  [[ $(uname) = Darwin ]]
+  [[ $ZRC_UNAME == Darwin ]]
 }
 
 function zrc-test-linux () {
-  :
+  [[ $ZRC_UNAME == (#i)linux ]]
 }
 
 function zrc-source () {
@@ -47,7 +47,7 @@ function zrc-run-exit-hooks () {
 
 function zrc-has-color () {
   # return true if the terminal can handle colors
-  if [[ $TERM = dump ]]; then
+  if [[ $TERM == dump ]]; then
     return 1
   else
     return 0
@@ -156,16 +156,16 @@ function zrc-keys-terminfo () {
 
 function zrc-keys-manual-corrections () {
   # Collection of conditions and corrections for errors with terminfo
-  if [[ $ZRC_UNAME = Linux ]]; then
-    if [[ $TERM = urxvt || $TERM = rxvt-unicode-256color ]]; then
+  if zrc-test-linux; then
+    if [[ $TERM == urxvt || $TERM == rxvt-unicode-256color ]]; then
       key[ShiftUp]='\e[a'
       key[ShiftDown]='\e[b'
     elif [[ -n $TMUX ]]; then
       zrc-keys-manual-corrections-tmux
-    elif [[ $TERM = xterm ]]; then
+    elif [[ $TERM == xterm ]]; then
       zrc-keys-manual-corrections-xterm
     fi
-  elif [[ $ZRC_UNAME = Darwin ]]; then
+  elif zrc-test-osx; then
     zrc-keys-manual-corrections-xterm
   else
     echo Unknown system: $ZRC_UNAME >&2
@@ -327,12 +327,12 @@ function zrc-stand-alone-monochrome-ps1 () {
 }
 
 function zrc-full-colour-rps1 () {
-  RPROMPT='%(?.'                                   # if $? = 0
+  RPROMPT='%(?.'                                   # if $? == 0
   RPROMPT+='%(${_threshold}S.'                     #   if _threshold < SECONDS
   RPROMPT+='%F{yellow}'                            #     switch color
   RPROMPT+='Time: $((SECONDS-_start))%f'           #     duration of command
   RPROMPT+='.)'                                    #   else, fi
-  if [[ $ZRC_UNAME = Darwin ]]; then                 #   if OS X
+  if zrc-test-osx; then                            #   if OS X
     RPROMPT+=' $(battery.sh -bce zsh)'             #     battery information
   fi                                               #   fi
   RPROMPT+='.'                                     # else
@@ -346,7 +346,7 @@ function zrc-full-colour-rps1 () {
 
 function zrc-condensed-color-ps1 () {
   PS1=
-  if [[ $SSH_CONNECTION ]]; then
+  if [[ -n $SSH_CONNECTION ]]; then
     PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
     PS1+='%n%F{cyan}@%F{blue}%m%f:'                       # user and host info
   else
@@ -715,7 +715,7 @@ function zrc-compinit () {
 # high level functions for some decisions {{{1
 
 function zrc-meta-prompt () {
-  if [[ $TERM = dump ]]; then
+  if [[ $TERM == dump ]]; then
     # possibly :sh from within macvim
     zrc-stand-alone-monochrome-ps1
     unset RPROMPT
@@ -778,5 +778,5 @@ zrc-run-exit-hooks
 
 # unset all local functions and variables {{{1
 
-unfunction $(functions|grep -E '^zrc-'|cut -f 1 -d ' ')
-unset $(set | grep -a '^ZRC_' | cut -f 1 -d =)
+unfunction -m 'zrc-*'
+unset -m 'ZRC_*'
