@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#
+
+for arg; do
+  case $(xdg-mime query filetype "$arg") in
+    text/*|inode/x-empty) gvim --remote-tab "$arg";;
+    *) xdg-open "$arg" &; disown;;
+  esac
+done

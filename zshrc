@@ -80,7 +80,7 @@ ZRC_UNAME=$(uname)
 # installed.
 ZRC_PREFIX=$(brew --prefix 2>/dev/null)
 # an array of functions to be called at exit
-ZRC_AT_EXIT_FUNCTIONS=()
+typeset -a ZRC_AT_EXIT_FUNCTIONS
 
 # functions to set up basic zsh options {{{1
 

@@ -113,5 +113,4 @@ elif [ `uname` = Linux ]; then
   alias pstree='pstree -n'
   alias cal='cal -3'
   inetplay () { mplayer $(youtube-dl -g $1); }
-  o () { for arg; do xdg-open $arg &; disown; done; }
 fi
