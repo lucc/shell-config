@@ -28,7 +28,7 @@
 # Description
 # -----------
 #
-#  Completion script for abook
+#  Completion script for nload from http://www.roland-riegel.de/nload/
 #
 # ------------------------------------------------------------------------------
 # Authors
@@ -59,12 +59,12 @@ auto_units=(
 
 _arguments \
   '(- *)'{-h,--help}'[print the help message]' \
-  '-a[sets the length of the time window for average calculation (default 300s)]:seconds' \
-  '(-m)-i[specifies the 100% mark of the incoming bandwidth graph(default 10240, ignored if 0)]:kBit/s' \
-  '(-i -o)-m[show multiple devices at a time; no traffic graphs]' \
-  '(-m)-o[specifies the 100% mark of the outgoing bandwidth graph(default 10240, ignored if 0)]:kBit/s' \
-  '-t[refresh interval of the display (default 500ms)]:milliseconds' \
-  "-u[type of unit used for the display of traffic numbers (default h)]::units:(($units2 $auto_units))" \
-  "-U[type of unit used for the display of total amount of data]::units:(($units $auto_units))"
+  '(-a)-a[sets the length of the time window for average calculation (default 300s)]:seconds' \
+  '(-m -i)-i[specifies the 100% mark of the incoming bandwidth graph(default 10240, ignored if 0)]:kBit/s' \
+  '(-i -o -m)-m[show multiple devices at a time; no traffic graphs]' \
+  '(-m -o)-o[specifies the 100% mark of the outgoing bandwidth graph(default 10240, ignored if 0)]:kBit/s' \
+  '(-t)-t[refresh interval of the display (default 500ms)]:milliseconds' \
+  "(-u)-u[type of unit used for the display of traffic numbers (default h)]::units:(($units2 $auto_units))" \
+  "(-U)-U[type of unit used for the display of total amount of data]::units:(($units $auto_units))" \
 
-#devices         Network devices to use. Default is to use all auto-detected devices.
+# TODO: complete network devices as last argument
