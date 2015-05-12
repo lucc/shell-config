@@ -249,7 +249,7 @@ _profile_start_pop_daemon () {
     FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 fetchmail
 }
 _profile_add_ssh_keys () {
-  SSH_ASKPASS=$HOME/bin/pass-as-ssh-askpass.sh \
+  SSH_ASKPASS=`which pass-as-ssh-askpass.sh` \
     ssh-add $HOME/.ssh/*id_rsa < /dev/null
 }
 _profile_default_profile_on_mint_linux () {
