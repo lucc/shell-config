@@ -413,7 +413,7 @@ _profile_export_GPG_AGENT_INFO () {
 _profile_export_standard_env () {
   # set some widely used environment variables to default values which can be
   # overriden in the specialized functions
-  export EDITOR=vim
+  export EDITOR=nvim
   #export HISTSIZE=2000
   export HTMLPAGER='elinks --dump'
   #export PYTHONSTARTUP=~/.config/pystartup
