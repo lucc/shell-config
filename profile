@@ -436,6 +436,14 @@ _profile_export_special_env () {
   export SCREENRC="$dir/screen/screenrc"
   export NOTMUCH_CONFIG="$dir/notmuch/config"
 }
+_profile_export_nvim_test_env () {
+  # see
+  # https://github.com/neovim/neovim/wiki/Development-tips#debugging-program-errors-undefined-behavior-leaks-
+  export ASAN_OPTIONS=detect_leaks=1:log_path=/home/luc/.logs/asan
+  export ASAN_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer-3.4
+  export MSAN_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer-3.4
+  export TSAN_OPTIONS=external_symbolizer_path=/usr/bin/llvm-symbolizer-3.4 log_path=/home/luc/.logs/tsan
+}
 _profile_set_manpath () {
   # TODO old function from setenv.sh (osx)
   :
