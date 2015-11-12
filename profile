@@ -425,8 +425,8 @@ _profile_export_special_env () {
   export PASSWORD_STORE_DIR="$dir/pass"
   export GNUPGHOME="$dir/gpg"
   # see https://tlvince.com/vim-respect-xdg
-  export VIMINIT='let $MYVIMRC = "'"$dir/vim/vimrc"'" | source $MYVIMRC'
-  export VIMPAGER_RC="$dir/vim/vimpagerrc"
+  #export VIMINIT='let $MYVIMRC = "'"$dir/vim/vimrc"'" | source $MYVIMRC'
+  export VIMPAGER_RC="$dir/nvim/vimpagerrc"
   #export GVIMINIT='let MYGVIMRC = "'"$dir/vim/gvimrc"'" | source $MYGVIMRC'
   export PENTADACTYL_INIT="source $dir/pentadactyl/pentadactylrc"
   export PENTADACTYL_RUNTIME="$dir/pentadactyl"
