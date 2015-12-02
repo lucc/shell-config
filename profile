@@ -335,7 +335,7 @@ _profile_host_mbp () {
     #_profile_start_pop_daemon
     #_profile_start_gpg_agent
     # for mutt 1.5.23 (it will check if this variable exists)
-    export GPG_AGENT_INFO='depricated since GPG 2.1'
+    #export GPG_AGENT_INFO='depricated since GPG 2.1'
     ###### _profile_start_ssh_agent
     export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket" #started by systemd
     #export SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket
