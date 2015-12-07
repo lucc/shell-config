@@ -1,0 +1,81 @@
+#compdef 7z
+# ------------------------------------------------------------------------------
+# This is free and unencumbered software released into the public domain.
+#
+# Anyone is free to copy, modify, publish, use, compile, sell, or
+# distribute this software, either in source code form or as a compiled
+# binary, for any purpose, commercial or non-commercial, and by any
+# means.
+#
+# In jurisdictions that recognize copyright laws, the author or authors
+# of this software dedicate any and all copyright interest in the
+# software to the public domain. We make this dedication for the benefit
+# of the public at large and to the detriment of our heirs and
+# successors. We intend this dedication to be an overt act of
+# relinquishment in perpetuity of all present and future rights to this
+# software under copyright law.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# For more information, please refer to <http://unlicense.org/>
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for 7z
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Lucas Hoffmann
+#
+# ------------------------------------------------------------------------------
+
+local -a commands switches
+commands=(
+  'a:Add files to archive'
+  'b:Benchmark'
+  'd:Delete files from archive'
+  'e:Extract files from archive (without using directory names)'
+  'h:Calculate hash values for files'
+  'l:List contents of archive'
+  'rn:Rename files in archive'
+  't:Test integrity of archive'
+  'u:Update files to archive'
+  'x:eXtract files with full paths'
+)
+#switches=(
+#  -- : Stop switches parsing
+#  -ai[r[-|0]]{@listfile|!wildcard} : Include archives
+#  -ax[r[-|0]]{@listfile|!wildcard} : eXclude archives
+#  -bd : Disable percentage indicator
+#  -i[r[-|0]]{@listfile|!wildcard} : Include filenames
+#  -m{Parameters} : set compression Method
+#  -o{Directory} : set Output directory
+#  -p{Password} : set Password
+#  -r[-|0] : Recurse subdirectories
+#  -scs{UTF-8|UTF-16LE|UTF-16BE|WIN|DOS|{id}} : set charset for list files
+#  -sfx[{name}] : Create SFX archive
+#  -si[{name}] : read data from stdin
+#  -slt : show technical information for l (List) command
+#  -so : write data to stdout
+#  -ssc[-] : set sensitive case mode
+#  -t{Type} : Set type of archive
+#  -u[-][p#][q#][r#][x#][y#][z#][!newArchiveName] : Update options
+#  -v{Size}[b|k|m|g] : Create volumes
+#  -w[{path}] : assign Work directory. Empty path means a temporary directory
+#  -x[r[-|0]]]{@listfile|!wildcard} : eXclude filenames
+#  -y : assume Yes on all queries
+#)
+
+# Usage: 7z <command> [<switches>...] <archive_name> [<file_names>...]
+#        [<@listfiles...>]
+
+_arguments

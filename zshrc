@@ -708,8 +708,11 @@ function zrc-compinit () {
   zrc-zstyle-hosts
   autoload -Uz compinit
   compinit
-  compdef gpg2=gpg
   compdef colordiff=diff
+  compdef gpg2=gpg
+  compdef pip2=pip
+  compdef vi=vim
+  compdef _gnu_generic afew
 }
 
 # high level functions for some decisions {{{1

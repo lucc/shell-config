@@ -1,0 +1,89 @@
+#compdef dmesg
+# ------------------------------------------------------------------------------
+# This is free and unencumbered software released into the public domain.
+#
+# Anyone is free to copy, modify, publish, use, compile, sell, or
+# distribute this software, either in source code form or as a compiled
+# binary, for any purpose, commercial or non-commercial, and by any
+# means.
+#
+# In jurisdictions that recognize copyright laws, the author or authors
+# of this software dedicate any and all copyright interest in the
+# software to the public domain. We make this dedication for the benefit
+# of the public at large and to the detriment of our heirs and
+# successors. We intend this dedication to be an overt act of
+# relinquishment in perpetuity of all present and future rights to this
+# software under copyright law.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# For more information, please refer to <http://unlicense.org/>
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for dmesg
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Lucas Hoffmann
+#
+# ------------------------------------------------------------------------------
+
+local levels facilities timeformats
+levels='emerg\:"system is unusable"
+	alert\:"action must be taken immediately"
+	crit\:"critical conditions"
+	err\:"error conditions"
+	warn\:"warning conditions"
+	notice\:"normal but significant condition"
+	info\:"informational"
+	debug\:"debug-level messages"'
+facilities='kern\:"kernel messages"
+	    user\:"random user-level messages"
+	    mail\:"mail system"
+	    daemon\:"system daemons"
+	    auth\:"security/authorization messages"
+	    syslog\:"messages generated internally by syslogd"
+	    lpr\:"line printer subsystem"
+	    news\:"network news subsystem"'
+timeformats='delta reltime ctime notime iso'
+
+
+_arguments \
+  {-C,--clear}'[clear the kernel ring buffer]' \
+  {-c,--read-clear}'[read and clear all messages]' \
+  {-D,--console-off}'[disable printing messages to console]' \
+  {-E,--console-on}'[enable printing messages to console]' \
+  {-F,--file}'[use the file instead of the kernel log buffer]:file' \
+  {-f,--facility}"[restrict output to defined facilities]::facility:(($facilities))" \
+  {-H,--human}'[human readable output]' \
+  {-k,--kernel}'[display kernel messages]' \
+  {-L,--color}'[colorize messages]::when:((auto always never))' \
+  {-l,--level}"[restrict output to defined levels]::level:(($levels))" \
+  {-n,--console-level}"[set level of messages printed to console]::level:(($levels))" \
+  {-P,--nopager}'[do not pipe output into a pager]' \
+  {-r,--raw}'[print the raw message buffer]' \
+  {-S,--syslog}'[force to use syslog(2) rather than /dev/kmsg]' \
+  {-s,--buffer-size}'[buffer size to query the kernel ring buffer]:size' \
+  {-u,--userspace}'[display userspace messages]' \
+  {-w,--follow}'[wait for new messages]' \
+  {-x,--decode}'[decode facility and level to readable string]' \
+  {-d,--show-delta}'[show time delta between printed messages]' \
+  {-e,--reltime}'[show local time and time delta in readable format]' \
+  {-T,--ctime}'[show human readable timestamp]' \
+  {-t,--notime}"[don't print messages timestamp]" \
+  "--time-format[show timestamp in a predefined format]::format:(($timeformats))" \
+  {-h,--help}'[display help and exit]' \
+  {-V,--version}'[output version information and exit]'
+
+# TODO --color needs an = sign
+# TODO which options allow a list of arguments?

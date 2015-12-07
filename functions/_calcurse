@@ -1,0 +1,293 @@
+#compdef calcurse
+# ------------------------------------------------------------------------------
+# This is free and unencumbered software released into the public domain.
+#
+# Anyone is free to copy, modify, publish, use, compile, sell, or
+# distribute this software, either in source code form or as a compiled
+# binary, for any purpose, commercial or non-commercial, and by any
+# means.
+#
+# In jurisdictions that recognize copyright laws, the author or authors
+# of this software dedicate any and all copyright interest in the
+# software to the public domain. We make this dedication for the benefit
+# of the public at large and to the detriment of our heirs and
+# successors. We intend this dedication to be an overt act of
+# relinquishment in perpetuity of all present and future rights to this
+# software under copyright law.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# For more information, please refer to <http://unlicense.org/>
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for calcurse
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Lucas Hoffmann
+#
+# ------------------------------------------------------------------------------
+
+# TODO optional and obligatory arguments
+#Usage: calcurse [-g|-h|-v] [-an] [-t[num]] [-i<file>] [-x[format]]
+#                [-d <date>|<num>] [-s[date]] [-r[range]]
+#                [-c<file>] [-D<dir>] [-S<regex>] [--status]
+#                [--read-only]
+_arguments \
+  '(- *)'{-h,--help}'[show the help message]' \
+  '(- *)'{-v,--version}'[show the version information]' \
+  '(--status)--status[display the status of running instances]' \
+  "(--read-only)--read-only[Don't save configuration nor appointments/todos]" \
+  '(-D --directory -c --calendar)'{-c,--calendar}'[specify the calendar file to use (default: ~/.calcurse/apts)]:files:_files' \
+  '(-D --directory)'{-D,--directory}'[specify the data directory to use (default: ~/.calcurse)]:directory:_directories' \
+  '(-a --appointment)'{-a,--appointment}'[print events and appointments for current day]' \
+  {-d,--day}'[print events and appointments for specified period of days]:date or number' \
+  '(--to --days)--days[length of the range for -Q]:length' \
+  '(-g --gc)'{-g,--gc}'[run the garbage collector for note files]' \
+  {-i,--import}'[import icalendar data from a file]:files:_files' \
+  {-n,--next}'[print next appointment within upcoming 24 hours]' \
+  {-l,--limit}'[only print info for the given number of items]:number' \
+  {-r,--range}'[print events and appointments for given number of days (default: 1)]::days' \
+  {-s,--startday}'[print events and appointments starting at the given date (default: today)]::date' \
+  {-S,--search}'[search for the given regular expression within events, appointments, and todos description]:regex' \
+  {-t,--todo}'[print todo list, optionally limited by priority]:priority:((0\:"completed tasks" 1 2 3 4 5 6 7 8 9))' \
+  {-x,--export}'[export user data to the specified format]:format:((ical pcal))' \
+  '--filter-type[items that do not match the type mask]:type mask' \
+  '--filter-pattern[ignore items not matching the given pattern]:pattern' \
+  '--filter-start-from[ignore items before the given date]:date' \
+  '--filter-start-to[ignore items after the given date]:date' \
+  '--filter-start-after[only include items after the given date]:date' \
+  '--filter-start-before[only include items before the given date]:date' \
+
+#-d <date|num>, --day <date|num>
+#    * a date (possible formats described below).
+#    * a number n.
+#--filter-type <type> See FILTERS for details.
+#--filter-pattern <pattern> See FILTERS for details.
+#--filter-start-from <date> See FILTERS for details.
+#--filter-start-to <date> See FILTERS for details.
+#--filter-start-after <date> See FILTERS for details.
+#--filter-start-before <date> See FILTERS for details.
+#--filter-start-range <range>
+#    Only include items within a given range. See FILTERS for
+#    details.
+#
+#--filter-end-from <date>
+#    Ignore any items that end before a given date. See FILTERS for
+#    details.
+#
+#--filter-end-to <date>
+#    Ignore any items that end after a given date. See FILTERS for
+#    details.
+#
+#--filter-end-after <date>
+#    Only include items that end after a given date. See FILTERS for
+#    details.
+#
+#--filter-end-before <date>
+#    Only include items that end before a given date. See FILTERS for
+#    details.
+#
+#--filter-end-range <range>
+#    Only include items within a given range. See FILTERS for
+#    details.
+#
+#--filter-priority <priority>
+#    Only include items with a given priority. See FILTERS for
+#    details.
+#
+#--filter-completed
+#    Only include completed TODO items. See FILTERS for details.
+#
+#--filter-uncompleted
+#    Only include uncompleted TODO items. See FILTERS for details.
+#
+#--format-apt <format>
+#    Specify a format to control the output of appointments in
+#    non-interactive mode. See the FORMAT STRINGS section for
+#    detailed information on format strings.
+#
+#--format-recur-apt <format>
+#    Specify a format to control the output of recurrent appointments
+#    in non-interactive mode. See the FORMAT STRINGS section for
+#    detailed information on format strings.
+#
+#--format-event <format>
+#    Specify a format to control the output of events in
+#    non-interactive mode. See the FORMAT STRINGS section for
+#    detailed information on format strings.
+#
+#--format-recur-event <format>
+#    Specify a format to control the output of recurrent events in
+#    non-interactive mode. See the FORMAT STRINGS section for
+#    detailed information on format strings.
+#
+#--format-todo <format>
+#    Specify a format to control the output of todo items in
+#    non-interactive mode. See the FORMAT STRINGS section for
+#    detailed information on format strings.
+#
+#--from <date>
+#    Specify the start date of the range when used with -Q.
+#
+#-g, --gc
+#    Run the garbage collector for note files and exit.
+#
+#-G, --grep
+#    Print appointments and TODO items using the calcurse data file
+#    format. The filter interface can be used to further restrict the
+#    output. See also: FILTERS.
+#
+#-h, --help
+#    Print a short help text describing the supported command-line
+#    options, and exit.
+#
+#-i <file>, --import <file>
+#    Import the icalendar data contained in file.
+#
+#-l <num>, --limit <num>
+#    Limit the number of results printed to num.
+#
+#-n, --next
+#    Print the next appointment within upcoming 24 hours and exit.
+#    The indicated time is the number of hours and minutes left
+#    before this appointment.
+#
+#    Note: the calendar from which to read the appointments can be
+#    specified using the -c flag.
+#
+#-Q, --query
+#    Print all appointments inside a given query range, followed by
+#    all TODO items. The query range defaults to the current day and
+#    can be changed by using the --from and --to (or --days)
+#    parameters. The filter interface can be used to further restrict
+#    the output. See also: FILTERS.
+#
+#-r[num], --range[=num]
+#    Print events and appointments for the num number of days and
+#    exit. If no num is given, a range of 1 day is considered.
+#    Equivalent to -Q --filter-type cal --days <num>.
+#
+#--read-only
+#    Don't save configuration nor appointments/todos.
+#
+#    Warning: Use this this with care! If you run an interactive
+#    calcurse instance in read-only mode, all changes from this
+#    session will be lost without warning!
+#
+#-s[date], --startday[=date]
+#    Print events and appointments from date and exit. If no date is
+#    given, the current day is considered. Equivalent to -Q
+#    --filter-type cal --from <date>.
+#
+#-S<regex>, --search=<regex>
+#    When used with the -a, -d, -r, -s, or -t flag, print only the
+#    items having a description that matches the given regular
+#    expression. Equivalent to -Q --filter-pattern <regex>.
+#
+#--status
+#    Display the status of running instances of calcurse. If calcurse
+#    is running, this will tell if the interactive mode was launched
+#    or if calcurse is running in background. The process pid will
+#    also be indicated.
+#
+#-t[num], --todo[=num]
+#    Print the todo list and exit. If the optional number num is
+#    given, then only todos having a priority equal to num will be
+#    returned. The priority number must be between 1 (highest) and 9
+#    (lowest). It is also possible to specify 0 for the priority, in
+#    which case only completed tasks will be shown. Equivalent to -Q
+#    --filter-type todo, combined with --filter-priority and
+#    --filter-completed or --filter-uncompleted.
+#
+#--to <date>
+#    Specify the end date of the range when used with -Q. Cannot be
+#    combined with --days.
+#
+#-v, --version
+#    Display calcurse version and exit.
+#
+#-x[format], --export[=format]
+#    Export user data to specified format. Events, appointments and
+#    todos are converted and echoed to stdout. Two possible formats
+#    are available: ical and pcal. If the optional argument format is
+#    not given, ical format is selected by default.
+#
+#    Note: redirect standard output to export data to a file, by
+#    issuing a command such as:
+#
+#        $ calcurse --export > my_data.dat
+#
+#Note: The -N option has been removed in calcurse 3.0.0. See the
+#FORMAT STRINGS section on how to print note along with appointments
+#and events.
+#
+#ILTERS
+#Filters can be used to restrict the set of items which are loaded
+#from the appointments file when using calcurse in non-interactive
+#mode. The following filters are currently supported:
+#
+#--filter-type <type>
+#    Ignore any items that do not match the type mask. The type mask
+#    is a comma-separated list of valid type descriptions which
+#    include event, apt, recur-event, recur-apt and todo. You can
+#    also use recur as a shorthand for recur-event,recur-apt and cal
+#    as a shorthand for event,apt,recur.
+#
+#--filter-pattern <pattern>
+#    Ignore any items with a description that does not match the
+#    pattern. The pattern is interpreted as extended regular
+#    expression.
+#
+#--filter-start-from <date>
+#    Ignore any items that start before a given date.
+#
+#--filter-start-to <date>
+#    Ignore any items that start after a given date.
+#
+#--filter-start-after <date>
+#    Only include items that start after a given date.
+#
+#--filter-start-before <date>
+#    Only include items that start before a given date.
+#
+#--filter-start-range <range>
+#    Only include items with a start date that falls within a given
+#    range. A range consists of a start date and an end date,
+#    separated by a comma.
+#
+#--filter-end-from <date>
+#    Ignore any items that end before a given date.
+#
+#--filter-end-to <date>
+#    Ignore any items that end after a given date.
+#
+#--filter-end-after <date>
+#    Only include items that end after a given date.
+#
+#--filter-end-before <date>
+#    Only include items that end before a given date.
+#
+#--filter-end-range <range>
+#    Only include items with an end date that falls within a given
+#    range. A range consists of a start date and an end date,
+#    separated by a comma.
+#
+#--filter-priority <priority>
+#    Only include items with a given priority.
+#
+#--filter-completed
+#    Only include completed TODO items.
+#
+#--filter-uncompleted
+#    Only include uncompleted TODO items.
