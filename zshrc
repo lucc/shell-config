@@ -671,7 +671,7 @@ function zrc-zstyle-hosts-patterns () {
 }
 
 function zrc-parse-netrc () {
-  netrc=(${${(@M)${(f)"$(cat ~/.netrc(N) /dev/null)"}:#machine *}#machine })
+  netrc=(${${(@M)${(f)"$(cat ${NETRC:-~/.netrc(N)} /dev/null)"}:#machine *}#machine })
   # sed -n '/^machine/s/^machine //p' ~/.netrc
 }
 

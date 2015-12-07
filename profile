@@ -435,6 +435,7 @@ _profile_export_special_env () {
   export ELINKS_CONFDIR="$dir/elinks"
   export SCREENRC="$dir/screen/screenrc"
   export NOTMUCH_CONFIG="$dir/notmuch/config"
+  export NETRC="$dir/netrc"
 }
 _profile_export_nvim_test_env () {
   # see
