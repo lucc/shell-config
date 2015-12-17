@@ -575,6 +575,10 @@ function zrc-calcurse-notifications () {
     --format-{recur-,}event='*****  %m\n'
 }
 
+function zrc-print-todo-items-from-notmuch () {
+  notmuch search --format=json tag:todo | jq --raw-output '.[].subject'
+}
+
 function zrc-todo-from-bashrc () {
   # this and dircolors in general
   if [ "$TERM" != "dumb" ]; then
