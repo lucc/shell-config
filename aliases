@@ -112,4 +112,6 @@ if [ `uname` = Darwin ] ; then
 elif [ `uname` = Linux ]; then
   alias pstree='pstree -n'
   alias cal='cal -3'
+  alias pacs='pacaur -Ss'
+  alias paci='pacaur -Syu --devel --needed'
 fi
