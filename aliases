@@ -71,8 +71,6 @@ alias isodate='date "+%F %T"'
 alias timestamp='date +%Y%m%d%H%M%S'
 alias hgrep='history 1 | grep'
 alias -- '?=if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) = true ]]; then git status --short; elif hg -q stat 2>/dev/null; then hg status; else echo Not under version control.; fi'
-alias alot='python2 ~/vcs/alot/build/lib/alot/init.py -d debug -l ~/log/alot.log'
-alias alot3='python ~/vcs/alot-py3/build/lib/alot/init.py -d debug -l ~/log/alot-py3.log'
 
 # games {{{1
 alias histhead='history -n 1 | \
