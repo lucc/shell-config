@@ -340,8 +340,7 @@ _profile_host_mbp () {
     export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket" #started by systemd
     #export SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket
     if [ "$TTY" = /dev/tty1 ] && _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
-      #XINITRC=~/.config/xinit/xinitrc exec startx
-      exec startx
+      exec startx "${XDG_CONFIG_HOME:-$HOME/.config}/xinit/xinitrc"
     elif [ "$TTY" != /dev/tty1 ]; then
       : _profile_colors_basic_solarized_dark
     fi
