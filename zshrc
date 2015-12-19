@@ -85,7 +85,7 @@ typeset -a ZRC_AT_EXIT_FUNCTIONS
 # functions to set up basic zsh options {{{1
 
 function zrc-history-options () {
-  HISTFILE=$ZDOTDIR/histfile
+  HISTFILE=${XDG_CACHE_HOME:-~/.cache}/zsh/history
   HISTSIZE=15000
   SAVEHIST=10000
   setopt hist_ignore_all_dups
@@ -445,7 +445,7 @@ function zrc-compile-run-help () {
 function zrc-run-help () {
   autoload -Uz run-help
   unalias run-help
-  HELPDIR=$ZDOTDIR/help
+  HELPDIR=${XDG_DATA_HOME:-~/.local/share}/zsh/help
   bindkey -M viins '\C-xh' run-help
   bindkey -M vicmd '\C-xh' run-help
   # install the files when needed
@@ -607,7 +607,7 @@ function zrc-zstyle-layout () {
 
 function zrc-zstyle-performemce () {
   zstyle ':completion:*' use-cache on
-  zstyle ':completion:*' cache-path $ZDOTDIR/cache
+  zstyle ':completion:*' cache-path ${XDG_CACHE_HOME:-~/.cache}/zsh/completion
 }
 
 function zrc-zstyle-other () {
