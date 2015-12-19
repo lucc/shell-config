@@ -419,22 +419,33 @@ _profile_export_standard_env () {
 }
 _profile_export_special_env () {
   # force some programs to load their configuration from ~/.config
-  local dir="${XDG_CONFIG_HOME:-$HOME/.config}"
-  export TIGRC_USER="$dir/tig/tigrc"
-  export PASSWORD_STORE_DIR="$dir/pass"
-  export GNUPGHOME="$dir/gpg"
+  local cdir="${XDG_CONFIG_HOME:-$HOME/.config}"
+  local ddir="${XDG_DATA_HOME:-$HOME/.local/share}"
+  export TIGRC_USER="$cdir/tig/tigrc"
+  export PASSWORD_STORE_DIR="$cdir/pass"
+  export GNUPGHOME="$cdir/gpg"
   # see https://tlvince.com/vim-respect-xdg
   #export VIMINIT='let $MYVIMRC = "'"$dir/vim/vimrc"'" | source $MYVIMRC'
-  export VIMPAGER_RC="$dir/nvim/vimpagerrc"
+  export VIMPAGER_RC="$cdir/nvim/vimpagerrc"
   #export GVIMINIT='let MYGVIMRC = "'"$dir/vim/gvimrc"'" | source $MYGVIMRC'
-  #export PENTADACTYL_INIT="source $dir/pentadactyl/pentadactylrc"
-  #export PENTADACTYL_RUNTIME="$dir/pentadactyl"
-  export WINEPREFIX="$dir/wine"
-  export RXVT_SOCKET="$dir/urxvt/urxvtd-`hostname`"
-  export ELINKS_CONFDIR="$dir/elinks"
+  export WINEPREFIX="$ddir/wine"
+  export RXVT_SOCKET="$ddir/urxvt/urxvtd-`hostname`"
+  export ELINKS_CONFDIR="$cdir/elinks"
   #export SCREENRC="$dir/screen/screenrc"
-  export NOTMUCH_CONFIG="$dir/notmuch/config"
-  export NETRC="$dir/netrc"
+  export NOTMUCH_CONFIG="$cdir/notmuch/config"
+  export NETRC="$cdir/netrc"
+}
+_profile_export_vimperator_init () {
+  export VIMPERATOR_INIT="source $dir/vimperator/vimperatorrc"
+  export VIMPERATOR_RUNTIME="$dir/vimperator"
+}
+_profile_export_pentadactyl_init () {
+  export PENTADACTYL_INIT="source $dir/pentadactyl/pentadactylrc"
+  export PENTADACTYL_RUNTIME="$dir/pentadactyl"
+}
+_profile_export_setup_for_firefox_vim_plugin () {
+  local dir="${XDG_CONFIG_HOME:-$HOME/.config}"
+  _profile_export_vimperator_init
 }
 _profile_export_nvim_test_env () {
   # see
@@ -463,6 +474,7 @@ _profile_export_PAGER
 _profile_export_GPG_AGENT_INFO
 _profile_export_DISPLAY
 _profile_export_special_env
+_profile_export_setup_for_firefox_vim_plugin
 
 # select the correct functions for this system
 case "`uname`" in
