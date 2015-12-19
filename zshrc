@@ -123,6 +123,7 @@ function zrc-keymap () {
   zrc-history-substring-search-keys
   zrc-keys-edit-command-line
   zrc-search-keys
+  zrc-push-zle-buffer-keys
 }
 
 function zrc-keys-terminfo () {
@@ -223,6 +224,11 @@ function zrc-keys-edit-command-line () {
   autoload edit-command-line
   zle -N edit-command-line
   bindkey '\ee' edit-command-line
+}
+
+function zrc-push-zle-buffer-keys () {
+  zrc-vi-bindkey '\C-p' push-input
+  zrc-vi-bindkey '\C-o' push-line
 }
 
 # prompt related functions {{{1
