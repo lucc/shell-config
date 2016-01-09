@@ -618,7 +618,7 @@ function zrc-zstyle-other () {
   zstyle ':completion:*' special-dirs ..
   zstyle ':completion:*' ignore-parents parent pwd ..
   #TODO
-  zstyle ':completion:*:cd:*' ignored-patterns .
+  #zstyle ':completion:*:cd:*' ignored-patterns .
   zstyle ':completion:*' list-suffixes true
   zstyle ':completion:*' matcher-list \
     '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
@@ -757,6 +757,10 @@ function zrc-antigen () {
   done
 }
 
+# set up fzf keybindings {{{1
+function zrc-fzf-setup () {
+  zrc-source /etc/profile.d/fzf.zsh
+}
 # call the functions {{{1
 
 zrc-source-files
@@ -783,6 +787,7 @@ zrc-lesspipe
 zrc-autojump-decision
 zrc-homeshick
 zrc-gpg-setup
+zrc-fzf-setup
 
 zrc-compinit
 
