@@ -175,6 +175,8 @@ function zrc-keys-manual-corrections () {
 }
 
 function zrc-keys-manual-corrections-tmux () {
+  key[Up]='\e[A'
+  key[Down]='\e[B'
   # this needs the tmux option "xterm-keys" set to "on"
   key[ShiftUp]='\e[1;2A'
   key[ShiftDown]='\e[1;2B'
