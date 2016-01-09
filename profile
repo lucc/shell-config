@@ -424,16 +424,14 @@ _profile_export_special_env () {
   export TIGRC_USER="$cdir/tig/tigrc"
   export PASSWORD_STORE_DIR="$cdir/pass"
   export GNUPGHOME="$cdir/gpg"
-  # see https://tlvince.com/vim-respect-xdg
-  #export VIMINIT='let $MYVIMRC = "'"$dir/vim/vimrc"'" | source $MYVIMRC'
   export VIMPAGER_RC="$cdir/nvim/vimpagerrc"
-  #export GVIMINIT='let MYGVIMRC = "'"$dir/vim/gvimrc"'" | source $MYGVIMRC'
   export WINEPREFIX="$ddir/wine"
   export RXVT_SOCKET="$ddir/urxvt/urxvtd-`hostname`"
   export ELINKS_CONFDIR="$cdir/elinks"
   #export SCREENRC="$dir/screen/screenrc"
   export NOTMUCH_CONFIG="$cdir/notmuch/config"
   export NETRC="$cdir/netrc"
+  export FZF_DEFAULT_OPTS="--inline-info --cycle"
 }
 _profile_export_vimperator_init () {
   export VIMPERATOR_INIT="source $dir/vimperator/vimperatorrc"
@@ -446,6 +444,12 @@ _profile_export_pentadactyl_init () {
 _profile_export_setup_for_firefox_vim_plugin () {
   local dir="${XDG_CONFIG_HOME:-$HOME/.config}"
   _profile_export_vimperator_init
+}
+_profile_export_vim_init_for_xdg () {
+  local dir="${XDG_CONFIG_HOME:-$HOME/.config}"
+  # see https://tlvince.com/vim-respect-xdg
+  export VIMINIT='let $MYVIMRC = "'"$dir/vim/vimrc"'" | source $MYVIMRC'
+  export GVIMINIT='let MYGVIMRC = "'"$dir/vim/gvimrc"'" | source $MYGVIMRC'
 }
 _profile_export_nvim_test_env () {
   # see
