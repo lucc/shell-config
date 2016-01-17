@@ -415,7 +415,7 @@ _profile_export_standard_env () {
   export EDITOR=nvim
   #export HISTSIZE=2000
   export HTMLPAGER='elinks --dump'
-  #export PYTHONSTARTUP=~/.config/pystartup
+  export PYTHONSTARTUP=~/.config/python/init.py
 }
 _profile_export_special_env () {
   # force some programs to load their configuration from ~/.config
