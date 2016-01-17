@@ -92,10 +92,10 @@ alias gtype='gtypist ktde.typ'
 alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
 
 # suffix aliases {{{1
-alias -s com=xdg-open
-alias -s org=xdg-open
-alias -s net=xdg-open
-alias -s de=xdg-open
+#alias -s com=xdg-open
+#alias -s org=xdg-open
+#alias -s net=xdg-open
+#alias -s de=xdg-open
 
 # Mac OS X specific aliases {{{1
 if [ `uname` = Darwin ] ; then

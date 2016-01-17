@@ -75,6 +75,7 @@ function zrc-filter-existing () { # {{{2
 }
 
 # local variables {{{1
+
 ZRC_UNAME=$(uname)
 # Will expand to the nullstring if we are not on Mac OS X or brew is not
 # installed.
@@ -573,6 +574,11 @@ function zrc-gpg-setup () { # {{{2
   export GPG_TTY=$(tty)
 }
 
+function zrc-zsh-mime-handling-setup () { # {{{2
+  autoload zsh-mime-setup
+  zsh-mime-setup
+}
+
 # other {{{1
 
 function zrc-calcurse-notifications () { # {{{2
@@ -789,6 +795,7 @@ zrc-autojump-decision
 zrc-homeshick
 zrc-gpg-setup
 zrc-fzf-setup
+zrc-zsh-mime-handling-setup
 
 zrc-compinit
 
