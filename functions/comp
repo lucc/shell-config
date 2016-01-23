@@ -1,28 +1,49 @@
 # vim: ft=zsh
 
-if [[ $1 = -h ]]; then
-  cat <<-'EOF' >&2
-	Usage: comp [-n] shell-code-string-1  shell-code-string-2 [number]
-	       comp -h
+local output='>& /dev/null'
+local check=true
+local debug=false
 
-	 The shell code strings will be passed to eval, each executed number
-	 times (10 by default).  If -n is given the output of the commands is
-	 NOT supressed.
+local usage=\
+'Usage: comp [-fnx] shell-code-string-1  shell-code-string-2 [number]
+       comp -h'
+local help='
+The shell code strings will be passed to eval, each executed number times (10
+by default).  If -n is given the output of the commands is NOT supressed.  If
+-f is given the first word of the two strings is NOT checked if it is a valid
+command/function/alias/buildin ...
 
-	 With this you can compare the execution times of external commands,
-	 shell functions or literal shell code.
+With this you can compare the execution times of external commands, shell
+functions or literal shell code.
+'
 
-	EOF
-  return
-fi
+while getopts fhnx FLAG; do
+  case $FLAG in
+    h)
+      echo $usage
+      echo $help
+      return
+      ;;
+    n)
+      output=
+      ;;
+    f)
+      check=false
+      ;;
+    x)
+      # Only set xtrace if it was not set (especially only unset xtrace if we
+      # set it ourselfs).
+      [[ -o xtrace ]] || debug=true
+      ;;
+    *)
+      echo $usage >&2
+      return 2
+      ;;
+  esac
+done
 
-# check the first argument and decide if we should redirect stdout and stderr
-if [[ $1 = -n ]]; then
-  local output=
-  shift
-else
-  local output='>& /dev/null'
-fi
+shift $((OPTIND - 1))
+
 
 ## save the current setting of shwordsplit
 #local oldshwordsplit=
@@ -33,10 +54,18 @@ fi
 #fi
 
 #setopt shwordsplit
-type ${1%% *} > /dev/null 2>&1 || return 2
-type ${2%% *} > /dev/null 2>&1 || return 3
+if $check; then
+  type ${1%% *} > /dev/null 2>&1 || return 2
+  type ${2%% *} > /dev/null 2>&1 || return 3
+fi
+if $debug; then
+  set -x
+fi
 printf 1
 eval "time ( for ((i=0; i<${3:-10}; i++)); do $1; done $output )"
 printf 2
 eval "time ( for ((i=0; i<${3:-10}; i++)); do $2; done $output )"
+if $debug; then
+  set +x
+fi
 #setopt $oldshwordsplit
