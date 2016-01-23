@@ -57,10 +57,7 @@ alias up='date +"%F `uptime`"'
 #  alias ncmpcpp='ncmpcpp --host pi.local'
 #  alias mpc='mpc --host pi.local'
 #fi
-alias m=ncmpcpp
-alias play='mpc play'
-alias pause='mpc pause'
-alias p='mpc toggle'
+alias music=ncmpcpp
 
 # other {{{1
 alias ctw-muc='ctw GMXX0087'
