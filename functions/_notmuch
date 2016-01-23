@@ -2,6 +2,9 @@
 
 _notmuch_commands()
 {
+  local context state state_descr line
+  local ret=1
+  typeset -A opt_args
   local -a notmuch_commands
   notmuch_commands=(
     'setup:interactively set up notmuch for first use'
@@ -18,7 +21,26 @@ _notmuch_commands()
     'count:count messages matching the given search terms'
   )
 
-  _describe -t command 'command' notmuch_commands
+  # TODO complete sub commands after --help
+  # TODO complete commands if an option was given
+  _arguments -C \
+    "(-*)--help[show help]:help topics:_notmuch_help"    \
+    '(*)--version[show version information]' \
+    '(--help --version)--config=-[specify an alternative config file]:file:_files' \
+    '(--help --version)--uuid=-[identifier in hex]:identifier (hex string)' \
+    ': :->command' \
+    && ret=0
+
+  case $state in
+    command)
+      _describe -t command 'command' notmuch_commands
+      ;;
+    #help)
+    #  _notmuch_help
+    #  ;;
+  esac
+
+  return ret
 }
 
 _notmuch_dump()
@@ -47,12 +69,35 @@ _notmuch_restore()
   _files
 }
 
+_notmuch_search_terms ()
+{
+  : # TODO
+}
+
 _notmuch_search()
 {
-  _arguments -s : \
-    '--max-threads=[display only the first x threads from the search results]:number of threads to show: ' \
-    '--first=[omit the first x threads from the search results]:number of threads to omit: ' \
-    '--sort=[sort results]:sorting:((newest-first\:"reverse chronological order" oldest-first\:"chronological order"))'
+  local context state state_descr line
+  local ret=1
+  typeset -A opt_args
+  _arguments -s -C : \
+    '--max-threads=-[display only the first x threads from the search results]:number of threads to show: ' \
+    '--first=-[omit the first x threads from the search results]:number of threads to omit: ' \
+    '--sort=-[sort results]:sorting:((newest-first\:"reverse chronological order" oldest-first\:"chronological order"))' \
+    '--format=-[specify output format (default text)]:format:(json sexp text text0)' \
+    '--format-version=-[version of output format used (default latest)]:version:' \
+    '--output=-[type of information to print (default summary)]:output:((sumary\:"one line summary of the thread" threads\:"thread IDs of matching messages" messages\:"message IDs of matching messages" files\:"filenames of matching messages" tags\:"all tags of any matching message"))' \
+    '--offset=-[skip initial results]:number:' \
+    '--limit=-[limit number of displayed results]:number:' \
+    '--exclude=-[how to handle search.tag_exclude config option]:exclusion behaviour:(true false all flag)' \
+    '--duplicate=-[show duplicate x of matching message]:number:' \
+    '*::search terms:->terms' && ret=0
+
+  case $state in
+    terms)
+      _notmuch_search_terms
+      ;;
+  esac
+  return ret
 }
 
 _notmuch()
