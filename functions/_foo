@@ -1,0 +1,38 @@
+#compdef foo
+
+# A completion test script by luc.
+
+_foo () {
+
+  local ret=1
+
+  local -a arguments_for_the_arguments_function
+  arguments_for_the_arguments_function=(
+  # the help option
+  '--help[show the help]'
+  # the first command argument, set state to "hans1" and drop to case
+  # statement
+  ': :->hans1'
+  # the second argument, set state to "hans2", ...
+  '*:: :->hans2'
+  )
+
+  _arguments -C $arguments_for_the_arguments_function && ret=0
+
+  local -a some_array_name some_other_array_name
+  some_array_name=(ab:help_ab cd:help_cd ef:help_ef)
+  some_other_array_name=(ab_2:help_ab_2 cd_2:help_cd_2 ef_2:help_ef_2)
+
+
+
+  case $state in
+    hans1)
+      _describe 'we are in hans1 state' some_array_name
+      ;;
+    hans2)
+      _describe 'we are in hans2 state' some_other_array_name
+      ;;
+  esac
+
+  return ret
+}
