@@ -644,6 +644,10 @@ function zrc-zstyle-todo () { # {{{2
   zstyle ':completion:*' muttrc ~/.mutt/muttrc
   zstyle ':completion:*' mail-directory ~/mail
   zstyle ':completion:*' mailboxes ~/mail
+  # Copied from the _git completion file.  This enables completion of custom
+  # git subcommands (git-* files in $PATH).
+  zstyle ':completion:*:*:git:*' user-commands \
+    ${${(M)${(k)commands}:#git-*}/git-/}
 }
 
 function zrc-zstyle-hosts () { # new {{{2
