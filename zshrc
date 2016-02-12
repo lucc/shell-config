@@ -627,6 +627,10 @@ function zrc-calcurse-notifications () { # {{{2
     --format-{recur-,}event='*****  %m\n'
 }
 
+function zrc-khal-notifications () { # {{{2
+  make --quiet -C ~/.config/khal
+}
+
 function zrc-print-todo-items-from-notmuch () { # {{{2
   notmuch search --format=json tag:todo | jq --raw-output '.[].subject'
 }
@@ -841,7 +845,7 @@ zrc-zsh-mime-handling-setup
 
 zrc-compinit
 
-zrc-calcurse-notifications
+zrc-khal-notifications
 
 # execute the at exit hooks {{{1
 zrc-run-exit-hooks
