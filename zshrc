@@ -159,7 +159,9 @@ function zrc-keys-terminfo () { # {{{2
 function zrc-keys-manual-corrections () { # {{{2
   # Collection of conditions and corrections for errors with terminfo
   if zrc-test-linux; then
-    if [[ $TERM == urxvt || $TERM == rxvt-unicode-256color ]]; then
+    if [[ -n $MYVIMRC && $VIM = *nvim* && $VIMRUNTIME = *nvim* ]]; then
+      zrc-keys-manual-corrections-nvim
+    elif [[ $TERM == urxvt || $TERM == rxvt-unicode-256color ]]; then
       key[ShiftUp]='\e[a'
       key[ShiftDown]='\e[b'
     elif [[ -n $TMUX ]]; then
@@ -192,6 +194,42 @@ function zrc-keys-manual-corrections-xterm () { # {{{2
   key[End]='\e[F'
   key[ShiftUp]='\e[1;2A'
   key[ShiftDown]='\e[1;2B'
+}
+
+function zrc-keys-manual-corrections-nvim () { # {{{2
+  # function keys
+  key[F1]='\U7fffce95'
+  key[F2]='\U7fffcd95'
+  key[F3]='\U7fffcc95'
+  key[F4]='\U7fffcb95'
+  key[F5]='\U7fffca95'
+  key[F6]='\U7fffc995'
+  key[F7]='\U7fffc895'
+  key[F8]='\U7fffc795'
+  key[F9]='\U7fffc695'
+  key[F10]='\U7fffc495'
+  key[F11]='\U7fffceba'
+  key[F12]='\U7fffcdba'
+  # plain arrows
+  key[Up]='\e[A'
+  key[Down]='\e[B'
+  # shifted arrows
+  #key[ShiftUp]=   # not possible?
+  #key[ShiftDown]= # not possible?
+  key[ShiftLeft]='\U7fffcbdd'  # problematic?
+  key[ShiftRight]='\U7fff96db' # problematic?
+  # fn-arrows
+  key[Home]='\e[H'
+  key[End]='\e[F'
+  # shifted fn-arrows
+  key[ShiftPageUp]=    # Not possible? (used by the terminal)
+  key[ShiftPageDown]=  # Not possible?
+  key[ShiftHome]='\U7fffcddd'
+  key[ShiftEnd]='\U7fffc8d6'
+  # delete and such
+  key[Delete]='\e[3~'
+  key[ShiftBackspace]= # TODO
+  key[ShiftDelete]='\U7fffcbd6'
 }
 
 function zrc-keys-ssh () { # {{{2
