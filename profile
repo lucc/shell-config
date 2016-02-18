@@ -362,28 +362,7 @@ _profile_export_PAGER () {
     # TODO
     unset PAGER
     # default pager program should be "less"
-    # FIXME this is bash syntax. zsh and sh seem to accept it as well.
-    export LESS_TERMCAP_mb=$'\033[01;31m'      # begin blinking
-    export LESS_TERMCAP_md=$'\033[01;31m'      # begin bold
-    export LESS_TERMCAP_me=$'\033[0m'          # end mode
-    export LESS_TERMCAP_se=$'\033[0m'          # end standout-mode
-    export LESS_TERMCAP_so=$'\033[01;44m'      # begin standout-mode/info box
-    export LESS_TERMCAP_ue=$'\033[0m'          # end underline
-    export LESS_TERMCAP_us=$'\033[01;33m'      # begin underline
-    LESS=
-    LESS="$LESS --ignore-case"
-    LESS="$LESS --LINE-NUMBERS"
-    LESS="$LESS --hilite-unread"
-    LESS="$LESS --window=-4"
-    LESS="$LESS --hilite-search"
-    LESS="$LESS --LONG-PROMPT"
-    LESS="$LESS --no-init"
-    LESS="$LESS --quit-if-one-screen"
-    LESS="$LESS --RAW-CONTROL-CHARS"
-    LESS="$LESS --prompt=%t?f%f"
-    # FIXME: What is this for?
-    LESS="$LESS \\"
-    export LESS
+    _profile_export_less_env
   fi
 }
 _profile_export_DISPLAY () {
@@ -430,6 +409,22 @@ _profile_export_special_env () {
   export NOTMUCH_CONFIG="$cdir/notmuch/config"
   export NETRC="$cdir/netrc"
   export FZF_DEFAULT_OPTS="--inline-info --cycle"
+}
+_profile_export_less_env () {
+  export LESSKEY="$cdir/less/lesskey"
+  make --quiet -C "$cdir/less" lesskey
+  # FIXME this is bash syntax. zsh and sh seem to accept it as well.
+  export LESS_TERMCAP_mb=$'\033[01;31m'    # begin blinking
+  export LESS_TERMCAP_md=$'\033[01;31m'    # begin bold
+  export LESS_TERMCAP_me=$'\033[0m'        # end mode
+  export LESS_TERMCAP_se=$'\033[0m'        # end standout-mode
+  export LESS_TERMCAP_so=$'\033[01;44m'    # begin standout-mode/info box
+  export LESS_TERMCAP_ue=$'\033[0m'        # end underline
+  export LESS_TERMCAP_us=$'\033[01;33m'    # begin underline
+}
+_profile_export_systemctl_env () {
+  export SYSTEMD_PAGER=less
+  _profile_export_less_env
 }
 _profile_export_vimperator_init () {
   export VIMPERATOR_INIT="source $cdir/vimperator/vimperatorrc"
