@@ -245,8 +245,8 @@ _profile_start_ssh_agent () {
 _profile_start_pop_daemon () {
   # if fetchmail is already runnng this will just awake it once and not do any
   # harm
-  FETCHMAILHOME=${XDG_CONFIG_HOME:-$HOME/.config}/fetchmail \
-    FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 fetchmail
+  FETCHMAILHOME="$cdir/fetchmail" FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 \
+    fetchmail
 }
 _profile_add_ssh_keys () {
   SSH_ASKPASS=`which pass-as-ssh-askpass.sh` \
@@ -303,7 +303,7 @@ _profile_system_mac_osx_fix_path_for_brew () {
 }
 _profile_system_mac_osx_env_from_file () {
   local file
-  for file in ~/.config/env/*; do
+  for file in "$cdir"/env/*; do
     _profile_helper_set_var_from_file "${file##*/}" "$file"
   done
 }
@@ -340,7 +340,7 @@ _profile_host_mbp () {
     export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket" #started by systemd
     #export SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket
     if [ "$TTY" = /dev/tty1 ] && _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
-      exec startx "${XDG_CONFIG_HOME:-$HOME/.config}/xinit/xinitrc"
+      exec startx "$cdir/xinit/xinitrc"
     elif [ "$TTY" != /dev/tty1 ]; then
       : _profile_colors_basic_solarized_dark
     fi
@@ -415,12 +415,10 @@ _profile_export_standard_env () {
   export EDITOR=nvim
   #export HISTSIZE=2000
   export HTMLPAGER='elinks --dump'
-  export PYTHONSTARTUP=~/.config/python/init.py
+  export PYTHONSTARTUP="$cdir"/python/init.py
 }
 _profile_export_special_env () {
   # force some programs to load their configuration from ~/.config
-  local cdir="${XDG_CONFIG_HOME:-$HOME/.config}"
-  local ddir="${XDG_DATA_HOME:-$HOME/.local/share}"
   export TIGRC_USER="$cdir/tig/tigrc"
   export PASSWORD_STORE_DIR="$cdir/pass"
   export GNUPGHOME="$cdir/gpg"
@@ -434,22 +432,20 @@ _profile_export_special_env () {
   export FZF_DEFAULT_OPTS="--inline-info --cycle"
 }
 _profile_export_vimperator_init () {
-  export VIMPERATOR_INIT="source $dir/vimperator/vimperatorrc"
-  export VIMPERATOR_RUNTIME="$dir/vimperator"
+  export VIMPERATOR_INIT="source $cdir/vimperator/vimperatorrc"
+  export VIMPERATOR_RUNTIME="$cdir/vimperator"
 }
 _profile_export_pentadactyl_init () {
-  export PENTADACTYL_INIT="source $dir/pentadactyl/pentadactylrc"
-  export PENTADACTYL_RUNTIME="$dir/pentadactyl"
+  export PENTADACTYL_INIT="source $cdir/pentadactyl/pentadactylrc"
+  export PENTADACTYL_RUNTIME="$cdir/pentadactyl"
 }
 _profile_export_setup_for_firefox_vim_plugin () {
-  local dir="${XDG_CONFIG_HOME:-$HOME/.config}"
   _profile_export_vimperator_init
 }
 _profile_export_vim_init_for_xdg () {
-  local dir="${XDG_CONFIG_HOME:-$HOME/.config}"
   # see https://tlvince.com/vim-respect-xdg
-  export VIMINIT='let $MYVIMRC = "'"$dir/vim/vimrc"'" | source $MYVIMRC'
-  export GVIMINIT='let MYGVIMRC = "'"$dir/vim/gvimrc"'" | source $MYGVIMRC'
+  export VIMINIT='let $MYVIMRC = "'"$cdir/vim/vimrc"'" | source $MYVIMRC'
+  export GVIMINIT='let MYGVIMRC = "'"$cdir/vim/gvimrc"'" | source $MYGVIMRC'
 }
 _profile_export_nvim_test_env () {
   # see
@@ -473,6 +469,10 @@ _profile_set_infopath () {
 }
 
 main () {
+  # Local variables for this script.
+  local cdir="${XDG_CONFIG_HOME:-$HOME/.config}"
+  local ddir="${XDG_DATA_HOME:-$HOME/.local/share}"
+
   # start setting up the environment
   _profile_export_standard_env
   _profile_export_PATH
