@@ -526,8 +526,7 @@ main () {
       _profile_system_open_bsd
       ;;
   esac
-  # unset all functions again
-  unset -f $(declare -f | grep -E '^_profile_[^ ]* \(\)' | cut -f 1 -d ' ')
 }
-
-unset -f main
+main
+# unset all functions again
+unset -f $(declare -f | grep -E '^_profile_[^ ]* \(\)' | cut -f 1 -d ' ') main
