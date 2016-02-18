@@ -471,59 +471,63 @@ _profile_set_infopath () {
     /usr/local/texlive/2012/texmf/doc/info \
 
 }
-# start setting up the environment
-_profile_export_standard_env
-_profile_export_PATH
-_profile_export_PAGER
-_profile_export_GPG_AGENT_INFO
-_profile_export_DISPLAY
-_profile_export_special_env
-_profile_export_setup_for_firefox_vim_plugin
 
-# select the correct functions for this system
-case "`uname`" in
-  LINUX|Linux|linux)
-    # general functions first
-    # detecting Linux distros: [1]
-    if test -e /etc/arch-release; then
-      #grep Arch < /etc/issue
-      _profile_system_arch_linux
-    elif test -e /etc/debian_version; then
-      # Debian or derivate (Ubuntu)
-      if grep -q Debian < /etc/issue; then
-	: Debian GNU/Linux
-      elif grep -q Ubuntu < /etc/issue; then
-	: Ubuntu
+main () {
+  # start setting up the environment
+  _profile_export_standard_env
+  _profile_export_PATH
+  _profile_export_PAGER
+  _profile_export_GPG_AGENT_INFO
+  _profile_export_DISPLAY
+  _profile_export_special_env
+  _profile_export_setup_for_firefox_vim_plugin
+
+  # select the correct functions for this system
+  case "`uname`" in
+    LINUX|Linux|linux)
+      # general functions first
+      # detecting Linux distros: [1]
+      if test -e /etc/arch-release; then
+	#grep Arch < /etc/issue
+	_profile_system_arch_linux
+      elif test -e /etc/debian_version; then
+	# Debian or derivate (Ubuntu)
+	if grep -q Debian < /etc/issue; then
+	  : Debian GNU/Linux
+	elif grep -q Ubuntu < /etc/issue; then
+	  : Ubuntu
+	else
+	  : unknown Debian
+	fi
       else
-	: unknown Debian
+	: unknown Linux
       fi
-    else
-      : unknown Linux
-    fi
-    # set up the host specific environment
-    case "`hostname --long`" in
-      cip*.cipmath.loc)
-	_profile_host_math
-	;;
-      *.cip.ifi.lmu.de)
-	_profile_host_ifi
-	;;
-      mbp*)
-	_profile_host_mbp
-	;;
-    esac
-    # startx ??
-    ;;
-  Darwin) # MacOS X
-    _profile_system_mac_osx
-    if [ "$1" = --launchd ] || [ "$1" = launchd ]; then
-      _profile_helper_export_to_launchd
-    fi
-    ;;
-  OpenBSD)
-    _profile_system_open_bsd
-    ;;
-esac
+      # set up the host specific environment
+      case "`hostname --long`" in
+	cip*.cipmath.loc)
+	  _profile_host_math
+	  ;;
+	*.cip.ifi.lmu.de)
+	  _profile_host_ifi
+	  ;;
+	mbp*)
+	  _profile_host_mbp
+	  ;;
+      esac
+      # startx ??
+      ;;
+    Darwin) # MacOS X
+      _profile_system_mac_osx
+      if [ "$1" = --launchd ] || [ "$1" = launchd ]; then
+	_profile_helper_export_to_launchd
+      fi
+      ;;
+    OpenBSD)
+      _profile_system_open_bsd
+      ;;
+  esac
+  # unset all functions again
+  unset -f $(declare -f | grep -E '^_profile_[^ ]* \(\)' | cut -f 1 -d ' ')
+}
 
-# unset all functions again
-unset -f $(declare -f | grep -E '^_profile_[^ ]* \(\)' | cut -f 1 -d ' ')
+unset -f main
