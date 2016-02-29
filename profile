@@ -371,6 +371,8 @@ _profile_export_DISPLAY () {
   fi
 }
 _profile_export_GPG_AGENT_INFO () {
+  # The variable GPG_AGENT_INFO should bot be needed anymore since gpg 2.1 or
+  # so.
   local info="${GNUPGHOME:-$HOME}/.gpg-agent-info"
   local socket="${GNUPGHOME:-$HOME/.gnupg}/S.gpg-agent"
   # this should be system independent
@@ -476,6 +478,7 @@ main () {
   _profile_export_DISPLAY
   _profile_export_special_env
   _profile_export_setup_for_firefox_vim_plugin
+  _profile_export_systemctl_env
 
   # select the correct functions for this system
   case "`uname`" in
