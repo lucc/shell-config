@@ -628,7 +628,8 @@ function zrc-calcurse-notifications () { # {{{2
 }
 
 function zrc-khal-notifications () { # {{{2
-  make --quiet -C ~/.config/khal
+  #make --quiet -C ~/.config/khal
+  [[ -x =khal ]] && khal
 }
 
 function zrc-print-todo-items-from-notmuch () { # {{{2
