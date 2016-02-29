@@ -442,8 +442,10 @@ function zrc-fpath () { # {{{2
 # functions to set up the run-help function {{{1
 
 function zrc-install-run-help () { # {{{2
-  mkdir $HELPDIR
-  perl ~/vcs/zsh-code/Util/helpfiles zshall $HELPDIR
+  if [[ -r ~/vcs/zsh-code/Util/helpfiles ]]; then
+    mkdir -p $HELPDIR
+    perl ~/vcs/zsh-code/Util/helpfiles zshall $HELPDIR
+  fi
 }
 
 function zrc-compile-run-help-sed-helper () { # {{{2
