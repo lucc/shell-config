@@ -111,6 +111,7 @@ function zrc-interesting-options () { # {{{2
   setopt glob_dots
   #setopt print_exit_value
   setopt no_list_ambiguous
+  #setopt correct_all
 }
 
 # functions to set up key bindings {{{1
@@ -775,7 +776,7 @@ function zrc-compinit () { # {{{2
   compinit
   compdef colordiff=diff
   compdef gpg2=gpg
-  compdef pip2=pip
+  #compdef pip2=pip
   compdef vi=vim
   compdef _gnu_generic afew
 }
