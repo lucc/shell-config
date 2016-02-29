@@ -38,8 +38,8 @@ alias c:='internet-search.sh -f'
 alias q='surfraw duckduckgo'
 
 # connecting to remote servers {{{1
-alias lima='ftp ftp.lima-city.de'
-alias limalog='curl --silent --netrc ftp://ftp.lima-city.de/html/.log'
+alias lima='ftp --netrc=$NETRC luc42.lima-city.de'
+alias limalog='curl --silent --netrc ftp://luc42.lima-city.de/html/.log'
 
 alias myip='curl --silent http://luc42.lima-city.de/ip.php'
 alias piip='curl --silent http://luc42.lima-city.de/ip.php?host=rpi'
