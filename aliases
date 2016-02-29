@@ -60,6 +60,10 @@ alias up='date +"%F `uptime`"'
 alias music=ncmpcpp
 
 # other {{{1
+alias adr='python2 ~/vcs/khard/khard/khard.py'
+alias a='python2 ~/vcs/khard/khard/khard.py'
+alias m=alot
+alias c=khal
 alias ctw-muc='ctw GMXX0087'
 alias tex=latexmk
 alias D='date +%F'
