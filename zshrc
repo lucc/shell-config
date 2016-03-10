@@ -73,15 +73,6 @@ function zrc-filter-existing () {
   print
 }
 
-# local variables
-
-ZRC_UNAME=$(uname)
-# Will expand to the nullstring if we are not on Mac OS X or brew is not
-# installed.
-ZRC_PREFIX=$(brew --prefix 2>/dev/null)
-# an array of functions to be called at exit
-typeset -a ZRC_AT_EXIT_FUNCTIONS
-
 # functions to set up basic zsh options
 
 function zrc-history-options () {
@@ -819,6 +810,14 @@ function zrc-meta-prompt () {
 
 # main functions
 zrc-main () {
+  # local variables
+  local ZRC_UNAME=$(uname)
+  # Will expand to the nullstring if we are not on Mac OS X or brew is not
+  # installed.
+  local ZRC_PREFIX=$(brew --prefix 2>/dev/null)
+  # an array of functions to be called at exit
+  typeset -la ZRC_AT_EXIT_FUNCTIONS
+
   zrc-source-files
 
   zrc-meta-prompt
@@ -857,4 +856,3 @@ zrc-main () {
 zrc-main
 # unset all local functions
 unfunction -m 'zrc-*'
-unset -m 'ZRC_*'
