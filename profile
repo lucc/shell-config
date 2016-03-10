@@ -464,24 +464,10 @@ _profile_set_infopath () {
     /usr/local/texlive/2012/texmf/doc/info \
 
 }
-
-main () {
-  # Local variables for this script.
-  local cdir="${XDG_CONFIG_HOME:-$HOME/.config}"
-  local ddir="${XDG_DATA_HOME:-$HOME/.local/share}"
-
-  # start setting up the environment
-  _profile_export_standard_env
-  _profile_export_PATH
-  _profile_export_PAGER
-  _profile_export_GPG_AGENT_INFO
-  _profile_export_DISPLAY
-  _profile_export_special_env
-  _profile_export_setup_for_firefox_vim_plugin
-  _profile_export_systemctl_env
-
+# The main functions
+_profile_system_specific () {
   # select the correct functions for this system
-  case "`uname`" in
+  case "$(uname)" in
     LINUX|Linux|linux)
       # general functions first
       # detecting Linux distros: [1]
@@ -501,7 +487,7 @@ main () {
 	: unknown Linux
       fi
       # set up the host specific environment
-      case "`hostname --long`" in
+      case "$(hostname --long)" in
 	cip*.cipmath.loc)
 	  _profile_host_math
 	  ;;
@@ -525,6 +511,23 @@ main () {
       ;;
   esac
 }
-main
+_profile_main () {
+  # Local variables for this script.
+  local cdir="${XDG_CONFIG_HOME:-$HOME/.config}"
+  local ddir="${XDG_DATA_HOME:-$HOME/.local/share}"
+
+  # start setting up the environment
+  _profile_export_standard_env
+  _profile_export_PATH
+  _profile_export_PAGER
+  _profile_export_GPG_AGENT_INFO
+  _profile_export_DISPLAY
+  _profile_export_special_env
+  _profile_export_setup_for_firefox_vim_plugin
+  _profile_export_systemctl_env
+  _profile_system_specific "$@"
+}
+
+_profile_main "$@"
 # unset all functions again
-unset -f $(declare -f | grep -E '^_profile_[^ ]* \(\)' | cut -f 1 -d ' ') main
+unset -f $(declare -f | grep -E '^_profile_[^ ]* \(\)' | cut -f 1 -d ' ')
