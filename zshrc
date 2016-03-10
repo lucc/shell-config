@@ -380,7 +380,7 @@ function zrc-full-colour-rps1 () { # {{{2
   RPROMPT+='%F{yellow}'                            #     switch color
   RPROMPT+='Time: $((SECONDS-_start))%f'           #     duration of command
   RPROMPT+='.)'                                    #   else, fi
-  if zrc-test-osx; then                            #   if OS X
+  if zrc-test-osx || [[ ${(L)TERM} = linux ]]; then #   if OS X or console
     RPROMPT+=' $(battery.sh -bce zsh)'             #     battery information
   fi                                               #   fi
   RPROMPT+='.'                                     # else
