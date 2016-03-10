@@ -818,43 +818,44 @@ function zrc-meta-prompt () { # {{{2
   fi
 }
 
-# call the functions {{{1
+# main functions {{{1
+zrc-main () {
+  zrc-source-files
 
-zrc-source-files
-zrc-antigen
+  zrc-meta-prompt
 
-zrc-meta-prompt
+  zrc-history-options
+  zrc-misc-options
+  zrc-interesting-options
 
-zrc-history-options
-zrc-misc-options
-zrc-interesting-options
+  zrc-autoloading
+  zrc-module-path
+  zrc-fignore
+  zrc-zle-highlighting
+  zrc-fpath
 
-zrc-autoloading
-zrc-module-path
-zrc-fignore
-zrc-zle-highlighting
-zrc-fpath
+  zrc-syntax-highlighting
+  zrc-keymap
+  zrc-run-help
 
-zrc-syntax-highlighting
-zrc-keymap
-zrc-run-help
+  zrc-zmodload
+  zrc-lesspipe
+  zrc-autojump-decision
+  zrc-homeshick
+  zrc-gpg-setup
+  zrc-fzf-setup
+  zrc-zsh-mime-handling-setup
 
-zrc-zmodload
-zrc-lesspipe
-zrc-autojump-decision
-zrc-homeshick
-zrc-gpg-setup
-zrc-fzf-setup
-zrc-zsh-mime-handling-setup
+  zrc-compinit
 
-zrc-compinit
+  zrc-khal-notifications
 
-zrc-khal-notifications
+  # execute the at exit hooks
+  zrc-run-exit-hooks
+}
 
-# execute the at exit hooks {{{1
-zrc-run-exit-hooks
-
+# call main {{{1
+zrc-main
 # unset all local functions and variables {{{1
-
 unfunction -m 'zrc-*'
 unset -m 'ZRC_*'
