@@ -18,15 +18,12 @@
 # TODO:    autoload -U throw catch
 
 # helper functions
-
 function zrc-test-osx () {
   [[ $ZRC_UNAME == Darwin ]]
 }
-
 function zrc-test-linux () {
   [[ $ZRC_UNAME == (#i)linux ]]
 }
-
 function zrc-source () {
   if [[ -r $1 ]]; then
     source $1
@@ -35,15 +32,6 @@ function zrc-source () {
     return 1
   fi
 }
-
-function zrc-run-exit-hooks () {
-  local f
-  for f in $ZRC_AT_EXIT_FUNCTIONS; do
-    $f
-    unfunction $f
-  done
-}
-
 function zrc-has-color () {
   # return true if the terminal can handle colors
   if [[ $TERM == dump ]]; then
@@ -52,17 +40,21 @@ function zrc-has-color () {
     return 0
   fi
 }
-
+function zrc-run-exit-hooks () {
+  local f
+  for f in $ZRC_AT_EXIT_FUNCTIONS; do
+    $f
+    unfunction $f
+  done
+}
 function zrc-add-exit-hook () {
   ZRC_AT_EXIT_FUNCTIONS+=$1
 }
-
 function zrc-vi-bindkey () {
   # bind the given key to the given function in the viins and vicmd maps
   bindkey -M viins $1 $2
   bindkey -M vicmd $1 $2
 }
-
 function zrc-filter-existing () {
   # print all the arguments that exist (test -e)
   for arg; do
@@ -74,7 +66,6 @@ function zrc-filter-existing () {
 }
 
 # functions to set up basic zsh options
-
 function zrc-history-options () {
   HISTFILE=${XDG_CACHE_HOME:-~/.cache}/zsh/history
   HISTSIZE=15000
@@ -89,13 +80,11 @@ function zrc-history-options () {
   setopt share_history
   setopt extended_history
 }
-
 function zrc-misc-options () {
   setopt extended_glob
   setopt no_no_match
   setopt prompt_subst
 }
-
 function zrc-interesting-options () {
   setopt auto_cd
   setopt glob_dots
@@ -105,7 +94,6 @@ function zrc-interesting-options () {
 }
 
 # functions to set up key bindings
-
 function zrc-keymap () {
   bindkey -v
   typeset -g -A key
@@ -117,7 +105,6 @@ function zrc-keymap () {
   zrc-search-keys
   zrc-push-zle-buffer-keys
 }
-
 function zrc-keys-terminfo () {
   zmodload zsh/terminfo
   # plain arrows
@@ -146,7 +133,6 @@ function zrc-keys-terminfo () {
   key[ShiftBackspace]= # TODO
   key[ShiftDelete]=$terminfo[kDC] # TODO
 }
-
 function zrc-keys-manual-corrections () {
   # Collection of conditions and corrections for errors with terminfo
   if zrc-test-linux; then
@@ -167,7 +153,6 @@ function zrc-keys-manual-corrections () {
     return
   fi
 }
-
 function zrc-keys-manual-corrections-tmux () {
   key[Up]='\e[A'
   key[Down]='\e[B'
@@ -177,7 +162,6 @@ function zrc-keys-manual-corrections-tmux () {
   key[ShiftLeft]='\e[1;2D'
   key[ShiftRight]='\e[1;2C'
 }
-
 function zrc-keys-manual-corrections-xterm () {
   key[Up]='\e[A'
   key[Down]='\e[B'
@@ -186,7 +170,6 @@ function zrc-keys-manual-corrections-xterm () {
   key[ShiftUp]='\e[1;2A'
   key[ShiftDown]='\e[1;2B'
 }
-
 function zrc-keys-manual-corrections-nvim () {
   # function keys
   key[F1]='\U7fffce95'
@@ -222,14 +205,12 @@ function zrc-keys-manual-corrections-nvim () {
   key[ShiftBackspace]= # TODO
   key[ShiftDelete]='\U7fffcbd6'
 }
-
 function zrc-keys-ssh () {
   key[Home]='\e[H'
   key[End]='\e[F'
   key[ShiftRight]='\e[1;2C'
   key[ShiftLeft]='\e[1;2D'
 }
-
 function zrc-bind-basic-keys () {
   zrc-vi-bindkey $key[Up]         up-line-or-search
   zrc-vi-bindkey $key[Down]       down-line-or-search
@@ -238,7 +219,6 @@ function zrc-bind-basic-keys () {
   zrc-vi-bindkey $key[ShiftLeft]  vi-backward-word
   zrc-vi-bindkey $key[ShiftRight] vi-forward-word
 }
-
 function zrc-history-substring-search-keys () {
   zrc-source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh || \
     zrc-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh || \
@@ -246,25 +226,21 @@ function zrc-history-substring-search-keys () {
   zrc-vi-bindkey $key[ShiftUp]   history-substring-search-up
   zrc-vi-bindkey $key[ShiftDown] history-substring-search-down
 }
-
 function zrc-search-keys () {
   zrc-vi-bindkey '\C-r' history-incremental-pattern-search-backward
   zrc-vi-bindkey '\C-s' history-incremental-pattern-search-forward
 }
-
 function zrc-keys-edit-command-line () {
   autoload edit-command-line
   zle -N edit-command-line
   bindkey '\ee' edit-command-line
 }
-
 function zrc-push-zle-buffer-keys () {
   zrc-vi-bindkey '\C-p' push-input
   zrc-vi-bindkey '\C-o' push-line
 }
 
 # prompt related functions
-
 function zrc-execution-timer () {
   autoload -Uz add-zsh-hook
   # define the needed variables
@@ -280,7 +256,6 @@ function zrc-execution-timer () {
 }
 
 # functions to set up the vsc_info plugin for the prompt
-
 function zrc-vcs-info-zstyle () {
   zstyle ':vcs_info:*' actionformats '%F{cyan}%s%F{green}%c%u%b%F{blue}%a%f'
   ####TODO
@@ -292,13 +267,11 @@ function zrc-vcs-info-zstyle () {
   zstyle ':vcs_info:*' stagedstr '%F{yellow}'
   zstyle ':vcs_info:*' unstagedstr '%F{red}'
 }
-
 function zrc-vcs-info-setup () {
   autoload -Uz add-zsh-hook
   autoload -Uz vcs_info
   add-zsh-hook precmd vcs_info
 }
-
 function zrc-vcs-info-hooks () {
   function +vi-git-string() {
     # turn the name 'git' into '±'
@@ -323,7 +296,6 @@ function zrc-vcs-info-hooks () {
 }
 
 # prompt versions
-
 function zrc-full-colour-ps1 () {
   PS1='[ '                                              # frame
   PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
@@ -338,7 +310,6 @@ function zrc-full-colour-ps1 () {
   zrc-vcs-info-hooks
   zrc-vcs-info-setup
 }
-
 function zrc-stand-alone-colour-ps1 () {
   PS1='[ '                                              # frame
   PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
@@ -353,7 +324,6 @@ function zrc-stand-alone-colour-ps1 () {
   zrc-vcs-info-hooks
   zrc-vcs-info-setup
 }
-
 function zrc-stand-alone-monochrome-ps1 () {
   PS1='[ '                                              # frame
   PS1+='%n@%m'                                          # user and host info
@@ -363,7 +333,6 @@ function zrc-stand-alone-monochrome-ps1 () {
   PS1+='%(?.%D{%H:%M:%S}.Error %?)'                     # curren time or error
   PS1+=' ] '                                            # frame
 }
-
 function zrc-full-colour-rps1 () {
   RPROMPT='%(?.'                                   # if $? == 0
   RPROMPT+='%(${_threshold}S.'                     #   if _threshold < SECONDS
@@ -381,7 +350,6 @@ function zrc-full-colour-rps1 () {
   RPROMPT+=')'                                     # fi
   zrc-execution-timer
 }
-
 function zrc-condensed-color-ps1 () {
   PS1=
   if [[ -n $SSH_CONNECTION ]]; then
@@ -399,21 +367,17 @@ function zrc-condensed-color-ps1 () {
 }
 
 # functions to set up zsh special variables
-
 function zrc-module-path () {
   module_path=($module_path /usr/local/lib/zpython)
 }
-
 function zrc-fignore () {
   # file endings to ignore for completion
   fignore=($fignore '~' .o .bak '.sw?')
 }
-
 function zrc-zle-highlighting () {
   # zle stuff
   zle_highlight=(region:bg=green special:bg=blue suffix:fg=red isearch:fg=yellow)
 }
-
 function zrc-fpath () {
   local trypath
   # functions for completion and user defined functions
@@ -430,14 +394,12 @@ function zrc-fpath () {
 }
 
 # functions to set up the run-help function
-
 function zrc-install-run-help () {
   if [[ -r ~/vcs/zsh-code/Util/helpfiles ]]; then
     mkdir -p $HELPDIR
     perl ~/vcs/zsh-code/Util/helpfiles zshall $HELPDIR
   fi
 }
-
 function zrc-compile-run-help-sed-helper () {
   sed -e \
     '$ {
@@ -446,7 +408,6 @@ function zrc-compile-run-help-sed-helper () {
        s/\//\\\//g
      }'
 }
-
 function zrc-compile-run-help-perl-helper () {
   perl -n \
     -e 'if ( /^'$1'/i ) {
@@ -459,7 +420,6 @@ function zrc-compile-run-help-perl-helper () {
 	  print
 	}'
 }
-
 function zrc-compile-run-help () {
   local file manpage regexp
   grep -l 'See the section .* in zsh[a-z]*([0-9])\.' $HELPDIR/* | \
@@ -475,7 +435,6 @@ function zrc-compile-run-help () {
   done
   rm $HELPDIR/*.tmp
 }
-
 function zrc-run-help () {
   autoload -Uz run-help
   unalias run-help
@@ -507,7 +466,6 @@ function zrc-run-help () {
 }
 
 # functions to set xxx
-
 function zrc-directory-hash-table () {
   #hash -d i=~/Pictures
   #hash -d m=~/Music
@@ -517,27 +475,23 @@ function zrc-directory-hash-table () {
   hash -d p=~/uni/philosophie
   hash -d y=~/.homesick/repos/secure/yaml
 }
-
 function zrc-autoloading () {
   autoload -Uz colors && colors
   #autoload -Uz checkmail
   # autoloading user defined functions
   autoload -Uz $ZDOTDIR/functions/*(:t)
 }
-
 function zrc-zmodload () {
   zmodload zsh/sched
   zmodload zsh/zprof
   #zmodload zsh/zpython
 }
-
 function zrc-source-files () {
   local file
   for file in $ZDOTDIR/aliases; do
     zrc-source $file
   done
 }
-
 function zrc-lesspipe () {
   ## make less more friendly for non-text input files, see lesspipe(1)
   if whence -p lesspipe &>/dev/null; then
@@ -546,7 +500,6 @@ function zrc-lesspipe () {
     eval "$(lesspipe.sh)"
   fi
 }
-
 function zrc-autojump () {
   #export AUTOJUMP_KEEP_SYMLINKS=1
   zrc-source /usr/share/autojump/autojump.zsh  || \
@@ -554,7 +507,6 @@ function zrc-autojump () {
     zrc-source $ZRC_PREFIX/etc/autojump.sh     || \
     zrc-source /etc/profile.d/autojump.zsh
 }
-
 function zrc-rupa-z () {
   if [[ -r $ZRC_PREFIX/etc/profile.d/z.sh ]]; then
     autoload -Uz add-zsh-hook
@@ -572,7 +524,6 @@ function zrc-rupa-z () {
     zrc-add-exit-hook j-completion-at-exit-function
   fi
 }
-
 function zrc-autojump-decision () {
   if which autojump >/dev/null 2>&1; then
     zrc-autojump
@@ -581,7 +532,6 @@ function zrc-autojump-decision () {
     zrc-rupa-z
   fi
 }
-
 function zrc-syntax-highlighting () {
   local -a locations
   local location
@@ -595,23 +545,19 @@ function zrc-syntax-highlighting () {
   esac
   zrc-source $location
 }
-
 function zrc-homeshick () {
   # homesick for automatic dotfiles setup
   zrc-source ~/.homesick/repos/homeshick/homeshick.sh
 }
-
 function zrc-gpg-setup () {
   export GPG_TTY=$(tty)
 }
-
 function zrc-zsh-mime-handling-setup () {
   autoload zsh-mime-setup
   zsh-mime-setup
 }
 
 # other
-
 function zrc-calcurse-notifications () {
   calcurse                                \
     --todo                                \
@@ -619,16 +565,13 @@ function zrc-calcurse-notifications () {
     --format-{recur-,}apt='%S  %m\n'      \
     --format-{recur-,}event='*****  %m\n'
 }
-
 function zrc-khal-notifications () {
   #make --quiet -C ~/.config/khal
   [[ -x =khal ]] && khal
 }
-
 function zrc-print-todo-items-from-notmuch () {
   notmuch search --format=json tag:todo | jq --raw-output '.[].subject'
 }
-
 function zrc-todo-from-bashrc () {
   # this and dircolors in general
   if [ "$TERM" != "dumb" ]; then
@@ -637,7 +580,6 @@ function zrc-todo-from-bashrc () {
 }
 
 # functions to set up completion
-
 function zrc-zstyle-layout () {
   zstyle ':completion:*' list-prompt \
     %SAt %p: Hit TAB for more, or the character to insert%s
@@ -648,12 +590,10 @@ function zrc-zstyle-layout () {
   zstyle ':completion:*' select-prompt \
     %SScrolling active: current selection at %p%s
 }
-
 function zrc-zstyle-performemce () {
   zstyle ':completion:*' use-cache on
   zstyle ':completion:*' cache-path ${XDG_CACHE_HOME:-~/.cache}/zsh/completion
 }
-
 function zrc-zstyle-other () {
   zstyle ':completion:*' completer _expand _complete _ignored
   zstyle ':completion:*' expand prefix suffix
@@ -675,7 +615,6 @@ function zrc-zstyle-other () {
 
   zstyle ':completion:*:warnings' format 'No matches for: %d'
 }
-
 function zrc-zstyle-todo () {
   zstyle ':completion:*' muttrc ~/.mutt/muttrc
   zstyle ':completion:*' mail-directory ~/mail
@@ -685,7 +624,6 @@ function zrc-zstyle-todo () {
   zstyle ':completion:*:*:git:*' user-commands \
     ${${(M)${(k)commands}:#git-*}/git-/}
 }
-
 function zrc-zstyle-hosts () { # new
   local -a hosts netrc known_hosts ssh_config
   zrc-parse-ssh-config
@@ -701,7 +639,6 @@ function zrc-zstyle-hosts () { # new
   fi
   zrc-zstyle-hosts-patterns
 }
-
 function zrc-zstyle-hosts-patterns () {
   # TODO
   # from
@@ -727,12 +664,10 @@ function zrc-zstyle-hosts-patterns () {
   #      adm bin daemon halt lp named shutdown sync
   zstyle ':completion:*(ssh|scp):*:users' ignored-patterns daemon _*
 }
-
 function zrc-parse-netrc () {
   netrc=(${${(@M)${(f)"$(cat ${NETRC:-~/.netrc(N)} /dev/null)"}:#machine *}#machine })
   # sed -n '/^machine/s/^machine //p' ~/.netrc
 }
-
 function zrc-parse-known-hosts () {
   # many thanks to http://www.sourceguru.net/ssh-host-completion-zsh-stylee
   known_hosts=(${=${${(f)"$(cat {/etc/ssh_,{~/.ssh/,/var/lib/misc/ssh_}known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })
@@ -750,14 +685,12 @@ function zrc-parse-known-hosts () {
   )
   # TODO ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2>/dev/null))"}%%\#*}
 }
-
 function zrc-parse-ssh-config () {
   # from http://serverfault.com/questions/170346
   ssh_config=(${${${(@M)${(f)"$(cat ~/.ssh/config(N) /dev/null)"}:#Host *}#Host }:#*[*?]*})
   # ${=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
   # sed -n '/\*/d;/^Host/s/^Host[=\t ]*//p' ~/.ssh/config
 }
-
 function zrc-compinit () {
   zrc-zstyle-layout
   zrc-zstyle-performemce
@@ -787,7 +720,6 @@ function zrc-fzf-setup () {
 }
 
 # high level functions for some decisions
-
 function zrc-meta-prompt () {
   if [[ $TERM == dump ]]; then
     # possibly :sh from within macvim
