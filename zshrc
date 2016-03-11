@@ -402,13 +402,12 @@ function zrc-fpath () {
   for trypath in                              \
       /usr/local/share/zsh-completions        \
       ~/.homesick/repos/homeshick/completions \
-      $ZDOTDIR/functions                      \
-    ; do
-    if [[ -d $trypath ]]; then
+      $ZDOTDIR/functions
+  do
+    if [[ -d $trypath && -z $fpath[(r)$trypath] ]]; then
       fpath=($trypath $fpath)
     fi
   done
-  #fpath=($(zrc-filter-existing $fpath))
 }
 
 # functions to set up the run-help function
