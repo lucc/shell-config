@@ -248,13 +248,12 @@ function zrc-execution-timer () {
   typeset -ig _start=0
   # define the needed function
   function execution-time-helper-function () {
-    (( _start = $SECONDS ))
+    (( _start = SECONDS ))
     (( _threshold = _start + 10 ))
   }
   # add the function to a hook
   add-zsh-hook preexec execution-time-helper-function
 }
-
 # functions to set up the vsc_info plugin for the prompt
 function zrc-vcs-info-zstyle () {
   zstyle ':vcs_info:*' actionformats '%F{cyan}%s%F{green}%c%u%b%F{blue}%a%f'
@@ -294,7 +293,6 @@ function zrc-vcs-info-hooks () {
 
   zstyle ':vcs_info:hg+set-message:*' hooks hg-string
 }
-
 # prompt versions
 function zrc-full-colour-ps1 () {
   PS1='[ '                                              # frame
@@ -364,6 +362,26 @@ function zrc-condensed-color-ps1 () {
   zrc-vcs-info-zstyle
   zrc-vcs-info-hooks
   zrc-vcs-info-setup
+}
+# main prompt decision function
+function zrc-meta-prompt () {
+  if [[ $TERM == dump ]]; then
+    # possibly :sh from within macvim
+    zrc-stand-alone-monochrome-ps1
+    unset RPROMPT
+  elif [[ $CONQUE -eq 1 ]]; then
+    # vim Conque term plugin
+    zrc-stand-alone-colour-ps1
+    unset RPROMPT
+  elif [[ $VIMSHELL -eq 1 ]]; then
+    # vim "vimshell" plugin
+    zrc-stand-alone-colour-ps1
+    unset RPROMPT
+  else
+    # hopefully a color terminal
+    zrc-condensed-color-ps1
+    zrc-full-colour-rps1
+  fi
 }
 
 # functions to set up zsh special variables
@@ -556,8 +574,18 @@ function zrc-zsh-mime-handling-setup () {
   autoload zsh-mime-setup
   zsh-mime-setup
 }
+function zrc-setup-antigen () {
+  local p
+  for p in ~/vcs/antigen; do
+    zrc-source $p/antigen.zsh
+  done
+}
+function zrc-fzf-setup () {
+  # set up fzf keybindings
+  zrc-source /etc/profile.d/fzf.zsh
+}
 
-# other
+# start up notifications
 function zrc-calcurse-notifications () {
   calcurse                                \
     --todo                                \
@@ -572,6 +600,8 @@ function zrc-khal-notifications () {
 function zrc-print-todo-items-from-notmuch () {
   notmuch search --format=json tag:todo | jq --raw-output '.[].subject'
 }
+
+# misc
 function zrc-todo-from-bashrc () {
   # this and dircolors in general
   if [ "$TERM" != "dumb" ]; then
@@ -704,40 +734,6 @@ function zrc-compinit () {
   #compdef pip2=pip
   compdef vi=vim
   compdef _gnu_generic afew
-}
-
-# set up antigen
-function zrc-antigen () {
-  local p
-  for p in ~/vcs/antigen; do
-    zrc-source $p/antigen.zsh
-  done
-}
-
-# set up fzf keybindings
-function zrc-fzf-setup () {
-  zrc-source /etc/profile.d/fzf.zsh
-}
-
-# high level functions for some decisions
-function zrc-meta-prompt () {
-  if [[ $TERM == dump ]]; then
-    # possibly :sh from within macvim
-    zrc-stand-alone-monochrome-ps1
-    unset RPROMPT
-  elif [[ $CONQUE -eq 1 ]]; then
-    # vim Conque term plugin
-    zrc-stand-alone-colour-ps1
-    unset RPROMPT
-  elif [[ $VIMSHELL -eq 1 ]]; then
-    # vim "vimshell" plugin
-    zrc-stand-alone-colour-ps1
-    unset RPROMPT
-  else
-    # hopefully a color terminal
-    zrc-condensed-color-ps1
-    zrc-full-colour-rps1
-  fi
 }
 
 # main functions
