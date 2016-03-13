@@ -593,12 +593,22 @@ function zrc-calcurse-notifications () {
     --format-{recur-,}event='*****  %m\n'
 }
 function zrc-khal-notifications () {
-  local marker=~/.cache/zsh/startup-calendar-timestamp
+  # only continue if khal is installed
+  [[ -x =khal ]] || return
+  local marker1=~/.cache/zsh/startup-calendar-timestamp-1
+  local marker2=~/.cache/zsh/startup-calendar-timestamp-2
+  # prompt expand sequence for the current time in seconds since EPOCH
   local epoch=%D{%s}
   #make --quiet -C ~/.config/khal
-  if [[ -x =khal ]] && (( ${(%)epoch} > $(stat --format %Y $marker) + 3600 )); then
-    khal
-    touch $marker
+  # marker1 is used every 12 hours
+  if (( ${(%)epoch} > $(stat --format %Y $marker1) + 43200 )); then
+    khal calendar --days=7
+    touch $marker1
+    touch $marker2
+  # marker 2 is used every hour
+  elif (( ${(%)epoch} > $(stat --format %Y $marker2) + 3600 )); then
+    khal calendar --days=2
+    touch $marker2
   fi
 }
 function zrc-print-todo-items-from-notmuch () {
