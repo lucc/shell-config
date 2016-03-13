@@ -18,6 +18,33 @@
 # TODO:    autoload -U throw catch
 
 # helper functions
+zrc-once () {
+  # Return true or false depending on the value of the variable name given in
+  # $1.  This can be used in other functions to return early, like this:
+  #   func_name () {
+  #     zrc-once func_name || return
+  #     other code
+  #   }
+
+  if [[ -z $1 ]]; then
+    echo "ERROR: You must give an argument." >&2
+    return 2
+  fi
+  # First do a savety check that $1 contains a possibly valid variable name.
+  if [[ $1 != [[:alpha:]_][[:alnum:]_]# ]]; then
+    echo "ERROR: Argument to once can not be a variable name: $1." >&2
+    return 2
+  fi
+  # Eval $1 to check if the named variable is empty.
+  if [[ -z ${(P)1} ]]; then
+    # Set the named variable and return success.
+    (( $1 = 1 ))
+    return
+  else
+    # The variable was set, return failure.
+    return 1
+  fi
+}
 function zrc-test-osx () {
   [[ $ZRC_UNAME == Darwin ]]
 }
