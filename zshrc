@@ -593,8 +593,13 @@ function zrc-calcurse-notifications () {
     --format-{recur-,}event='*****  %m\n'
 }
 function zrc-khal-notifications () {
+  local marker=~/.cache/zsh/startup-calendar-timestamp
+  local epoch=%D{%s}
   #make --quiet -C ~/.config/khal
-  [[ -x =khal ]] && khal
+  if [[ -x =khal ]] && (( ${(%)epoch} > $(stat --format %Y $marker) + 3600 )); then
+    khal
+    touch $marker
+  fi
 }
 function zrc-print-todo-items-from-notmuch () {
   notmuch search --format=json tag:todo | jq --raw-output '.[].subject'
