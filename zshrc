@@ -600,13 +600,14 @@ function zrc-khal-notifications () {
   # prompt expand sequence for the current time in seconds since EPOCH
   local epoch=%D{%s}
   #make --quiet -C ~/.config/khal
+  zmodload -F zsh/stat b:zstat
   # marker1 is used every 12 hours
-  if (( ${(%)epoch} > $(stat --format %Y $marker1) + 43200 )); then
+  if (( ${(%)epoch} > $(zstat +mtime $marker1) + 43200 )); then
     khal calendar --days=7
     touch $marker1
     touch $marker2
   # marker 2 is used every hour
-  elif (( ${(%)epoch} > $(stat --format %Y $marker2) + 3600 )); then
+  elif (( ${(%)epoch} > $(zstat +mtime $marker2) + 3600 )); then
     khal calendar --days=2
     touch $marker2
   fi
