@@ -27,7 +27,7 @@ function zrc-once () {
   #     other code
   #   }
   if [[ -z $funcstack[2] ]]; then
-    echo "ERROR: This function needs to be called from a function." >&2
+    print "ERROR: This function needs to be called from a function." >&2
     return 2
   fi
   if [[ -z $ZRC_ONCE_FUNCTION_LIST[${funcstack[2]//-/_}] ]]; then
@@ -168,7 +168,7 @@ function zrc-keys-manual-corrections () {
   elif zrc-test-osx; then
     zrc-keys-manual-corrections-xterm
   else
-    echo Unknown system: $ZRC_UNAME >&2
+    print Unknown system: $ZRC_UNAME >&2
     return
   fi
 }
@@ -466,7 +466,7 @@ function zrc-compile-run-help () {
   done
 
   for file in $HELPDIR/*.tmp; do
-    echo >> ${file%.tmp}
+    print >> ${file%.tmp}
     cat $file >> ${file%.tmp}
   done
   rm $HELPDIR/*.tmp
@@ -552,7 +552,7 @@ function zrc-rupa-z () {
     add-zsh-hook chpwd _z_precmd
     unalias j
     function j () {
-      _z $@ 2>&1 && echo ${fg[red]}`pwd`$reset_color
+      _z $@ 2>&1 && print ${fg[red]}$PWD$reset_color
     }
     function j-completion-at-exit-function () {
       compctl -U -K _z_zsh_tab_completion j
