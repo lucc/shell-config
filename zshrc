@@ -805,7 +805,6 @@ zrc-main () {
   zrc-homeshick
   zrc-gpg-setup
   zrc-fzf-setup
-  zrc-zsh-mime-handling-setup
 
   zrc-compinit
 
