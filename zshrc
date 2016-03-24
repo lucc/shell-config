@@ -602,6 +602,16 @@ function zrc-fzf-setup () {
   # set up fzf keybindings
   zrc-source /etc/profile.d/fzf.zsh
 }
+function zrc-setup-history-statistics () {
+  # Collect data about executed commands.
+  #HISTORY_STATISTICS_FILE=~/.cache/zsh/history-statistics
+  function save-history-statistics () {
+    local timestamp=%D{%s}
+    print "${(%)timestamp}:$1" >> ~/.cache/zsh/history-statistics
+  }
+  autoload add-zsh-hook
+  add-zsh-hook preexec save-history-statistics
+}
 
 # start up notifications
 function zrc-calcurse-notifications () {
@@ -805,6 +815,7 @@ zrc-main () {
   zrc-homeshick
   zrc-gpg-setup
   zrc-fzf-setup
+  zrc-setup-history-statistics
 
   zrc-compinit
 
