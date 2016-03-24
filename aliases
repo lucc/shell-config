@@ -9,6 +9,7 @@
 
 # general aliases {{{1
 alias cp='cp -ip'
+alias d=diff-wrapper.bash
 alias grep='grep --extended-regexp --color=auto'
 #alias l='ls -l --time-style=full-iso'
 alias l='ls -l'
@@ -60,9 +61,12 @@ alias up='date +"%F `uptime`"'
 alias music=ncmpcpp
 
 # other {{{1
-alias email='PYTHONPATH=~/vcs/alot python2 -m alot -d debug -l ~/log/alot.log'
+alias alot='PYTHONPATH=~/vcs/alot python2 -m alot -d debug -l ~/log/alot.log'
+alias khal='PYTHONPATH=~/vcs/khal python -m khal'
+alias khard='PYTHONPATH=~/vcs/khard python -m khard'
+alias email=alot
+alias contacts=khard
 alias calendar=khal
-alias contacts='python2 ~/vcs/khard/khard/khard.py'
 alias addressbook=contacts
 alias addresses=contacts
 alias adr=contacts
