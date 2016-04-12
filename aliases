@@ -61,9 +61,9 @@ alias up='date +"%F `uptime`"'
 alias music=ncmpcpp
 
 # other {{{1
-alias alot='PYTHONPATH=~/vcs/alot python2 -m alot -d debug -l ~/log/alot.log'
-alias khal='PYTHONPATH=~/vcs/khal python -m khal'
-alias khard='PYTHONPATH=~/vcs/khard python -m khard'
+#alias alot='PYTHONPATH=~/vcs/alot python2 -m alot -d debug -l ~/log/alot.log'
+#alias khal='PYTHONPATH=~/vcs/khal python -m khal'
+#alias khard='PYTHONPATH=~/vcs/khard python -m khard'
 alias email=alot
 alias contacts=khard
 alias calendar=khal
