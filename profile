@@ -403,7 +403,7 @@ _profile_export_special_env () {
   export TIGRC_USER="$cdir/tig/tigrc"
   export PASSWORD_STORE_DIR="$cdir/pass"
   export GNUPGHOME="$cdir/gpg"
-  export VIMPAGER_RC="$cdir/nvim/vimpagerrc"
+  #export VIMPAGER_RC="$cdir/nvim/vimpagerrc"
   export WINEPREFIX="$ddir/wine"
   export RXVT_SOCKET="$ddir/urxvt/urxvtd-`hostname`"
   export ELINKS_CONFDIR="$cdir/elinks"
