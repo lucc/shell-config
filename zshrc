@@ -633,8 +633,7 @@ function zrc-khal-notifications () {
   # marker1 is used every 12 hours
   if (( ${(%)epoch} > $(zstat +mtime $marker1) + 43200 )); then
     khal calendar --days=7
-    touch $marker1
-    touch $marker2
+    touch $marker1 $marker2
   # marker 2 is used every hour
   elif (( ${(%)epoch} > $(zstat +mtime $marker2) + 3600 )); then
     khal calendar --days=2
