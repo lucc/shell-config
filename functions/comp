@@ -3,6 +3,7 @@
 local output='>& /dev/null'
 local check=true
 local debug=false
+local i
 
 local usage=\
 'Usage: comp [-fnx] shell-code-string-1  shell-code-string-2 [number]
@@ -62,9 +63,9 @@ if $debug; then
   set -x
 fi
 printf 1
-eval "time ( for ((i=0; i<${3:-10}; i++)); do $1; done $output )"
+eval time \( for i in {0..${3:-10}} \; do $1 \; done $output \)
 printf 2
-eval "time ( for ((i=0; i<${3:-10}; i++)); do $2; done $output )"
+eval time \( for i in {0..${3:-10}} \; do $2 \; done $output \)
 if $debug; then
   set +x
 fi
