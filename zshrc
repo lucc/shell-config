@@ -612,6 +612,12 @@ function zrc-setup-history-statistics () {
   autoload add-zsh-hook
   add-zsh-hook preexec save-history-statistics
 }
+function zrc-set-up-mail-warning-variables () {
+  if [[ "$TTY" = /dev/tty* ]]; then
+    mailpath=(~/.cache/notmuch/new-mail-marker ~/mail/inbox)
+    set -U
+  fi
+}
 
 # start up notifications
 function zrc-calcurse-notifications () {
@@ -815,6 +821,7 @@ zrc-main () {
   zrc-gpg-setup
   zrc-fzf-setup
   zrc-setup-history-statistics
+  zrc-set-up-mail-warning-variables
 
   zrc-compinit
 
