@@ -59,6 +59,7 @@ alias up='date +"%F `uptime`"'
 #  alias mpc='mpc --host pi.local'
 #fi
 alias music=ncmpcpp
+alias ffprobe='ffprobe -hide_banner'
 
 # other {{{1
 #alias alot='PYTHONPATH=~/vcs/alot python2 -m alot -d debug -l ~/log/alot.log'
