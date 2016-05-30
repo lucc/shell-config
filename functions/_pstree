@@ -43,14 +43,14 @@ _arguments \
  {-A,--ascii}'[use ASCII line drawing characters]' \
  {-c,--compact}"[don't compact identical subtrees]" \
  {-h,--highlight-all}'[highlight current process and its ancestors]' \
- {-H,--highlight-pid}'[highlight given process and its ancestors]:PID' \
+ {-H,--highlight-pid}'[highlight given process and its ancestors]:PID:_pids' \
  {-g,--show-pgids}'[show process group ids; implies -c]' \
  {-G,--vt100}'[use VT100 line drawing characters]' \
  {-l,--long}"[don't truncate long lines]" \
  {-n,--numeric-sort}'[sort output by PID]' \
  {-N,--ns-sort}'[sort by namespace type]::namespace:((ipc mnt net pid user uts))' \
  {-p,--show-pids}'[show PIDs; implies -c]' \
- {-s,--show-parents}'[show parents of the selected process]' \
+ {-s,--show-parents}'[show parents of the selected process]:PID:_pids' \
  {-S,--ns-changes}'[show namespace transitions]' \
  {-u,--uid-changes}'[show uid transitions]' \
  {-U,--unicode}'[use UTF-8 (Unicode) line drawing characters]' \
