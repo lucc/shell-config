@@ -654,7 +654,7 @@ function zrc-print-todo-items-from-notmuch () {
 function zrc-todo-from-bashrc () {
   # this and dircolors in general
   if [ "$TERM" != "dumb" ]; then
-    eval "`dircolors -b`"
+    eval "$(dircolors -b)"
   fi
 }
 

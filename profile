@@ -13,31 +13,31 @@
 # helper function
 _profile_helper_sort_pathlike_string () {
   # remove duplicates from a colon seperated string supplied at $@
-  local ret="`printf %s "$@" | \
-    awk -v RS=: -v ORS=: '!path[$0]{path[$0]=1;print}'`"
+  local ret=$(printf %s "$@" | \
+    awk -v RS=: -v ORS=: '!path[$0]{path[$0]=1;print}')
   echo "${ret%:}"
 }
 _profile_helper_set_var_from_file () {
   # The file should contain the values for the variable one per line. They
   # will be read in duplicates will be removed and the variable will be set
   # colon delimited.
-  local var="$1" file="$2" item=
+  local var=$1 file=$2 item=
   # get the original value of the variable
-  eval local tmp=\$"$var"
+  eval local tmp=\$$var
   cat "$file" | while read line; do
     # if line starts with # discard it
     if echo "$line" | grep '^[[:space:]]*#' >/dev/null ; then continue; fi
     if [ -z "$line" ]; then continue; fi
     # expand variable references in $line
-    item="`eval echo $line`"
+    eval item=\"$line\"
     # only add existing dirs
-    if [ -d "$item" ]; then tmp="$item:$tmp"; fi
+    if [ -d "$item" ]; then tmp=$item:$tmp; fi
   done
   # remove all duplicates, export the result
-  eval export "$var=`_profile_helper_sort_pathlike_string $tmp`"
+  eval export $var=$(_profile_helper_sort_pathlike_string $tmp)
 }
 _profile_helper_add_to_var () {
-  local varname="$1" dir
+  local varname=$1 dir
   eval local tmp=\$$varname
   shift
   for dir; do
@@ -45,10 +45,10 @@ _profile_helper_add_to_var () {
       tmp=$dir:$tmp
     fi
   done
-  eval export $varname=`_profile_helper_sort_pathlike_string "$tmp"`
+  eval export $varname=$(_profile_helper_sort_pathlike_string "$tmp")
 }
 _profile_helper_append_to_var () {
-  local varname="$1" dir
+  local varname=$1 dir
   eval local tmp=\$$varname
   shift
   for dir; do
@@ -56,7 +56,7 @@ _profile_helper_append_to_var () {
       tmp=$tmp:$dir
     fi
   done
-  eval export $varname=`_profile_helper_sort_pathlike_string "$tmp"`
+  eval export $varname=$(_profile_helper_sort_pathlike_string "$tmp")
 }
 _profile_helper_export_to_launchd () {
   local var VARS
@@ -110,7 +110,7 @@ _profile_helper_check_pid () {
   # check if the pid in $1 is an instance of the program given as $2
   # FIXME this is Linux specific
   [ -r /proc/$1/exe ] || return 1
-  [ "`readlink /proc/$1/exe`" = "`which $2`" ]
+  [ "$(readlink /proc/$1/exe)" = "$(which $2)" ]
 }
 _profile_test_bash () {
   # test if this shell is bash
@@ -138,7 +138,7 @@ _profile_source () {
 }
 _profile_export_var_from_file () {
   if _profile_source "$1"; then
-    eval `cut -d = -f 1 < "$1" | xargs echo export`
+    eval $(cut -d = -f 1 < "$1" | xargs echo export)
     return 0
   else
     return 1
@@ -189,10 +189,10 @@ _profile_colors_basic_solarized_dark () {
 # functions to start programs
 _profile_start_gpg_agent () {
   # This function looks for a running gpg-agent or starts one itself
-  local file="${GNUPGHOME:-$HOME/.gnupg}/.gpg-agent-info"
+  local file=${GNUPGHOME:-$HOME/.gnupg}/.gpg-agent-info
   if [ -r "$file" ]; then
     #_profile_helper_logger Found gpg info file at "$file".
-    if _profile_helper_check_pid `cut -f 2 -d : < "$file"` gpg-agent; then
+    if _profile_helper_check_pid $(cut -f 2 -d : < "$file") gpg-agent; then
       #_profile_helper_logger Found running gpg-agent.
       _profile_export_var_from_file "$file"
     else
@@ -219,7 +219,7 @@ _profile_start_ssh_agent () {
       return
     else
       #_profile_helper_logger Trying to kill ssh-agent.
-      eval `ssh-agent -k`
+      eval $(ssh-agent -k)
     fi
   fi
   # look for a (custom) info file to source
@@ -231,12 +231,12 @@ _profile_start_ssh_agent () {
       return
     else
       #_profile_helper_logger Trying to kill ssh-agent.
-      eval `ssh-agent -k`
+      eval $(ssh-agent -k)
     fi
   fi
   # really start ssh-agent
   #_profile_helper_logger Starting new ssh-agent.
-  eval `ssh-agent`
+  eval $(ssh-agent)
   touch "$file"
   chmod 600 "$file"
   echo SSH_AGENT_PID=$SSH_AGENT_PID >  "$file"
@@ -245,11 +245,11 @@ _profile_start_ssh_agent () {
 _profile_start_pop_daemon () {
   # if fetchmail is already runnng this will just awake it once and not do any
   # harm
-  FETCHMAILHOME="$cdir/fetchmail" FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 \
+  FETCHMAILHOME=$cdir/fetchmail FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 \
     fetchmail
 }
 _profile_add_ssh_keys () {
-  SSH_ASKPASS=`which pass-as-ssh-askpass.sh` \
+  SSH_ASKPASS=$(which pass-as-ssh-askpass.sh) \
     ssh-add $HOME/.ssh/*id_rsa < /dev/null
 }
 _profile_default_profile_on_mint_linux () {
@@ -281,10 +281,10 @@ _profile_system_mac_osx () {
 _profile_system_mac_osx_gpg_setup () {
   local pid
   if [ -z "$GPG_AGENT_INFO" ] && which -a gpg-agent | grep -q MacGPG2; then
-    pid="`launchctl list org.gpgtools.macgpg2.gpg-agent | \
-      grep PID | grep --only-matching '[0-9]\+'`"
+    pid=$(launchctl list org.gpgtools.macgpg2.gpg-agent | grep PID | \
+      grep --only-matching '[0-9]\+')
     if [ -S $HOME/.gnupg/S.gpg-agent ]; then
-      export GPG_AGENT_INFO="$HOME/.gnupg/S.gpg-agent:$pid:1"
+      export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent:$pid:1
     fi
   fi
 }
@@ -308,7 +308,7 @@ _profile_system_mac_osx_env_from_file () {
   done
 }
 _profile_system_open_bsd () {
-  PKG_PATH=ftp://ftp.spline.de/pub/OpenBSD/`uname -r`/packages/`machine -a`/
+  PKG_PATH=ftp://ftp.spline.de/pub/OpenBSD/$(uname -r)/packages/$(machine -a)/
   export PKG_PATH
 }
 # setup for special hosts
@@ -332,7 +332,7 @@ _profile_host_mbp () {
   # only for Linux systems
   if ! _profile_test_ssh; then
     # started by systemd
-    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
     if [ "$TTY" = /dev/tty1 ] && \
       _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
       exec startx "$cdir/xinit/xinitrc"
@@ -362,24 +362,24 @@ _profile_export_PAGER () {
 }
 _profile_export_DISPLAY () {
   if [ -z "$DISPLAY" ] && [ "$SSH_CLIENT" ]; then
-    export DISPLAY="`echo $SSH_CLIENT | cut -f1 -d\ `:0.0"
+    export DISPLAY=$(echo $SSH_CLIENT | cut -f1 -d\ ):0.0
   fi
 }
 _profile_export_GPG_AGENT_INFO () {
   # The variable GPG_AGENT_INFO should bot be needed anymore since gpg 2.1 or
   # so.
-  local info="${GNUPGHOME:-$HOME}/.gpg-agent-info"
-  local socket="${GNUPGHOME:-$HOME/.gnupg}/S.gpg-agent"
+  local info=${GNUPGHOME:-$HOME}/.gpg-agent-info
+  local socket=${GNUPGHOME:-$HOME/.gnupg}/S.gpg-agent
   # this should be system independent
   if _profile_export_var_from_file "$info"; then
     return 0
   elif [ -S "$socket" ]; then
     local pid
-    pid=`pgrep gpg-agent`
-    if [ `echo "$pid" | wc -l` -ne 1 ]; then
+    pid=$(pgrep gpg-agent)
+    if [ $(echo "$pid" | wc -l) -ne 1 ]; then
       return 1
     fi
-    export GPG_AGENT_INFO="$socket:$pid:1"
+    export GPG_AGENT_INFO=$socket:$pid:1
     return 0
   else
     return 1
@@ -391,23 +391,23 @@ _profile_export_standard_env () {
   export EDITOR=nvim
   #export HISTSIZE=2000
   export HTMLPAGER='elinks --dump'
-  export PYTHONSTARTUP="$cdir"/python/init.py
+  export PYTHONSTARTUP=$cdir/python/init.py
 }
 _profile_export_special_env () {
   # force some programs to load their configuration from ~/.config
-  export TIGRC_USER="$cdir/tig/tigrc"
-  export PASSWORD_STORE_DIR="$cdir/pass"
-  export GNUPGHOME="$cdir/gpg"
-  #export VIMPAGER_RC="$cdir/nvim/vimpagerrc"
-  export WINEPREFIX="$ddir/wine"
-  export ELINKS_CONFDIR="$cdir/elinks"
-  #export SCREENRC="$dir/screen/screenrc"
-  export NOTMUCH_CONFIG="$cdir/notmuch/config"
-  export NETRC="$cdir/netrc"
+  export TIGRC_USER=$cdir/tig/tigrc
+  export PASSWORD_STORE_DIR=$cdir/pass
+  export GNUPGHOME=$cdir/gpg
+  #export VIMPAGER_RC=$cdir/nvim/vimpagerrc
+  export WINEPREFIX=$ddir/wine
+  export ELINKS_CONFDIR=$cdir/elinks
+  #export SCREENRC=$dir/screen/screenrc
+  export NOTMUCH_CONFIG=$cdir/notmuch/config
+  export NETRC=$cdir/netrc
   export FZF_DEFAULT_OPTS="--inline-info --cycle"
 }
 _profile_export_less_env () {
-  export LESSKEY="$cdir/less/lesskey"
+  export LESSKEY=$cdir/less/lesskey
   make --quiet -C "$cdir/less" lesskey
   # FIXME this is bash syntax. zsh and sh seem to accept it as well.
   export LESS_TERMCAP_mb=$'\033[01;31m'    # begin blinking
@@ -450,7 +450,7 @@ _profile_set_infopath () {
 # The main functions
 _profile_system_specific () {
   # select the correct functions for this system
-  case "$(uname)" in
+  case $(uname) in
     LINUX|Linux|linux)
       # general functions first
       # detecting Linux distros: [1]
@@ -470,7 +470,7 @@ _profile_system_specific () {
 	: unknown Linux
       fi
       # set up the host specific environment
-      case "$(hostname)" in
+      case $(hostname) in
 	cip*.cipmath.loc)
 	  _profile_host_math
 	  ;;
@@ -496,8 +496,8 @@ _profile_system_specific () {
 }
 _profile_main () {
   # Local variables for this script.
-  local cdir="${XDG_CONFIG_HOME:-$HOME/.config}"
-  local ddir="${XDG_DATA_HOME:-$HOME/.local/share}"
+  local cdir=${XDG_CONFIG_HOME:-$HOME/.config}
+  local ddir=${XDG_DATA_HOME:-$HOME/.local/share}
 
   # start setting up the environment
   _profile_export_standard_env

@@ -43,36 +43,36 @@ color () {
 clear
 
 # print date and uptime
-color -c blue "Date: `date '+%F %T'`"
-color -c blue "Uptime: `uptime | sed -E 's/[ 0-9:]*up ([0-9days,.: ]*), [0-9]* user.*/\1/;s/ +/ /g'`"
+color -c blue "Date: $(date '+%F %T')"
+color -c blue "Uptime: $(uptime | sed -E 's/[ 0-9:]*up ([0-9days,.: ]*), [0-9]* user.*/\1/;s/ +/ /g')"
 
 echo
 
 # machine information
 color -c green Machine
-color -c blue "Host: `hostname`"
-color -c blue "Arch: `uname -m`"
+color -c blue "Host: $(hostname)"
+color -c blue "Arch: $(uname -m)"
 
 echo
 
 color -c green System
-color -c blue "Kern: `uname -s`"
-color -c blue "Vers: `uname -r`"
+color -c blue "Kern: $(uname -s)"
+color -c blue "Vers: $(uname -r)"
 
 echo
 
 color -c green Shell
-color -c blue "Shell: `ps -o command= -p $$`"
+color -c blue "Shell: $(ps -o command= -p $$)"
 color -c blue -f "%s %02d:%02d:%02d" Running: $((SECONDS/3600%24)) \
   $((SECONDS/60%60)) $((SECONDS%60))
 color -c blue "SHLVL: $SHLVL"
 color -nc blue Jobs:
-if [ `jobs|wc -l` -ne 0 ]; then echo; jobs; else echo " None"; fi
+if [ $(jobs | wc -l) -ne 0 ]; then echo; jobs; else echo " None"; fi
 
 echo
 
 color -c green Processes
-pstree `ps -o ppid= $$`
+pstree $(ps -o ppid= $$)
 w | tail -n +3
 
 return
@@ -85,21 +85,21 @@ echo "$fg[red]Uptime:$reset_color `uptime | \
   sed -E 's/[ 0-9:]*up ([0-9days,.: ]*), [0-9]* user.*/\1/;s/ +/ /g'`"
 echo ""
 echo "$fg[green]Machine$reset_color"
-echo "$fg[green]Host:$reset_color `hostname`"
-echo "$fg[green]Arch:$reset_color `uname -m`"
+echo "$fg[green]Host:$reset_color $(hostname)"
+echo "$fg[green]Arch:$reset_color $(uname -m)"
 echo ""
 echo "$fg[blue]System$reset_color"
-echo "$fg[blue]Kern:$reset_color `uname -s`"
-echo "$fg[blue]Vers:$reset_color `uname -r`"
+echo "$fg[blue]Kern:$reset_color $(uname -s)"
+echo "$fg[blue]Vers:$reset_color $(uname -r)"
 echo ""
 echo "$fg[yellow]Shell$reset_color"
-echo "$fg[yellow]Shell:$reset_color `ps -o command= -p $$`"
+echo "$fg[yellow]Shell:$reset_color $(ps -o command= -p $$)"
 printf "$fg[yellow]Running:$reset_color %02d:%02d:%02d\n" $((SECONDS/3600%24)) $((SECONDS/60%60)) \
   $((SECONDS%60))
 echo "$fg[yellow]SHLVL:$reset_color $SHLVL"
 echo -n "$fg[yellow]Jobs in backround:$reset_color"
-if [ `jobs|wc -l` -ne 0 ]; then echo; jobs; else echo " None"; fi
+if [ $(jobs|wc -l) -ne 0 ]; then echo; jobs; else echo " None"; fi
 echo ""
 echo "$fg[magenta]Processes$reset_color"
-pstree `ps -o ppid= $$`
+pstree $(ps -o ppid= $$)
 w | tail -n +3

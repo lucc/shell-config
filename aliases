@@ -50,11 +50,11 @@ alias sshpi='ssh -p 4771 $(piip)'
 # backup and statistics {{{1
 alias tbz2='tar -cjv --exclude .DS_Store --one-file-system'
 alias tgz='tar -czv --exclude .DS_Store --one-file-system'
-alias up='date +"%F `uptime`"'
+alias up='date +"%F $(uptime)"'
 
 # music {{{1
 # aliases to use mpd on raspberry pi
-#if [[ `hostname` != pi ]]; then
+#if [[ $(hostname) != pi ]]; then
 #  alias ncmpcpp='ncmpcpp --host pi.local'
 #  alias mpc='mpc --host pi.local'
 #fi
@@ -109,7 +109,7 @@ alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
 #alias -s de=xdg-open
 
 # Mac OS X specific aliases {{{1
-if [ `uname` = Darwin ] ; then
+if [ $(uname) = Darwin ] ; then
   alias dl='cd $HOME/Downloads && wget'
   #play go
   alias igo='(wine c:/Program\ Files/igowin/igowin.exe &) >/dev/null 2>&1'
@@ -117,7 +117,7 @@ if [ `uname` = Darwin ] ; then
   alias L='ls -lT'
   alias ls='ls -G'
   alias pstree='pstree -g3'
-  alias pst='pstree `ps -o ppid= $$` `pgrep tmux`'
+  alias pst='pstree $(ps -o ppid= $$) $(pgrep tmux)'
   alias psu='pstree -u $USER'
   #alias f=mdfind
   alias o=open
@@ -131,7 +131,7 @@ if [ `uname` = Darwin ] ; then
   urlopen () { open "http://$*"; }
   alias suspenduser='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
 # Linux specific aliases {{{1
-elif [ `uname` = Linux ]; then
+elif [ $(uname) = Linux ]; then
   alias pstree='pstree -n'
   alias cal='cal -3'
   alias pacs='pacaur -Ss'
