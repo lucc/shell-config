@@ -400,7 +400,6 @@ _profile_export_special_env () {
   export GNUPGHOME="$cdir/gpg"
   #export VIMPAGER_RC="$cdir/nvim/vimpagerrc"
   export WINEPREFIX="$ddir/wine"
-  export RXVT_SOCKET="$ddir/urxvt/urxvtd-`hostname`"
   export ELINKS_CONFDIR="$cdir/elinks"
   #export SCREENRC="$dir/screen/screenrc"
   export NOTMUCH_CONFIG="$cdir/notmuch/config"
@@ -422,17 +421,6 @@ _profile_export_less_env () {
 _profile_export_systemctl_env () {
   export SYSTEMD_PAGER=less
   _profile_export_less_env
-}
-_profile_export_vimperator_init () {
-  export VIMPERATOR_INIT="source $cdir/vimperator/vimperatorrc"
-  export VIMPERATOR_RUNTIME="$cdir/vimperator"
-}
-_profile_export_pentadactyl_init () {
-  export PENTADACTYL_INIT="source $cdir/pentadactyl/pentadactylrc"
-  export PENTADACTYL_RUNTIME="$cdir/pentadactyl"
-}
-_profile_export_setup_for_firefox_vim_plugin () {
-  _profile_export_vimperator_init
 }
 _profile_export_vim_init_for_xdg () {
   # see https://tlvince.com/vim-respect-xdg
@@ -482,7 +470,7 @@ _profile_system_specific () {
 	: unknown Linux
       fi
       # set up the host specific environment
-      case "$(hostname --long)" in
+      case "$(hostname)" in
 	cip*.cipmath.loc)
 	  _profile_host_math
 	  ;;
@@ -518,7 +506,6 @@ _profile_main () {
   _profile_export_GPG_AGENT_INFO
   _profile_export_DISPLAY
   _profile_export_special_env
-  _profile_export_setup_for_firefox_vim_plugin
   _profile_export_systemctl_env
   _profile_system_specific "$@"
 }
