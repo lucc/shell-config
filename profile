@@ -331,15 +331,10 @@ _profile_host_ifi () {
 _profile_host_mbp () {
   # only for Linux systems
   if ! _profile_test_ssh; then
-    # moved to systemd
-    #_profile_start_pop_daemon
-    #_profile_start_gpg_agent
-    # for mutt 1.5.23 (it will check if this variable exists)
-    #export GPG_AGENT_INFO='depricated since GPG 2.1'
-    ###### _profile_start_ssh_agent
-    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket" #started by systemd
-    #export SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket
-    if [ "$TTY" = /dev/tty1 ] && _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
+    # started by systemd
+    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+    if [ "$TTY" = /dev/tty1 ] && \
+      _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
       exec startx "$cdir/xinit/xinitrc"
     elif [ "$TTY" != /dev/tty1 ]; then
       : _profile_colors_basic_solarized_dark
