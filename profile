@@ -343,11 +343,12 @@ _profile_host_mbp () {
 }
 # functions to set environment variables
 _profile_export_PATH () {
-  _profile_helper_add_to_var PATH                     \
-    /Applications/LilyPond.app/Contents/Resources/bin \
-    $HOME/.cabal/bin                                  \
-    $HOME/.local/bin                                  \
-    $HOME/bin                                         \
+  _profile_helper_add_to_var PATH                          \
+    /Applications/LilyPond.app/Contents/Resources/bin      \
+    $HOME/.cabal/bin                                       \
+    $(ls -d $HOME/.gem/ruby/*/bin 2>/dev/null | head -n 1) \
+    $HOME/.local/bin                                       \
+    $HOME/bin                                              \
 
 }
 _profile_export_PAGER () {
