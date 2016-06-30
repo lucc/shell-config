@@ -618,6 +618,17 @@ function zrc-set-up-mail-warning-variables () {
     set -U
   fi
 }
+function zrc-set-up-autopair-plugin () {
+  # should be placed before syntax highlighting
+  zrc-source /usr/share/zsh/plugins/zsh-autopair/autopair.zsh
+}
+function zrc-set-up-autosuggest-plugin () {
+  zrc-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=10
+}
+function zrc-set-up-do-what-i-mean-plugin () {
+  zrc-source /usr/share/zsh-dwim/init.zsh
+}
 
 # start up notifications
 function zrc-calcurse-notifications () {
@@ -808,6 +819,7 @@ zrc-main () {
   zrc-zle-highlighting
   zrc-fpath
 
+  zrc-set-up-autopair-plugin
   zrc-syntax-highlighting
   zrc-keymap
   zrc-run-help
@@ -820,6 +832,7 @@ zrc-main () {
   zrc-fzf-setup
   zrc-setup-history-statistics
   zrc-set-up-mail-warning-variables
+  zrc-set-up-autosuggest-plugin
 
   zrc-compinit
 
