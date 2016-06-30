@@ -43,6 +43,9 @@ function zrc-test-osx () {
 function zrc-test-linux () {
   [[ $ZRC_UNAME == (#i)linux ]]
 }
+function zrc-is-virtual-machine () {
+  systemd-detect-virt --quiet
+}
 function zrc-source () {
   if [[ -r $1 ]]; then
     source $1
@@ -369,7 +372,7 @@ function zrc-full-colour-rps1 () {
 }
 function zrc-condensed-color-ps1 () {
   PS1=
-  if [[ -n $SSH_CONNECTION ]]; then
+  if [[ -n $SSH_CONNECTION ]] || zrc-is-virtual-machine; then
     PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
     PS1+='%n%F{cyan}@%F{blue}%m%f:'                       # user and host info
   else
