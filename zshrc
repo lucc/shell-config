@@ -638,12 +638,10 @@ function zrc-khal-notifications () {
   zmodload -F zsh/stat b:zstat
   # marker1 is used every 12 hours
   if (( ${(%)epoch} > $(zstat +mtime $marker1) + 43200 )); then
-    khal calendar --days=7
-    touch $marker1 $marker2
+    khal --color calendar --days=7 | tee $marker1
   # marker 2 is used every hour
   elif (( ${(%)epoch} > $(zstat +mtime $marker2) + 3600 )); then
-    khal calendar --days=2
-    touch $marker2
+    khal --color calendar --days=2 | tee $marker2
   fi
 }
 function zrc-print-todo-items-from-notmuch () {
