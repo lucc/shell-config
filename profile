@@ -93,6 +93,9 @@ _profile_helper_ask_yes () {
   local answer=
   local question="\e[31m$1\e[m [Y|n] "
   _profile_helper_ask_timeout "$question" $2
+  if [ "$answer" != $'\n' ]; then
+    echo
+  fi
   [ "$answer" = Y -o "$answer" = y -o "$answer" = $'\n' -o -z "$answer" ]
 }
 _profile_helper_ask_no () {
