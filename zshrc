@@ -73,6 +73,10 @@ function zrc-add-exit-hook () {
   ZRC_AT_EXIT_FUNCTIONS+=$1
 }
 function zrc-vi-bindkey () {
+  if [[ -z $1 || -z $2 ]]; then
+    bindkey_error=1
+    return
+  fi
   # bind the given key to the given function in the viins and vicmd maps
   bindkey -M viins $1 $2
   bindkey -M vicmd $1 $2
@@ -119,6 +123,7 @@ function zrc-interesting-options () {
 function zrc-keymap () {
   bindkey -v
   typeset -g -A key
+  local bindkey_error=0
   zrc-keys-terminfo
   zrc-keys-manual-corrections
   zrc-bind-basic-keys
@@ -126,6 +131,9 @@ function zrc-keymap () {
   zrc-keys-edit-command-line
   zrc-search-keys
   zrc-push-zle-buffer-keys
+  if ((bindkey_error)); then
+    print 'There were errors when binding keys.' >&2
+  fi
 }
 function zrc-keys-terminfo () {
   zmodload zsh/terminfo
