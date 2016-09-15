@@ -411,8 +411,11 @@ _profile_export_special_env () {
   export FZF_DEFAULT_OPTS="--inline-info --cycle"
 }
 _profile_export_less_env () {
-  export LESSKEY=$cdir/less/lesskey
-  make --quiet -C "$cdir/less" lesskey
+  LESSKEY=$cdir/less/lesskey
+  if [ -r "$LESSKEY" ]; then
+    export LESSKEY
+    make --quiet -C "$cdir/less" lesskey
+  fi
   # FIXME this is bash syntax. zsh and sh seem to accept it as well.
   export LESS_TERMCAP_mb=$'\033[01;31m'    # begin blinking
   export LESS_TERMCAP_md=$'\033[01;31m'    # begin bold
