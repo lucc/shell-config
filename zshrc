@@ -666,6 +666,25 @@ function zrc-khal-notifications () {
     khal --color calendar --days=2 | tee $marker2
   fi
 }
+function zrc-khal-notifications-2 () {
+  # only continue if khal is installed
+  [[ -x =khal ]] || return
+  local marker=~/.cache/zsh/startup-calendar-timestamp
+  local image=~/.cache/khal/ascii-dump.txt
+  # prompt expand sequence for the current time in seconds since EPOCH
+  local epoch=%D{%s}
+  zmodload -F zsh/stat b:zstat
+  # image should be updated every 1/2 h.
+  if (( ${(%)epoch} > $(zstat +mtime $image) + 3600 )); then
+    systemctl --user start khal-ascii-image.timer &!
+    systemctl --user start khal-ascii-image &!
+  fi
+  # use marker every hour
+  if (( ${(%)epoch} > $(zstat +mtime $marker) + 3600 )); then
+    cat $image
+    touch $marker
+  fi
+}
 function zrc-print-todo-items-from-notmuch () {
   notmuch search --format=json tag:todo | jq --raw-output '.[].subject'
 }
@@ -847,7 +866,7 @@ zrc-main () {
 
   zrc-compinit
 
-  zrc-khal-notifications
+  zrc-khal-notifications-2
 
   # execute the at exit hooks
   zrc-run-exit-hooks
