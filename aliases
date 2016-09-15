@@ -136,4 +136,5 @@ elif [ $(uname) = Linux ]; then
   alias cal='cal -3'
   alias pacs='pacaur -Ss'
   alias paci='pacaur -Syu --devel --needed'
+  alias blk='lsblk -o NAME,FSTYPE,MOUNTPOINT,PARTLABEL,SIZE,RO'
 fi
