@@ -1,0 +1,3 @@
+#compdef u
+eval "$(u complete)"
+_lucs_util_scipt_completion_function "$@"
