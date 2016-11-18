@@ -93,6 +93,7 @@ else
     grep --recursive $1 .
   }
 fi
+alias quoted-printeable-decode='python -c "import os,quopri,sys;quopri.decode(sys.stdin,os.fdopen(sys.stdout.fileno(), \"wb\"))"'
 
 # games {{{1
 alias histhead='history -n 1 | \
