@@ -688,6 +688,22 @@ function zrc-khal-notifications-2 () {
 function zrc-print-todo-items-from-notmuch () {
   notmuch search --format=json tag:todo | jq --raw-output '.[].subject'
 }
+zrc-pacman-update-notification () {
+  [[ -x =pacman ]] || return
+  local epoch=%D{%s}
+  local file=/var/log/pacman.log
+  zmodload -F zsh/stat b:zstat
+  # Print a warning if the last update (interaction with pacman) is more than
+  # one week ago.
+  if (( ${(%)epoch} > $(zstat +mtime $file) + 60*60*24*7 )); then
+    print Consider updateing your system.
+  fi
+  # Override all other notifications
+  for name in $(functions -m 'zrc-*notification*' | \
+                sed -n '/^zrc/{s/ .*//;p;}'); do
+    function $name () :
+  done
+}
 
 # misc
 function zrc-todo-from-bashrc () {
@@ -866,6 +882,7 @@ zrc-main () {
 
   zrc-compinit
 
+  zrc-pacman-update-notification
   zrc-khal-notifications-2
 
   # execute the at exit hooks
