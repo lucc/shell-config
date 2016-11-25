@@ -587,7 +587,9 @@ function zrc-syntax-highlighting () {
       location=$ZRC_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
       ;;
     Linux)
-      location=/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      location=$(zrc-filter-existing \
+	/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+	/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh)
       ;;
   esac
   zrc-source $location
