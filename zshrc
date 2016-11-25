@@ -173,7 +173,7 @@ function zrc-keys-manual-corrections () {
       key[ShiftDown]='\e[b'
     elif [[ -n $TMUX ]]; then
       zrc-keys-manual-corrections-tmux
-    elif [[ $TERM == xterm ]]; then
+    elif [[ $TERM == xterm && -z $KONSOLE_PROFILE_NAME ]]; then
       zrc-keys-manual-corrections-xterm
     fi
   elif zrc-test-osx; then
