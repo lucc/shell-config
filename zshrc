@@ -699,12 +699,12 @@ zrc-pacman-update-notification () {
   # one week ago.
   if (( ${(%)epoch} > $(zstat +mtime $file) + 60*60*24*7 )); then
     print Consider updateing your system.
+    # Override all other notifications
+    for name in $(functions -m 'zrc-*notification*' | \
+		  sed -n '/^zrc/{s/ .*//;p;}'); do
+      function $name () :
+    done
   fi
-  # Override all other notifications
-  for name in $(functions -m 'zrc-*notification*' | \
-                sed -n '/^zrc/{s/ .*//;p;}'); do
-    function $name () :
-  done
 }
 
 # misc
