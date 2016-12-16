@@ -484,7 +484,7 @@ _profile_system_specific () {
 	*.cip.ifi.lmu.de)
 	  _profile_host_ifi
 	  ;;
-	mbp*)
+	mbp*|tp*)
 	  _profile_host_mbp
 	  ;;
       esac
