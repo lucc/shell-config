@@ -16,7 +16,7 @@ alias l='ls -l'
 alias L='ls -l --time-style=+%F\ %H:%M:%S'
 alias lh='L -h'
 alias lr='tree -Chuapl' # replacement for ls -lR
-alias lr='tree -aCI ".git|.svn|__pycache__|*.egg-info"'
+alias lr='tree -aCI ".git|.svn|__pycache__|*.egg-info|*.pyc"'
 alias ls='ls --color=auto'
 alias la='ls -A'
 alias lla='l -A'
