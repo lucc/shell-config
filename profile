@@ -409,6 +409,7 @@ _profile_export_special_env () {
   export NOTMUCH_CONFIG=$cdir/notmuch/config
   export NETRC=$cdir/netrc
   export FZF_DEFAULT_OPTS="--inline-info --cycle"
+  export RLWRAP_HOME=$ddir/rlwrap
 }
 _profile_export_less_env () {
   LESSKEY=$cdir/less/lesskey
