@@ -613,7 +613,8 @@ function zrc-setup-antigen () {
 }
 function zrc-fzf-setup () {
   # set up fzf keybindings
-  zrc-source /usr/share/fzf/key-bindings.zsh
+  zrc-source /usr/share/fzf/key-bindings.zsh ||
+    zrc-source /etc/profile.d/fzf.zsh
 }
 function zrc-setup-history-statistics () {
   # Collect data about executed commands.
