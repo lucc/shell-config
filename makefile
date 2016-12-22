@@ -10,3 +10,4 @@ DEPS = \
 
 install-deps:
 	pacaur -S $(DEPS)
+	$(MAKE) -C ../pam
