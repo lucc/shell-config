@@ -350,6 +350,7 @@ _profile_export_PATH () {
     /Applications/LilyPond.app/Contents/Resources/bin      \
     $HOME/.cabal/bin                                       \
     $(ls -d $HOME/.gem/ruby/*/bin 2>/dev/null | head -n 1) \
+    $HOME/.luarocks/bin                                    \
     $HOME/.local/bin                                       \
     $HOME/bin                                              \
 
