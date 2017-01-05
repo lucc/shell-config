@@ -338,7 +338,7 @@ _profile_host_mbp () {
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
     if [ "$TTY" = /dev/tty1 ] && \
       _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
-      exec startx "$cdir/xinit/xinitrc"
+      exec "$cdir/sway/bin/start-sway.sh"
     elif [ "$TTY" != /dev/tty1 ]; then
       : _profile_colors_basic_solarized_dark
     fi
