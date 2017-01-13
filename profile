@@ -336,11 +336,8 @@ _profile_host_mbp () {
   if ! _profile_test_ssh; then
     # started by systemd
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
-    if [ "$TTY" = /dev/tty1 ] && \
-      _profile_helper_ask_yes "Do you want a graphical environment?" 2; then
+    if [ "$TTY" = /dev/tty1 ] && grep -qv lucas=nogui /proc/cmdline; then
       exec "$cdir/sway/bin/start-sway.sh"
-    elif [ "$TTY" != /dev/tty1 ]; then
-      : _profile_colors_basic_solarized_dark
     fi
   fi
 }
