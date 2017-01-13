@@ -255,23 +255,8 @@ _profile_add_ssh_keys () {
   SSH_ASKPASS=$(which pass-as-ssh-askpass.sh) \
     ssh-add $HOME/.ssh/*id_rsa < /dev/null
 }
-_profile_default_profile_on_mint_linux () {
-  # ~/.profile: executed by the command interpreter for login shells.
-  # This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
-  # exists.
-  # see /usr/share/doc/bash/examples/startup-files for examples.
-  # the files are located in the bash-doc package.
-
-  # the default umask is set in /etc/profile; for setting the umask
-  # for ssh logins, install and configure the libpam-umask package.
-  #umask 022
-  :
-}
 # We will now define several functions to set up the correct environment for
 # different systems.
-_profile_system_arch_linux () {
-  :
-}
 _profile_system_mac_osx () {
   # do not work with ._* files
   export EDITOR='gvim.sh --editor'
@@ -327,9 +312,6 @@ _profile_host_math () {
       exec zsh
     fi
   fi
-}
-_profile_host_ifi () {
-  :
 }
 _profile_host_mbp () {
   # only for Linux systems
@@ -458,30 +440,10 @@ _profile_system_specific () {
   # select the correct functions for this system
   case $(uname) in
     LINUX|Linux|linux)
-      # general functions first
-      # detecting Linux distros: [1]
-      if test -e /etc/arch-release; then
-	#grep Arch < /etc/issue
-	_profile_system_arch_linux
-      elif test -e /etc/debian_version; then
-	# Debian or derivate (Ubuntu)
-	if grep -q Debian < /etc/issue; then
-	  : Debian GNU/Linux
-	elif grep -q Ubuntu < /etc/issue; then
-	  : Ubuntu
-	else
-	  : unknown Debian
-	fi
-      else
-	: unknown Linux
-      fi
       # set up the host specific environment
       case $(hostname) in
 	cip*.cipmath.loc)
 	  _profile_host_math
-	  ;;
-	*.cip.ifi.lmu.de)
-	  _profile_host_ifi
 	  ;;
 	mbp*|tp*)
 	  _profile_host_mbp
