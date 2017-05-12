@@ -208,8 +208,14 @@ _profile_start_gui () {
   if ! _profile_test_ssh; then
     # started by systemd
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
-    if [ "$TTY" = /dev/tty1 ] && grep -qv lucas=nogui /proc/cmdline; then
-      exec "$cdir/sway/bin/start-sway.sh"
+    if
+      [ "$TTY" = /dev/tty1 ] && \
+      [ ! -e "$XDG_RUNTIME_DIR/gui-login-done" ] && \
+      grep -qv lucas=nogui /proc/cmdline
+    then
+      touch "$XDG_RUNTIME_DIR/gui-login-done"
+      exec startx "$cdir/xinit/xinitrc"
+      #exec "$cdir/sway/bin/start-sway.sh"
     fi
   fi
 }
