@@ -189,72 +189,6 @@ _profile_colors_basic_solarized_dark () {
   echo -en "\E]PFfdf6e3" #white
   clear
 }
-# functions to start programs
-_profile_start_gpg_agent () {
-  # This function looks for a running gpg-agent or starts one itself
-  local file=${GNUPGHOME:-$HOME/.gnupg}/.gpg-agent-info
-  if [ -r "$file" ]; then
-    #_profile_helper_logger Found gpg info file at "$file".
-    if _profile_helper_check_pid $(cut -f 2 -d : < "$file") gpg-agent; then
-      #_profile_helper_logger Found running gpg-agent.
-      _profile_export_var_from_file "$file"
-    else
-      #_profile_helper_logger Removing lingering info file.
-      rm "$file"
-    fi
-  fi
-  if [ ! -f "$file" ]; then
-    # starting the daemon
-    #_profile_helper_logger Starting new gpg-agent.
-    gpg-agent --daemon --write-env-file "$file"
-    _profile_export_var_from_file "$file"
-  fi
-  # TODO is there any other way to find a daemon?
-}
-_profile_start_ssh_agent () {
-  local file=$HOME/.ssh/.ssh-agent-info
-  # first look for variables in the environment
-  if [ "$SSH_AGENT_PID" -a "$SSH_AUTH_SOCK" ]; then
-    #_profile_helper_logger Found lingering SSH_AGENT_PID.
-    export SSH_AGENT_PID SSH_AUTH_SOCK
-    if _profile_helper_check_pid $SSH_AGENT_PID ssh-agent; then
-      #_profile_helper_logger Found running ssh-agent.
-      return
-    else
-      #_profile_helper_logger Trying to kill ssh-agent.
-      eval $(ssh-agent -k)
-    fi
-  fi
-  # look for a (custom) info file to source
-  if [ -r "$file" ]; then
-    #_profile_helper_logger Found info file at "$file".
-    _profile_export_var_from_file "$file"
-    if _profile_helper_check_pid $SSH_AGENT_PID ssh-agent; then
-      #_profile_helper_logger Found running ssh-agent.
-      return
-    else
-      #_profile_helper_logger Trying to kill ssh-agent.
-      eval $(ssh-agent -k)
-    fi
-  fi
-  # really start ssh-agent
-  #_profile_helper_logger Starting new ssh-agent.
-  eval $(ssh-agent)
-  touch "$file"
-  chmod 600 "$file"
-  echo SSH_AGENT_PID=$SSH_AGENT_PID >  "$file"
-  echo SSH_AUTH_SOCK=$SSH_AUTH_SOCK >> "$file"
-}
-_profile_start_pop_daemon () {
-  # if fetchmail is already runnng this will just awake it once and not do any
-  # harm
-  FETCHMAILHOME=$cdir/fetchmail FETCHMAIL_INCLUDE_DEFAULT_X509_CA_CERTS=1 \
-    fetchmail
-}
-_profile_add_ssh_keys () {
-  SSH_ASKPASS=$(which pass-as-ssh-askpass.sh) \
-    ssh-add $HOME/.ssh/*id_rsa < /dev/null
-}
 # We will now define several functions to set up the correct environment for
 # different systems.
 _profile_system_mac_osx () {
@@ -263,57 +197,13 @@ _profile_system_mac_osx () {
   export COPY_EXTENDED_ATTRIBUTES_DISABLE=true
   #export BROWSER=browser # script installed with brew (uses "open")
   export LANG=en_US.UTF-8
-  _profile_system_mac_osx_fix_path_for_brew
-  _profile_system_mac_osx_gpg_setup
-}
-_profile_system_mac_osx_gpg_setup () {
-  local pid
-  if [ -z "$GPG_AGENT_INFO" ] && which -a gpg-agent | grep -q MacGPG2; then
-    pid=$(launchctl list org.gpgtools.macgpg2.gpg-agent | grep PID | \
-      grep --only-matching '[0-9]\+')
-    if [ -S $HOME/.gnupg/S.gpg-agent ]; then
-      export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent:$pid:1
-    fi
-  fi
-}
-_profile_system_mac_osx_fix_path_for_brew () {
-  # Fix PATH for OS X:  When using brew /usr/local/bin should be befor
-  # /usr/bin in order for the brewed vim to override the system vim.
-  if [ -x /usr/local/bin/brew ]; then
-    _profile_helper_add_to_var PATH                     \
-      /usr/local/bin                                    \
-      /Applications/LilyPond.app/Contents/Resources/bin \
-      $HOME/.cabal/bin                                  \
-      $HOME/bin                                         \
-
-    _profile_helper_append_to_var PATH /usr/local/opt/surfraw/lib/surfraw
-  fi
-}
-_profile_system_mac_osx_env_from_file () {
-  local file
-  for file in "$cdir"/env/*; do
-    _profile_helper_set_var_from_file "${file##*/}" "$file"
-  done
 }
 _profile_system_open_bsd () {
   PKG_PATH=ftp://ftp.spline.de/pub/OpenBSD/$(uname -r)/packages/$(machine -a)/
   export PKG_PATH
 }
 # setup for special hosts
-_profile_host_math () {
-  # remap capslock
-  if [ -z "$SSH_CLIENT" -a -n "$DISPLAY" ]; then
-    xmodmap -e "add control = Caps_Lock"
-  fi
-
-  if [ -n "$SSH_CLIENT" ]; then
-    #calendar
-    if ! _profile_test_zsh; then
-      exec zsh
-    fi
-  fi
-}
-_profile_host_mbp () {
+_profile_start_gui () {
   # only for Linux systems
   if ! _profile_test_ssh; then
     # started by systemd
@@ -335,38 +225,11 @@ _profile_export_PATH () {
 
 }
 _profile_export_PAGER () {
-  if which vimpager >/dev/null 2>&1; then
-    export PAGER=vimpager
-  else
-    # TODO
-    unset PAGER
-    # default pager program should be "less"
-    _profile_export_less_env
-  fi
+  export PAGER=$HOME/src/less.nvim/nvimpager.in
 }
 _profile_export_DISPLAY () {
   if [ -z "$DISPLAY" ] && [ "$SSH_CLIENT" ]; then
     export DISPLAY=$(echo $SSH_CLIENT | cut -f1 -d\ ):0.0
-  fi
-}
-_profile_export_GPG_AGENT_INFO () {
-  # The variable GPG_AGENT_INFO should bot be needed anymore since gpg 2.1 or
-  # so.
-  local info=${GNUPGHOME:-$HOME}/.gpg-agent-info
-  local socket=${GNUPGHOME:-$HOME/.gnupg}/S.gpg-agent
-  # this should be system independent
-  if _profile_export_var_from_file "$info"; then
-    return 0
-  elif [ -S "$socket" ]; then
-    local pid
-    pid=$(pgrep gpg-agent)
-    if [ $(echo "$pid" | wc -l) -ne 1 ]; then
-      return 1
-    fi
-    export GPG_AGENT_INFO=$socket:$pid:1
-    return 0
-  else
-    return 1
   fi
 }
 _profile_export_standard_env () {
@@ -410,11 +273,6 @@ _profile_export_systemctl_env () {
   export SYSTEMD_PAGER=less
   _profile_export_less_env
 }
-_profile_export_vim_init_for_xdg () {
-  # see https://tlvince.com/vim-respect-xdg
-  export VIMINIT='let $MYVIMRC = "'"$cdir/vim/vimrc"'" | source $MYVIMRC'
-  export GVIMINIT='let MYGVIMRC = "'"$cdir/vim/gvimrc"'" | source $MYGVIMRC'
-}
 _profile_export_nvim_test_env () {
   # see
   # https://github.com/neovim/neovim/wiki/Development-tips#debugging-program-errors-undefined-behavior-leaks-
@@ -442,14 +300,10 @@ _profile_system_specific () {
     LINUX|Linux|linux)
       # set up the host specific environment
       case $(hostname) in
-	cip*.cipmath.loc)
-	  _profile_host_math
-	  ;;
-	mbp*|tp*)
-	  _profile_host_mbp
+	tp*)
+	  _profile_start_gui
 	  ;;
       esac
-      # startx ??
       ;;
     Darwin) # MacOS X
       _profile_system_mac_osx
@@ -471,7 +325,6 @@ _profile_main () {
   _profile_export_standard_env
   _profile_export_PATH
   _profile_export_PAGER
-  _profile_export_GPG_AGENT_INFO
   _profile_export_DISPLAY
   _profile_export_special_env
   #_profile_export_systemctl_env
