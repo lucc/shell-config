@@ -517,10 +517,7 @@ function zrc-directory-hash-table () {
   #hash -d i=~/Pictures
   #hash -d m=~/Music
   hash -d t=~/tmp
-  hash -d u=~/uni
-  hash -d v=/Volumes
-  hash -d p=~/uni/philosophie
-  hash -d y=~/.homesick/repos/secure/yaml
+  hash -d u=~/uni/semester/current
 }
 function zrc-autoloading () {
   autoload -Uz colors && colors
@@ -872,6 +869,8 @@ zrc-main () {
   zrc-syntax-highlighting
   zrc-keymap
   zrc-run-help
+
+  zrc-directory-hash-table
 
   zrc-zmodload
   zrc-lesspipe
