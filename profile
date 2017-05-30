@@ -256,7 +256,7 @@ _profile_export_special_env () {
   export ELINKS_CONFDIR=$cdir/elinks
   #export SCREENRC=$dir/screen/screenrc
   export NOTMUCH_CONFIG=$cdir/notmuch/config
-  export NETRC=$cdir/netrc
+  [ -r "$cdir/netrc" ] && export NETRC=$cdir/netrc
   export FZF_DEFAULT_OPTS="--inline-info --cycle"
   export RLWRAP_HOME=$ddir/rlwrap
 }
