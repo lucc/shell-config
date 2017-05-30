@@ -173,6 +173,9 @@ function zrc-keys-manual-corrections () {
       key[ShiftDown]='\e[b'
     elif [[ -n $TMUX ]]; then
       zrc-keys-manual-corrections-tmux
+    elif [[ -n $KONSOLE_DBUS_SERVICE ]]; then
+      key[ShiftUp]='\e[1;5A'
+      key[ShiftDown]='\e[1;5B'
     elif [[ $TERM == xterm && -z $KONSOLE_PROFILE_NAME ]]; then
       zrc-keys-manual-corrections-xterm
     fi
