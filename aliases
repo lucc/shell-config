@@ -133,3 +133,6 @@ elif [ $(uname) = Linux ]; then
     alias pacnews='yay --show --news'
   fi
 fi
+
+hash -d portal=/var/www/html/portal
+hash -d asamdev=/var/www/html/portal/luc

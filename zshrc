@@ -242,6 +242,7 @@ function zrc-bind-basic-keys () {
 function zrc-history-substring-search-keys () {
   zrc-source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh ||
     zrc-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ||
+    zrc-source ~/.local/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ||
     zrc-source ~/.nix-profile/share/zsh-history-substring-search/zsh-history-substring-search.zsh ||
     return
   zrc-vi-bindkey $key[ShiftUp]   history-substring-search-up
@@ -642,6 +643,7 @@ function zrc-fzf-setup () {
   zrc-source /usr/share/fzf/key-bindings.zsh ||
     zrc-source ~/.nix-profile/share/fzf/key-bindings.zsh ||
     zrc-source /etc/profile.d/fzf.zsh ||
+    zrc-source ~/.fzf.zsh ||
     zrc-source $(fzf-share)/key-bindings.zsh
   bindkey '^j' fzf-cd-widget
 }
