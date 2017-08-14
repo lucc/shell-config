@@ -26,6 +26,7 @@ alias mkdir='mkdir -p'
 alias nload='nload -i 6144 -o 1024'
 alias diff=colordiff
 alias qmv='qmv --format=destination-only'
+alias py=ipython3
 
 # view documentation {{{1
 #alias info='transparent-gvim.sh --info'
@@ -65,7 +66,7 @@ alias ffprobe='ffprobe -hide_banner'
 #alias alot='PYTHONPATH=~/vcs/alot python2 -m alot -d debug -l ~/log/alot.log'
 #alias khal='PYTHONPATH=~/vcs/khal python -m khal'
 #alias khard='PYTHONPATH=~/vcs/khard python -m khard'
-alias email=alot
+alias email='alot -d debug -l ~/log/alot.log'
 alias contacts=khard
 alias calendar=khal
 alias addressbook=contacts
@@ -74,6 +75,7 @@ alias adr=contacts
 alias a=contacts
 alias m=email
 alias c=calendar
+alias newsbeuter='newsbeuter -q'
 alias ctw-muc='ctw GMXX0087'
 alias tex=latexmk
 alias D='date +%F'
@@ -82,6 +84,7 @@ alias isodate='date "+%F %T"'
 alias timestamp='date +%Y%m%d%H%M%S'
 alias hgrep='history 1 | grep'
 alias -- '?=if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) = true ]]; then git status --short; elif hg -q stat 2>/dev/null; then hg status; else echo Not under version control.; fi'
+alias g=hub
 if which pt &>/dev/null; then
   alias s=pt
 elif which ag &>/dev/null; then
@@ -108,6 +111,7 @@ alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
 #alias -s org=xdg-open
 #alias -s net=xdg-open
 #alias -s de=xdg-open
+alias -s pdf=o
 
 # Mac OS X specific aliases {{{1
 if [ $(uname) = Darwin ] ; then
