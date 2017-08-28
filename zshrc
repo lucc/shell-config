@@ -824,7 +824,7 @@ function zrc-parse-known-hosts () {
 }
 function zrc-parse-ssh-config () {
   # from http://serverfault.com/questions/170346
-  ssh_config=(${${${(@M)${(f)"$(cat ~/.ssh/config(N) /dev/null)"}:#Host *}#Host }:#*[*?]*})
+  ssh_config=(${=${${${(@M)${(f)"$(cat ~/.ssh/config(N) /dev/null)"}:#Host *}#Host }:#*[*?]*}})
   # ${=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
   # sed -n '/\*/d;/^Host/s/^Host[=\t ]*//p' ~/.ssh/config
 }
