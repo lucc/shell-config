@@ -61,20 +61,12 @@ alias up='date +"%F $(uptime)"'
 #fi
 alias music=ncmpcpp
 alias ffprobe='ffprobe -hide_banner'
+alias mpv="notify-send --urgency=critical 'Go read a book instead!' 'You were planning to flee less.  So you could also try to think about what you are running from.'; :"
 
 # other {{{1
-#alias alot='PYTHONPATH=~/vcs/alot python2 -m alot -d debug -l ~/log/alot.log'
-#alias khal='PYTHONPATH=~/vcs/khal python -m khal'
-#alias khard='PYTHONPATH=~/vcs/khard python -m khard'
-alias email='alot -d debug -l ~/log/alot.log'
-alias contacts=khard
-alias calendar=khal
-alias addressbook=contacts
-alias addresses=contacts
-alias adr=contacts
-alias a=contacts
-alias m=email
-alias c=calendar
+alias a=khard
+alias c=khal
+alias m='alot --debug-level debug --logfile ~/log/alot.log'
 alias newsbeuter='newsbeuter -q'
 alias ctw-muc='ctw GMXX0087'
 alias tex=latexmk
