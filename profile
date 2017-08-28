@@ -223,6 +223,7 @@ _profile_start_gui () {
 _profile_export_PATH () {
   _profile_helper_add_to_var PATH                          \
     /Applications/LilyPond.app/Contents/Resources/bin      \
+    $HOME/.config/composer/vendor/bin                      \
     $HOME/.cabal/bin                                       \
     $(ls -d $HOME/.gem/ruby/*/bin 2>/dev/null | head -n 1) \
     $HOME/.luarocks/bin                                    \
