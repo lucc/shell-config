@@ -1,18 +1,18 @@
-#!/bin/sh
+#!/bin/zsh
 
 #
 
 for arg; do
-  if [ ! -f "$arg" ]; then
+  if [[ ! -f $arg ]]; then
     echo "Error: $arg does not exist." >&2
     continue
-  elif [ ! -r "$arg" ]; then
+  elif [[ ! -r $arg ]]; then
     echo "Error: $arg is not readable." >&2
     continue
   fi
-  case $(xdg-mime query filetype "$arg") in
-    text/html|text/htm) browser "$arg" &!;;
-    text/*|inode/x-empty) ${EDITOR:-vi} "$arg";;
-    *) xdg-open "$arg" &!;;
+  case $(xdg-mime query filetype $arg) in
+    text/html|text/htm) browser $arg &!;;
+    text/*|inode/x-empty) ${EDITOR:-vi} $arg;;
+    *) xdg-open $arg &!;;
   esac
 done
