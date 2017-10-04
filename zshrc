@@ -612,9 +612,36 @@ function zrc-setup-antigen () {
   done
 }
 function zrc-fzf-setup () {
+  function __fzf-list-files-helper () {
+    # first list autojump data:
+    sort --reverse --numeric-sort ~/.local/share/autojump/autojump.txt | \
+      cut --fields=2
+    # second list the contents of the locate database:
+    locate '*'
+    # lastly find files below the current directory (like the upstream
+    # version):
+    command find -L . \
+      -mindepth 1 \
+      \( \
+	-fstype 'sysfs' -o \
+	-fstype 'devfs' -o \
+	-fstype 'devtmpfs' -o \
+	-fstype 'proc' \
+      \) -prune \
+      -o -type d -print \
+      2> /dev/null \
+      | cut -b3-
+    # original command from the upstream script
+    #   command find -L . -mindepth 1 \( -path '*/\\.*' -o -fstype 'sysfs' -o
+    #   -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \) -prune -o
+    #   -type d -print 2> /dev/null | cut -b3-
+  }
   # set up fzf keybindings
+  FZF_ALT_C_COMMAND=__fzf-list-files-helper
+  export FZF_ALT_C_COMMAND
   zrc-source /usr/share/fzf/key-bindings.zsh ||
     zrc-source /etc/profile.d/fzf.zsh
+  bindkey '^j' fzf-cd-widget
 }
 function zrc-setup-history-statistics () {
   # Collect data about executed commands.
