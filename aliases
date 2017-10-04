@@ -134,5 +134,5 @@ elif [ $(uname) = Linux ]; then
   fi
 fi
 
-hash -d portal=/var/www/html/portal
-hash -d asamdev=/var/www/html/portal/luc
+hash -d ip=/var/www/html/dev/luc/infoportal
+hash -d ip-master=/var/www/html/dev/infoportal/asamdev
