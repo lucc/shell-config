@@ -277,8 +277,9 @@ _profile_export_less_env () {
   export LESS_TERMCAP_us=$'\033[01;33m'    # begin underline
 }
 _profile_export_systemctl_env () {
-  export SYSTEMD_PAGER=less
-  _profile_export_less_env
+  #export SYSTEMD_PAGER=less
+  #_profile_export_less_env
+  export SYSTEMD_PAGER=
 }
 _profile_export_nvim_test_env () {
   # see
