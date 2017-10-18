@@ -630,6 +630,10 @@ function zrc-set-up-autosuggest-plugin () {
 function zrc-set-up-do-what-i-mean-plugin () {
   zrc-source /usr/share/zsh-dwim/init.zsh
 }
+function zrc-set-up-reporttime-and-reportmem () {
+  REPORTTIME=5
+  #REPORTMEMORY=50
+}
 
 # start up notifications
 function zrc-calcurse-notifications () {
@@ -871,6 +875,7 @@ zrc-main () {
   zrc-setup-history-statistics
   zrc-set-up-mail-warning-variables
   zrc-set-up-autosuggest-plugin
+  zrc-set-up-reporttime-and-reportmem
 
   zrc-compinit
 
