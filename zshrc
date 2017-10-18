@@ -179,6 +179,8 @@ function zrc-keys-manual-corrections () {
       key[ShiftDown]='\e[1;5B'
     elif [[ $TERM == xterm && -z $KONSOLE_PROFILE_NAME ]]; then
       zrc-keys-manual-corrections-xterm
+    elif [[ $TERM == xterm-termite ]]; then
+      zrc-keys-manual-corrections-xterm
     fi
   elif zrc-test-osx; then
     zrc-keys-manual-corrections-xterm
