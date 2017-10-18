@@ -339,29 +339,6 @@ function zrc-full-colour-ps1 () {
   zrc-vcs-info-hooks
   zrc-vcs-info-setup
 }
-function zrc-stand-alone-colour-ps1 () {
-  PS1='[ '                                              # frame
-  PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
-  PS1+='%n%F{cyan}@%F{blue}%m%f'                        # user and host info
-  PS1+=' | '                                            # delimiter
-  PS1+='%F{cyan}%1~%f'                                  # working directory
-  PS1+=' | '                                            # delimiter
-  PS1+='${vcs_info_msg_0_:+$vcs_info_msg_0_ | }'        # VCS info with delim.
-  PS1+='%(?.%D{%H:%M:%S}.%F{red}Error %?%f)'            # curren time or error
-  PS1+=' ] '                                            # frame
-  zrc-vcs-info-zstyle
-  zrc-vcs-info-hooks
-  zrc-vcs-info-setup
-}
-function zrc-stand-alone-monochrome-ps1 () {
-  PS1='[ '                                              # frame
-  PS1+='%n@%m'                                          # user and host info
-  PS1+=' | '                                            # delimiter
-  PS1+='%1~'                                            # working directory
-  PS1+=' | '                                            # delimiter
-  PS1+='%(?.%D{%H:%M:%S}.Error %?)'                     # curren time or error
-  PS1+=' ] '                                            # frame
-}
 function zrc-full-colour-rps1 () {
   RPROMPT='%(?.'                                   # if $? == 0
   RPROMPT+='%(${_threshold}S.'                     #   if _threshold < SECONDS
@@ -396,23 +373,8 @@ function zrc-condensed-color-ps1 () {
 }
 # main prompt decision function
 function zrc-meta-prompt () {
-  if [[ $TERM == dump ]]; then
-    # possibly :sh from within macvim
-    zrc-stand-alone-monochrome-ps1
-    unset RPROMPT
-  elif [[ $CONQUE -eq 1 ]]; then
-    # vim Conque term plugin
-    zrc-stand-alone-colour-ps1
-    unset RPROMPT
-  elif [[ $VIMSHELL -eq 1 ]]; then
-    # vim "vimshell" plugin
-    zrc-stand-alone-colour-ps1
-    unset RPROMPT
-  else
-    # hopefully a color terminal
-    zrc-condensed-color-ps1
-    zrc-full-colour-rps1
-  fi
+  zrc-condensed-color-ps1
+  zrc-full-colour-rps1
 }
 
 # functions to set up zsh special variables
