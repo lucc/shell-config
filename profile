@@ -232,7 +232,7 @@ _profile_export_PATH () {
 
 }
 _profile_export_PAGER () {
-  export PAGER=$HOME/src/less.nvim/nvimpager.in
+  export PAGER=nvimpager
 }
 _profile_export_DISPLAY () {
   if [ -z "$DISPLAY" ] && [ "$SSH_CLIENT" ]; then
