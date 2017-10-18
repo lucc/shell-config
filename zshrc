@@ -348,18 +348,17 @@ function zrc-full-colour-rps1 () {
   autoload -Uz add-zsh-hook
   # define the needed variables
   typeset -ig _threshold
-  typeset -ig _start
+  typeset -g _start
   typeset -g _diff
   # define the needed functions
   function execution-time-helper-function () {
-    (( _start=$(date +%s.%N) * 100 ))
+    local now=%D{%s.%.}
+    _start=${(%)now}
     (( _threshold = SECONDS + 4 ))
   }
   function execution-time-formatter () {
-    _diff=$(bc <<<"scale=2;($(date +%s.%N)*100-$_start)/100")
-    if [[ $_diff[1] = . ]]; then
-      _diff=0$_diff
-    fi
+    local now=%D{%s.%.}
+    _diff=$(printf '%.2f' $(( ${(%)now} - $_start )))
   }
   execution-time-helper-function
   # add the function to a hook
