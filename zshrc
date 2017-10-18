@@ -131,6 +131,7 @@ function zrc-keymap () {
   zrc-keys-edit-command-line
   zrc-search-keys
   zrc-push-zle-buffer-keys
+  unset key
   if ((bindkey_error)); then
     print 'There were errors when binding keys.' >&2
   fi
@@ -245,6 +246,7 @@ function zrc-bind-basic-keys () {
   zrc-vi-bindkey $key[End]        end-of-line
   zrc-vi-bindkey $key[ShiftLeft]  vi-backward-word
   zrc-vi-bindkey $key[ShiftRight] vi-forward-word
+  zrc-vi-bindkey $key[Delete]     vi-delete-char
 }
 function zrc-history-substring-search-keys () {
   zrc-source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh || \
@@ -260,7 +262,7 @@ function zrc-search-keys () {
 function zrc-keys-edit-command-line () {
   autoload edit-command-line
   zle -N edit-command-line
-  bindkey '\ee' edit-command-line
+  bindkey '\Ce' edit-command-line
 }
 function zrc-push-zle-buffer-keys () {
   zrc-vi-bindkey '\C-p' push-input
