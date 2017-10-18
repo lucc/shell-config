@@ -13,8 +13,6 @@
 #          http://zsh.sourceforge.net/Doc/
 # README:  This file is modularized in many functions which are called if
 #          apropriate at the end and then unset at EOF.
-# TODO:    use random variable for function names:
-#          fun_prefix=$(hexdump -xn16 /dev/random | head -n 1 | sed 's/ /-/g')
 # TODO:    autoload -U throw catch
 
 # helper functions
@@ -387,7 +385,12 @@ function zrc-fignore () {
 }
 function zrc-zle-highlighting () {
   # zle stuff
-  zle_highlight=(region:bg=green special:bg=blue suffix:fg=red isearch:fg=yellow)
+  zle_highlight=(
+    region:bg=green
+    special:bg=blue
+    suffix:fg=red
+    isearch:fg=yellow
+  )
 }
 function zrc-fpath () {
   local trypath
