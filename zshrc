@@ -238,12 +238,6 @@ function zrc-keys-manual-corrections-nvim () {
   key[ShiftBackspace]= # TODO
   key[ShiftDelete]='\U7fffcbd6'
 }
-function zrc-keys-ssh () {
-  key[Home]='\e[H'
-  key[End]='\e[F'
-  key[ShiftRight]='\e[1;2C'
-  key[ShiftLeft]='\e[1;2D'
-}
 function zrc-bind-basic-keys () {
   zrc-vi-bindkey $key[Up]         up-line-or-search
   zrc-vi-bindkey $key[Down]       down-line-or-search
