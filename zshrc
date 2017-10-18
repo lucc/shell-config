@@ -270,19 +270,6 @@ function zrc-push-zle-buffer-keys () {
 }
 
 # prompt related functions
-function zrc-execution-timer () {
-  autoload -Uz add-zsh-hook
-  # define the needed variables
-  typeset -ig _threshold=10
-  typeset -ig _start=0
-  # define the needed function
-  function execution-time-helper-function () {
-    (( _start = SECONDS ))
-    (( _threshold = _start + 10 ))
-  }
-  # add the function to a hook
-  add-zsh-hook preexec execution-time-helper-function
-}
 # functions to set up the vsc_info plugin for the prompt
 function zrc-vcs-info-zstyle () {
   zstyle ':vcs_info:*' actionformats '%F{cyan}%s%F{green}%c%u%b%F{blue}%a%f'
@@ -338,32 +325,57 @@ function zrc-full-colour-ps1 () {
   zrc-vcs-info-setup
 }
 function zrc-full-colour-rps1 () {
-  RPROMPT='%(?.'                                   # if $? == 0
-  RPROMPT+='%(${_threshold}S.'                     #   if _threshold < SECONDS
-  RPROMPT+='%F{yellow}'                            #     switch color
-  RPROMPT+='Time: $((SECONDS-_start))%f'           #     duration of command
-  RPROMPT+='.)'                                    #   else, fi
+  local time_segment='%F{yellow}⌛$_diff'
+  RPROMPT='%(?|'                                   # if $? == 0
+  RPROMPT+='%(${_threshold}S|'                     #   if _threshold < SECONDS
+  RPROMPT+=$time_segment                           #     duration of command
+  RPROMPT+='|)'                                    #   else, fi
   if zrc-test-osx || [[ ${(L)TERM} = linux ]]; then #   if OS X or console
     RPROMPT+=' $(battery.sh -bce zsh)'             #     battery information
   fi                                               #   fi
-  RPROMPT+='.'                                     # else
-  RPROMPT+='%F{yellow}'                            #   switch color
-  RPROMPT+='Time: $((SECONDS-_start)) '            #   duration of command
-  RPROMPT+='%F{red}'                               #   switch color
-  RPROMPT+='Error: %?'                             #   error message
+  RPROMPT+='|'                                     # else
+  RPROMPT+='%(127?.'                               #   if $? == 127
+  RPROMPT+='%F{red}'                               #     switch color
+  RPROMPT+='∄'                                     #     command not found
+  RPROMPT+='.'                                     #   else
+  RPROMPT+="$time_segment "                        #     duration of command
+  RPROMPT+='%F{red}'                               #     switch color
+  RPROMPT+='✘%?'                                   #     error message
+  RPROMPT+=')'                                     #   fi
   RPROMPT+=')'                                     # fi
-  zrc-execution-timer
+
+  # Finally we prepare the dependencies for these prompt segments
+  autoload -Uz add-zsh-hook
+  # define the needed variables
+  typeset -ig _threshold
+  typeset -ig _start
+  typeset -g _diff
+  # define the needed functions
+  function execution-time-helper-function () {
+    (( _start=$(date +%s.%N) * 100 ))
+    (( _threshold = SECONDS + 4 ))
+  }
+  function execution-time-formatter () {
+    _diff=$(bc <<<"scale=2;($(date +%s.%N)*100-$_start)/100")
+    if [[ $_diff[1] = . ]]; then
+      _diff=0$_diff
+    fi
+  }
+  execution-time-helper-function
+  # add the function to a hook
+  add-zsh-hook preexec execution-time-helper-function
+  add-zsh-hook precmd execution-time-formatter
 }
 function zrc-condensed-color-ps1 () {
   PS1=
   if [[ -n $SSH_CONNECTION ]] || zrc-is-virtual-machine; then
-    PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
-    PS1+='%n%F{cyan}@%F{blue}%m%f:'                       # user and host info
+    PS1+='%(!.%F{red}.%F{green})'                   # user=green, root=red
+    PS1+='%n%F{cyan}@%F{blue}%m%f:'                 # user and host info
   else
-    PS1+='%(!.%F{red}%n%F{cyan}@%F{blue}%m%f:.)'          # user=green, root=red
+    PS1+='%(!.%F{red}%n%F{cyan}@%F{blue}%m%f:.)'    # user=green, root=red
   fi
-  PS1+='%F{cyan}%1~%f'                                  # working directory
-  PS1+='${vcs_info_msg_0_:+($vcs_info_msg_0_)}'        # VCS info with delim.
+  PS1+='%F{cyan}%1~%f'                              # working directory
+  PS1+='${vcs_info_msg_0_:+($vcs_info_msg_0_)}'     # VCS info with delim.
   PS1+='%# '
   zrc-vcs-info-zstyle
   zrc-vcs-info-hooks
