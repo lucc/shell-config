@@ -489,6 +489,41 @@ function zrc-run-help () {
   }
 }
 
+# Plugin managers
+function zrc-set-up-antigen () {
+  local p
+  for p in ~/vcs/antigen; do
+    zrc-source $p/antigen.zsh
+  done
+}
+function zrc-set-up-zplug () {
+  ZPLUG_HOME=~/.local/share/zsh/zplug
+  ZPLUG_CACHE_DIR=~/.cache/zsh/zplug
+
+  local zplug_init_script=$ZPLUG_HOME/repos/zplug/zplug/init.zsh
+  local run=false
+  if [[ ! -e $zplug_init_script ]]; then
+    echo 'WARNING: zplug ist not installed!'
+    echo 'Installing it now ...'
+    git clone https://github.com/zplug/zplug $ZPLUG_HOME/repos/zplug/zplug
+    run=true
+  fi
+
+  source $zplug_init_script
+
+  zplug "zplug/zplug"
+  zplug "zsh-users/zsh-history-substring-search"
+  zplug "zsh-users/zsh-syntax-highlighting", defer:3
+  #zplug "zsh-users/zaw"
+  zplug "k4rthik/git-cal", as:command   #, frozen:1
+
+  if $run; then
+    zplug update
+  fi
+
+  zplug load
+}
+
 # functions to set xxx
 function zrc-directory-hash-table () {
   #hash -d i=~/Pictures
@@ -578,12 +613,6 @@ function zrc-gpg-setup () {
 function zrc-zsh-mime-handling-setup () {
   autoload zsh-mime-setup
   zsh-mime-setup
-}
-function zrc-setup-antigen () {
-  local p
-  for p in ~/vcs/antigen; do
-    zrc-source $p/antigen.zsh
-  done
 }
 function zrc-fzf-setup () {
   function __fzf-list-files-helper () {
@@ -890,6 +919,8 @@ zrc-main () {
   zrc-set-up-mail-warning-variables
   zrc-set-up-autosuggest-plugin
   zrc-set-up-reporttime-and-reportmem
+
+  zrc-set-up-zplug
 
   zrc-compinit
 
