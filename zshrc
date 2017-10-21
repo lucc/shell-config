@@ -477,14 +477,15 @@ function zrc-run-help () {
   function run-help-ssh () {
     emulate -LR zsh
     local -a args
-    # Delete the "-l username" option
-    zparseopts -D -E -a args l:
+    # Delete some ssh options that are known to accept arguments
+    zparseopts -D -E -a args \
+      b: c: D: E: e: F: I: i: J: L: l: m: O: o: p: Q: R: S: W: w:
     # Delete other options, leaving: host command
     args=(${@:#-*})
     if [[ ${#args} -lt 2 ]]; then
       man ssh
     else
-      run-help $args[2]
+      run-help $args[2,-1]
     fi
   }
 }
