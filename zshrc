@@ -299,7 +299,7 @@ function zrc-vcs-info-hooks () {
     # Add information about untracked files to the branch information
     # idea from http://briancarper.net/blog/570
     if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
-      hook_com[branch]+='%F{red}?%f'
+      hook_com[branch]+='%F{red}⁇%f'
     fi
   }
   # register the functions with the correct hooks
