@@ -513,7 +513,6 @@ function zrc-set-up-zplug () {
 
   zplug "zplug/zplug"
   zplug "zsh-users/zsh-history-substring-search"
-  zplug "zsh-users/zsh-syntax-highlighting", defer:3
   #zplug "zsh-users/zaw"
   zplug "k4rthik/git-cal", as:command   #, frozen:1
 
