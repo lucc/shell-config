@@ -418,56 +418,55 @@ function zrc-fpath () {
 
 # functions to set up the run-help function
 function zrc-install-run-help () {
-  if [[ -r ~/vcs/zsh-code/Util/helpfiles ]]; then
+  local src=${ZSH_SOURCE_DIR:-~/vcs/zsh}/Util/helpfiles
+  if [[ -r $src ]]; then
     mkdir -p $HELPDIR
-    perl ~/vcs/zsh-code/Util/helpfiles zshall $HELPDIR
+    perl $src zshall $HELPDIR
+  else
+    return 1
   fi
-}
-function zrc-compile-run-help-sed-helper () {
-  sed -e \
-    '$ {
-       s/^.*See the section `\(.*\). in zsh\([a-z]*\)(1)\.$/manpage=zsh\2 regexp="\1"/
-       s/\\/\\\\/g
-       s/\//\\\//g
-     }'
-}
-function zrc-compile-run-help-perl-helper () {
-  perl -n \
-    -e 'if ( /^'$1'/i ) {
-          $on=1
-	  print
-	  next
-	}
-	if ($on) {
-	  last if /^[A-Z]/
-	  print
-	}'
-}
-function zrc-compile-run-help () {
-  local file manpage regexp
-  grep -l 'See the section .* in zsh[a-z]*([0-9])\.' $HELPDIR/* | \
-    while read file; do
-      eval $(zrc-compile-run-help-sed-helper $file)
-      man $manpage | colcrt - | \
-	zrc-compile-run-help-perl-helper $regexp > ${file#./}.tmp
-  done
+  perl -e '
+    use strict;
+    use warnings;
+    foreach my $filename (@ARGV) {
+      open FILE, "<", $filename or die $!;
+      while (<FILE>) {
+	if ( m/^.*See the section `(.*). in (zsh[a-z]*)\(1\)\.$/ ) {
+	  my $manpage = $2;
+	  my $regex = $1;
+	  close FILE;
+	  open PROC, "-|", "man $manpage | colcrt -" or die $!;
+	  open OUTFILE, ">", $filename or die $!;
+	  my $on = 0;
+	  while (<PROC>) {
+	    # TODO
+	    if ( /^$regex/i ) {
+	      $on = 1;
+	      print OUTFILE;
+	      next;
+	    }
+	    if ($on) {
+	      last if /^[A-Z]/;
+	      print OUTFILE;
+	    }
 
-  for file in $HELPDIR/*.tmp; do
-    print >> ${file%.tmp}
-    cat $file >> ${file%.tmp}
-  done
-  rm $HELPDIR/*.tmp
+	  }
+	  close PROC;
+	  close OUTFILE;
+	  last; # out, back to the foreach loop
+	}
+      }
+    }
+    ' $HELPDIR/*(.)
 }
 function zrc-run-help () {
   autoload -Uz run-help
   unalias run-help
+  zrc-vi-bindkey '^H' run-help
   HELPDIR=${XDG_DATA_HOME:-~/.local/share}/zsh/help
-  bindkey -M viins '\C-xh' run-help
-  bindkey -M vicmd '\C-xh' run-help
   # install the files when needed
   if [[ ! -d $HELPDIR ]]; then
-    ( zrc-install-run-help && \
-        zrc-compile-run-help ) &
+    zrc-install-run-help
   fi
   # further helper functions
   autoload run-help-git
