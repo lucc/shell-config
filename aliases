@@ -10,7 +10,7 @@
 # general aliases {{{1
 alias cp='cp -ip'
 alias d=diff-wrapper.bash
-alias grep='grep --extended-regexp --color=auto'
+alias grep='grep --extended-regexp --color=auto --ignore-case'
 #alias l='ls -l --time-style=full-iso'
 alias l='ls -l'
 alias L='ls -l --time-style=+%F\ %H:%M:%S'
@@ -77,16 +77,10 @@ alias timestamp='date +%Y%m%d%H%M%S'
 alias hgrep='history 1 | grep'
 alias -- '?=if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) = true ]]; then git status --short; elif hg -q stat 2>/dev/null; then hg status; else echo Not under version control.; fi'
 alias g=hub
-if which pt &>/dev/null; then
-  alias s=pt
-elif which ag &>/dev/null; then
-  alias s=ag
-elif which ack &>/dev/null; then
-  alias s=ack
-else
-  s () {
-    grep --recursive $1 .
-  }
+if   which rg  &>/dev/null; then alias s='rg --ignore-case'
+elif which ag  &>/dev/null; then alias s=ag
+elif which ack &>/dev/null; then alias s=ack
+else s () { grep --recursive $1 .; }
 fi
 alias quoted-printeable-decode='python -c "import os,quopri,sys;quopri.decode(sys.stdin,os.fdopen(sys.stdout.fileno(), \"wb\"))"'
 
