@@ -509,6 +509,7 @@ function zrc-set-up-zplug () {
   fi
 
   source $zplug_init_script
+  path+=$ZPLUG_HOME/bin
 
   zplug "zplug/zplug"
   zplug "zsh-users/zsh-history-substring-search"
