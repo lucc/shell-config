@@ -408,7 +408,6 @@ function zrc-fpath () {
   # functions for completion and user defined functions
   for trypath in                              \
       /usr/local/share/zsh-completions        \
-      ~/.homesick/repos/homeshick/completions \
       $ZDOTDIR/functions
   do
     if [[ -d $trypath && -z $fpath[(r)$trypath] ]]; then
@@ -603,10 +602,6 @@ function zrc-syntax-highlighting () {
       ;;
   esac
   zrc-source $location
-}
-function zrc-homeshick () {
-  # homesick for automatic dotfiles setup
-  zrc-source ~/.homesick/repos/homeshick/homeshick.sh
 }
 function zrc-gpg-setup () {
   export GPG_TTY=$(tty)
@@ -913,7 +908,6 @@ zrc-main () {
   zrc-zmodload
   zrc-lesspipe
   zrc-autojump-decision
-  zrc-homeshick
   zrc-gpg-setup
   zrc-fzf-setup
   zrc-setup-history-statistics
