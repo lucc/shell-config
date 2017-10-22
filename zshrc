@@ -15,6 +15,9 @@
 #          apropriate at the end and then unset at EOF.
 # TODO:    autoload -U throw catch
 
+# Get the current time for startup profiling
+_start=${(%):-%D{%s.%.}}
+
 # helper functions
 function zrc-once () {
   # Return true if the calling function was not called befor, false otherwise.
@@ -360,7 +363,7 @@ function zrc-full-colour-rps1 () {
     local now=%D{%s.%.}
     _diff=$(printf '%.2f' $(( ${(%)now} - $_start )))
   }
-  execution-time-helper-function
+  _threshold=0
   # add the function to a hook
   add-zsh-hook preexec execution-time-helper-function
   add-zsh-hook precmd execution-time-formatter
