@@ -587,21 +587,6 @@ function zrc-autojump-decision () {
     zrc-rupa-z
   fi
 }
-function zrc-syntax-highlighting () {
-  local -a locations
-  local location
-  case $ZRC_UNAME in
-    Darwin)
-      location=$ZRC_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-      ;;
-    Linux)
-      location=$(zrc-filter-existing \
-	/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
-	/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh)
-      ;;
-  esac
-  zrc-source $location
-}
 function zrc-gpg-setup () {
   export GPG_TTY=$(tty)
 }
@@ -898,7 +883,6 @@ zrc-main () {
   zrc-fpath
 
   zrc-set-up-autopair-plugin
-  #zrc-syntax-highlighting
   zrc-keymap
   zrc-run-help
 
