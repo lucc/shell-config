@@ -513,7 +513,7 @@ function zrc-set-up-zplug () {
 
   zplug "zplug/zplug", hook-build:'zplug --self-manage'
   zplug "zsh-users/zsh-history-substring-search"
-  #zplug "zsh-users/zaw"
+  zplug "zdharma/fast-syntax-highlighting", defer:3
   zplug "k4rthik/git-cal", as:command   #, frozen:1
 
   if $run; then
@@ -898,7 +898,7 @@ zrc-main () {
   zrc-fpath
 
   zrc-set-up-autopair-plugin
-  zrc-syntax-highlighting
+  #zrc-syntax-highlighting
   zrc-keymap
   zrc-run-help
 
