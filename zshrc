@@ -329,7 +329,23 @@ function zrc-full-colour-ps1 () {
 }
 function zrc-full-colour-rps1 () {
   local time_segment='%F{yellow}⌛$_diff'
-  RPROMPT='%(?|'                                   # if $? == 0
+  typeset -gA _keymap_prompt_strings
+  _keymap_prompt_strings=(
+    main       ''
+    vicmd      '%F{yellow}CMD%f '
+    visual     '%F{blue}VIS%f '
+    viopp      '%F{red}OPP%f '
+    listscroll '%F{red}LIST%f '
+    command    '%F{red}CMD?%f '
+    .safe      '%F{red}SAFE%f '
+    menuselect '%F{red}SEL%f '
+    isearch    '%F{red}I/%f '
+    viins      '%F{red}INS%f '
+    emacs      '%F{red}EMACS%f '
+  )
+  KEYTIMEOUT=1
+  RPROMPT='$_keymap_prompt_strings[$KEYMAP]'       # INSERT|CMD|...
+  RPROMPT+='%(?|'                                  # if $? == 0
   RPROMPT+='%(${_threshold}S|'                     #   if _threshold < SECONDS
   RPROMPT+=$time_segment                           #     duration of command
   RPROMPT+='|)'                                    #   else, fi
@@ -363,6 +379,11 @@ function zrc-full-colour-rps1 () {
     local now=%D{%s.%.}
     _diff=$(printf '%.2f' $(( ${(%)now} - $_start )))
   }
+  function zle-keymap-select zle-line-init {
+    zle reset-prompt
+  }
+  zle -N zle-keymap-select
+  zle -N zle-line-init
   _threshold=0
   # add the function to a hook
   add-zsh-hook preexec execution-time-helper-function
@@ -518,12 +539,11 @@ function zrc-set-up-zplug () {
   zplug "zsh-users/zsh-history-substring-search"
   zplug "zdharma/fast-syntax-highlighting", defer:3
   zplug "k4rthik/git-cal", as:command   #, frozen:1
-
   zplug "arzzen/calc.plugin.zsh"
   zplug "supercrabtree/k"
   zplug "molovo/tipz"
   zplug "djui/alias-tips"
-  zplug "laurenkt/zsh-vimto"
+  #zplug "laurenkt/zsh-vimto"  # FIXME breaks my RPROMPT
   zplug "RobSis/zsh-completion-generator"
   zplug "mafredri/zsh-async"
   zplug "seletskiy/zsh-fuzzy-search-and-edit"
