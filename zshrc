@@ -511,7 +511,7 @@ function zrc-set-up-zplug () {
   source $zplug_init_script
   path+=$ZPLUG_HOME/bin
 
-  zplug "zplug/zplug"
+  zplug "zplug/zplug", hook-build:'zplug --self-manage'
   zplug "zsh-users/zsh-history-substring-search"
   #zplug "zsh-users/zaw"
   zplug "k4rthik/git-cal", as:command   #, frozen:1
