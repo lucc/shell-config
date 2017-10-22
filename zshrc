@@ -516,6 +516,23 @@ function zrc-set-up-zplug () {
   zplug "zdharma/fast-syntax-highlighting", defer:3
   zplug "k4rthik/git-cal", as:command   #, frozen:1
 
+  zplug "arzzen/calc.plugin.zsh"
+  zplug "supercrabtree/k"
+  zplug "molovo/tipz"
+  zplug "djui/alias-tips"
+  zplug "laurenkt/zsh-vimto"
+  zplug "RobSis/zsh-completion-generator"
+  zplug "mafredri/zsh-async"
+  zplug "seletskiy/zsh-fuzzy-search-and-edit"
+  zplug "joepvd/zsh-hints"  # todo setup
+  zplug "marzocchi/zsh-notify"
+  zplug "jedahan/ripz"
+  zplug "unixorn/git-extra-commands"
+  zplug "joel-porquet/zsh-dircolors-solarized"
+
+  if ! zplug check; then
+    zplug install
+  fi
   if $run; then
     zplug update
   fi
@@ -868,6 +885,7 @@ zrc-main () {
   typeset -la ZRC_AT_EXIT_FUNCTIONS
   typeset -A ZRC_ONCE_FUNCTION_LIST
 
+  zrc-set-up-zplug
   zrc-source-files
 
   zrc-meta-prompt
@@ -897,8 +915,6 @@ zrc-main () {
   zrc-set-up-mail-warning-variables
   zrc-set-up-autosuggest-plugin
   zrc-set-up-reporttime-and-reportmem
-
-  zrc-set-up-zplug
 
   zrc-compinit
 
