@@ -508,6 +508,7 @@ function zrc-set-up-zplug () {
   zplug "RobSis/zsh-completion-generator"
   zplug "mafredri/zsh-async"
   zplug "seletskiy/zsh-fuzzy-search-and-edit"
+  bindkey '^@' fuzzy-search-and-edit
   zplug "joepvd/zsh-hints"  # todo setup
   zplug "marzocchi/zsh-notify"
   #zplug "jedahan/ripz"  # FIXME breaks very often
