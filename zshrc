@@ -55,14 +55,6 @@ function zrc-source () {
     return 1
   fi
 }
-function zrc-has-color () {
-  # return true if the terminal can handle colors
-  if [[ $TERM == dump ]]; then
-    return 1
-  else
-    return 0
-  fi
-}
 function zrc-run-exit-hooks () {
   local f
   for f in $ZRC_AT_EXIT_FUNCTIONS; do
@@ -81,15 +73,6 @@ function zrc-vi-bindkey () {
   # bind the given key to the given function in the viins and vicmd maps
   bindkey -M viins $1 $2
   bindkey -M vicmd $1 $2
-}
-function zrc-filter-existing () {
-  # print all the arguments that exist (test -e)
-  for arg; do
-    if [[ -e $arg ]]; then
-      printf %s $arg
-    fi
-  done
-  print
 }
 
 # functions to set up basic zsh options
@@ -313,20 +296,6 @@ function zrc-vcs-info-hooks () {
   zstyle ':vcs_info:hg+set-message:*' hooks hg-string
 }
 # prompt versions
-function zrc-full-colour-ps1 () {
-  PS1='[ '                                              # frame
-  PS1+='%(!.%F{red}.%F{green})'                         # user=green, root=red
-  PS1+='%n%F{cyan}@%F{blue}%m%f'                        # user and host info
-  PS1+=' | '                                            # delimiter
-  PS1+='%F{cyan}%1~%f'                                  # working directory
-  PS1+=' | '                                            # delimiter
-  PS1+='${vcs_info_msg_0_:+$vcs_info_msg_0_ | }'        # VCS info with delim.
-  PS1+='%D{%H:%M:%S}'                                   # current time
-  PS1+=' ] '                                            # frame
-  zrc-vcs-info-zstyle
-  zrc-vcs-info-hooks
-  zrc-vcs-info-setup
-}
 function zrc-full-colour-rps1 () {
   local time_segment='%F{yellow}⌛$_diff'
   typeset -gA _keymap_prompt_strings
@@ -513,12 +482,6 @@ function zrc-run-help () {
 }
 
 # Plugin managers
-function zrc-set-up-antigen () {
-  local p
-  for p in ~/vcs/antigen; do
-    zrc-source $p/antigen.zsh
-  done
-}
 function zrc-set-up-zplug () {
   ZPLUG_HOME=~/.local/share/zsh/zplug
   ZPLUG_CACHE_DIR=~/.cache/zsh/zplug
@@ -690,22 +653,12 @@ function zrc-set-up-autosuggest-plugin () {
   zrc-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=10
 }
-function zrc-set-up-do-what-i-mean-plugin () {
-  zrc-source /usr/share/zsh-dwim/init.zsh
-}
 function zrc-set-up-reporttime-and-reportmem () {
   REPORTTIME=5
   #REPORTMEMORY=50
 }
 
 # start up notifications
-function zrc-calcurse-notifications () {
-  calcurse                                \
-    --todo                                \
-    --range=3                             \
-    --format-{recur-,}apt='%S  %m\n'      \
-    --format-{recur-,}event='*****  %m\n'
-}
 function zrc-khal-notifications () {
   # only continue if khal is installed
   [[ -x =khal ]] || return
@@ -742,9 +695,6 @@ function zrc-khal-notifications-2 () {
     touch $marker
   fi
 }
-function zrc-print-todo-items-from-notmuch () {
-  notmuch search --format=json tag:todo | jq --raw-output '.[].subject'
-}
 zrc-pacman-update-notification () {
   [[ -x =pacman ]] || return
   local epoch=%D{%s}
@@ -759,14 +709,6 @@ zrc-pacman-update-notification () {
 		  sed -n '/^zrc/{s/ .*//;p;}'); do
       function $name () :
     done
-  fi
-}
-
-# misc
-function zrc-todo-from-bashrc () {
-  # this and dircolors in general
-  if [ "$TERM" != "dumb" ]; then
-    eval "$(dircolors -b)"
   fi
 }
 
