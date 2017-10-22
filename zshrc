@@ -504,8 +504,6 @@ function zrc-set-up-zplug () {
   zplug "k4rthik/git-cal", as:command   #, frozen:1
   zplug "arzzen/calc.plugin.zsh"
   zplug "supercrabtree/k"
-  zplug "molovo/tipz"
-  zplug "djui/alias-tips"
   #zplug "laurenkt/zsh-vimto"  # FIXME breaks my RPROMPT
   zplug "RobSis/zsh-completion-generator"
   zplug "mafredri/zsh-async"
