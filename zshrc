@@ -16,7 +16,7 @@
 # TODO:    autoload -U throw catch
 
 # Get the current time for startup profiling
-_start=${(%):-%D{%s.%.}}
+_start=${(%):-%D{%s}}
 
 # helper functions
 function zrc-once () {
@@ -347,12 +347,12 @@ function zrc-full-colour-rps1 () {
   typeset -g _diff
   # define the needed functions
   function execution-time-helper-function () {
-    local now=%D{%s.%.}
+    local now=%D{%s}
     _start=${(%)now}
     (( _threshold = SECONDS + 4 ))
   }
   function execution-time-formatter () {
-    local now=%D{%s.%.}
+    local now=%D{%s}
     _diff=$(printf '%.2f' $(( ${(%)now} - $_start )))
   }
   function zle-keymap-select zle-line-init {
