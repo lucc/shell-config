@@ -501,18 +501,12 @@ function zrc-set-up-zplug () {
   zplug "zplug/zplug", hook-build:'zplug --self-manage'
   zplug "zsh-users/zsh-history-substring-search"
   zplug "zdharma/fast-syntax-highlighting", defer:3
-  zplug "k4rthik/git-cal", as:command   #, frozen:1
   zplug "arzzen/calc.plugin.zsh"
-  zplug "supercrabtree/k"
-  #zplug "laurenkt/zsh-vimto"  # FIXME breaks my RPROMPT
   zplug "RobSis/zsh-completion-generator"
   zplug "mafredri/zsh-async"
   zplug "seletskiy/zsh-fuzzy-search-and-edit"
   bindkey '^@' fuzzy-search-and-edit
-  zplug "joepvd/zsh-hints"  # todo setup
   zplug "marzocchi/zsh-notify"
-  #zplug "jedahan/ripz"  # FIXME breaks very often
-  zplug "unixorn/git-extra-commands"
   zplug "joel-porquet/zsh-dircolors-solarized"
 
   if ! zplug check; then
