@@ -61,7 +61,6 @@ alias up='date +"%F $(uptime)"'
 #fi
 alias music=ncmpcpp
 alias ffprobe='ffprobe -hide_banner'
-alias mpv="notify-send --urgency=critical 'Go read a book instead!' 'You were planning to flee less.  So you could also try to think about what you are running from.'; :"
 
 # other {{{1
 alias a=khard
@@ -77,6 +76,7 @@ alias timestamp='date +%Y%m%d%H%M%S'
 alias hgrep='history 1 | grep'
 alias -- '?=if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) = true ]]; then git status --short; elif hg -q stat 2>/dev/null; then hg status; else echo Not under version control.; fi'
 alias g=hub
+alias t='tig --all'
 if   which rg  &>/dev/null; then alias s='rg --ignore-case'
 elif which ag  &>/dev/null; then alias s=ag
 elif which ack &>/dev/null; then alias s=ack
