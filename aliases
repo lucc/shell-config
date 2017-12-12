@@ -64,7 +64,7 @@ alias ffprobe='ffprobe -hide_banner'
 
 # other {{{1
 alias a=khard
-alias c=khal
+alias c='khal --color calendar --format "{calendar-color}{cancelled}{start-end-time-style} {title}{repeat-symbol}{reset}" today 7d'
 alias m='alot --debug-level debug --logfile ~/log/alot.log'
 alias newsbeuter='newsbeuter -q'
 alias ctw-muc='ctw GMXX0087'
