@@ -6,7 +6,7 @@ local debug=false
 local i
 
 local usage=\
-'Usage: comp [-fnx] shell-code-string-1  shell-code-string-2 [number]
+'Usage: comp [-fnx] shell-code-string [shell-code-string ...] [-- number]
        comp -h'
 local help='
 The shell code strings will be passed to eval, each executed number times (10
@@ -45,6 +45,21 @@ done
 
 shift $((OPTIND - 1))
 
+cmds=()
+while [[ $# -ne 0 ]]; do
+  if [[ $1 = -- ]]; then
+    shift
+    break
+  fi
+  # check that the command exists
+  if $check; then
+    type ${1%% *} > /dev/null 2>&1 || return 2
+  fi
+  cmds+=$1
+  shift
+done
+
+count=${1:-10}
 
 ## save the current setting of shwordsplit
 #local oldshwordsplit=
@@ -55,17 +70,13 @@ shift $((OPTIND - 1))
 #fi
 
 #setopt shwordsplit
-if $check; then
-  type ${1%% *} > /dev/null 2>&1 || return 2
-  type ${2%% *} > /dev/null 2>&1 || return 3
-fi
 if $debug; then
   set -x
 fi
-printf 1
-eval time \( for i in {0..${3:-10}} \; do $1 \; done $output \)
-printf 2
-eval time \( for i in {0..${3:-10}} \; do $2 \; done $output \)
+for ((j=1; j<=$#cmds; j++)); do
+  printf "%d" $j
+  eval time \( for i in {0..${count}} \; do ${cmds[j]} \; done $output \)
+done
 if $debug; then
   set +x
 fi
