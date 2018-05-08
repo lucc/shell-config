@@ -650,6 +650,18 @@ function zrc-set-up-reporttime-and-reportmem () {
   REPORTTIME=5
   #REPORTMEMORY=50
 }
+function zrc-set-up-npm () {
+  # https://github.com/sindresorhus/guides/blob/master/npm-global-without-sudo.md
+  export NPM_PACKAGES=~/.local/share/npm
+  export PATH=$NPM_PACKAGES/bin:$PATH
+
+  # Unset manpath so we can inherit from /etc/manpath via the `manpath`
+  # command
+  #unset MANPATH
+  # delete if you already modified MANPATH elsewhere in your
+  # config
+  export MANPATH=$NPM_PACKAGES/share/man:$(manpath)
+}
 
 # start up notifications
 function zrc-khal-notifications () {
@@ -873,6 +885,7 @@ zrc-main () {
   zrc-set-up-mail-warning-variables
   zrc-set-up-autosuggest-plugin
   zrc-set-up-reporttime-and-reportmem
+  zrc-set-up-npm
 
   zrc-compinit
 
