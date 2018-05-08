@@ -64,8 +64,19 @@ alias ffprobe='ffprobe -hide_banner'
 
 # other {{{1
 alias a=khard
-alias c='khal --color calendar --format "{calendar-color}{cancelled}{start-end-time-style} {title}{repeat-symbol}{reset}" today 7d'
-alias m='alot --debug-level debug --logfile ~/log/alot.log'
+function c () {
+  case $1 in
+    week | 1w | '') end=7d;;
+    month | 1m) end=30d;;
+    *) end=$1;;
+  esac
+  khal --color calendar \
+    --format "{calendar-color}{cancelled}{start-end-time-style} {title}{repeat-symbol}{reset}" \
+    today $end
+}
+alias m='PYTHONPATH=~/vcs/alot python3 -m alot --debug-level debug --logfile ~/log/alot.log'
+alias alot='alot --debug-level debug --logfile ~/log/alot.log'
+alias astroid='~/vcs/astroid/build/astroid --log ~/log/astroid.log &>/dev/null'
 alias news='newsboat -q'
 alias ctw-muc='ctw GMXX0087'
 alias tex=latexmk
