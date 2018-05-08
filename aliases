@@ -59,7 +59,7 @@ alias up='date +"%F $(uptime)"'
 #  alias ncmpcpp='ncmpcpp --host pi.local'
 #  alias mpc='mpc --host pi.local'
 #fi
-alias music=ncmpcpp
+alias music='ncmpcpp -q'
 alias ffprobe='ffprobe -hide_banner'
 
 # other {{{1
