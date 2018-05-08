@@ -43,8 +43,8 @@ alias q='surfraw duckduckgo'
 alias lima='ftp --netrc=$NETRC luc42.ftp.de'
 alias limalog='curl --silent --netrc ftp://luc42.lima-ftp.de/html/.log'
 
-alias myip='curl --silent http://luc42.lima-city.de/ip.php'
-alias piip='curl --silent http://luc42.lima-city.de/ip.php?host=rpi'
+alias myip='curl --silent https://luc42.lima-city.de/ip.php'
+alias piip='curl --silent https://luc42.lima-city.de/ip.php?host=rpi'
 alias sshpi='ssh -p 4771 $(piip)'
 # dig +short myip.opendns.com A @208.67.222.222
 
