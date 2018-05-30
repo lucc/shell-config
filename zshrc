@@ -502,10 +502,11 @@ function zrc-set-up-zplug () {
   zplug "zsh-users/zsh-history-substring-search"
   zplug "zdharma/fast-syntax-highlighting", defer:3
   zplug "arzzen/calc.plugin.zsh"
+  #zplug "laurenkt/zsh-vimto"  # FIXME breaks my RPROMPT
   zplug "RobSis/zsh-completion-generator"
-  zplug "mafredri/zsh-async"
-  zplug "seletskiy/zsh-fuzzy-search-and-edit"
-  bindkey '^@' fuzzy-search-and-edit
+  #zplug "mafredri/zsh-async"
+  #zplug "seletskiy/zsh-fuzzy-search-and-edit"
+  #bindkey '^@' fuzzy-search-and-edit
   zplug "marzocchi/zsh-notify"
   zplug "joel-porquet/zsh-dircolors-solarized"
 
