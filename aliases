@@ -76,7 +76,6 @@ function c () {
 }
 alias m='PYTHONPATH=~/vcs/alot python3 -m alot --debug-level debug --logfile ~/log/alot.log'
 alias alot='alot --debug-level debug --logfile ~/log/alot.log'
-alias astroid='~/vcs/astroid/build/astroid --log ~/log/astroid.log &>/dev/null'
 alias news='newsboat -q'
 alias ctw-muc='ctw GMXX0087'
 alias tex=latexmk
