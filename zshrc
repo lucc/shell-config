@@ -449,10 +449,8 @@ function zrc-setup-history-statistics () {
   add-zsh-hook preexec save-history-statistics
 }
 function zrc-set-up-mail-warning-variables () {
-  if [[ "$TTY" = /dev/tty* ]]; then
-    mailpath=(~/.cache/notmuch/new-mail-marker ~/mail/inbox)
-    set -U
-  fi
+  mailpath=(~/.cache/notmuch/new-mail-marker ~/mail/inbox)
+  set -U
 }
 function zrc-set-up-autosuggest-plugin () {
   zrc-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
