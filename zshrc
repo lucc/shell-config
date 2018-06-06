@@ -881,7 +881,7 @@ zrc-main () {
   #exec 3>&2 2>$logfile
   #setopt XTRACE
 
-  zrc-set-up-zplug
+  #zrc-set-up-zplug
   zrc-source-files
 
   zrc-meta-prompt
