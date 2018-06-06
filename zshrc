@@ -931,5 +931,3 @@ zrc-main () {
 zrc-main
 # unset all local functions
 unfunction -m 'zrc-*'
-
-export PAGER=less
