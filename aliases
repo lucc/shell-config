@@ -74,8 +74,7 @@ function c () {
     --format "{calendar-color}{cancelled}{start-end-time-style} {title}{repeat-symbol}{reset}" \
     today $end
 }
-alias m='PYTHONPATH=~/vcs/alot python3 -m alot --debug-level debug --logfile ~/log/alot.log'
-alias alot='alot --debug-level debug --logfile ~/log/alot.log'
+alias m='alot --debug-level debug --logfile ~/log/alot.log'
 alias news='newsboat -q'
 alias ctw-muc='ctw GMXX0087'
 alias tex=latexmk
