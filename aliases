@@ -36,6 +36,7 @@ alias diff=colordiff
 alias qmv='qmv --format=destination-only'
 alias py=ipython
 alias hs='stack ghci'
+alias vi=nvim
 
 # searching the internet {{{1
 alias c:='internet-search.sh -f'
