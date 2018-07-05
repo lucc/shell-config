@@ -222,6 +222,7 @@ _profile_start_gui () {
 # functions to set environment variables
 _profile_export_PATH () {
   _profile_helper_add_to_var PATH                          \
+    $NPM_PACKAGES                                          \
     /Applications/LilyPond.app/Contents/Resources/bin      \
     $HOME/.config/composer/vendor/bin                      \
     $HOME/.cabal/bin                                       \
@@ -290,9 +291,10 @@ _profile_export_nvim_test_env () {
   export MSAN_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer-3.4
   export TSAN_OPTIONS=external_symbolizer_path=/usr/bin/llvm-symbolizer-3.4 log_path=/home/luc/.logs/tsan
 }
-_profile_set_manpath () {
-  # TODO old function from setenv.sh (osx)
-  :
+_profile_export_MANPATH () {
+  if [ -n "$NPM_PACKAGES" ]; then
+    export MANPATH=$NPM_PACKAGES/share/man:$(manpath)
+  fi
 }
 _profile_set_infopath () {
   # TODO old function from setenv.sh (osx)
@@ -332,6 +334,10 @@ _profile_main () {
 
   # start setting up the environment
   _profile_export_standard_env
+  # https://github.com/sindresorhus/guides/blob/master/npm-global-without-sudo.md
+  if [ -d "$ddir/npm" ]; then
+    export NPM_PACKAGES=$ddir/npm
+  fi
   _profile_export_PATH
   _profile_export_PAGER
   _profile_export_DISPLAY
