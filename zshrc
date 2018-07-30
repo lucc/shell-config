@@ -77,14 +77,17 @@ function zrc-vi-bindkey () {
 
 # functions to set up basic zsh options
 function zrc-history-options () {
+  # We set a *very* large history limit and never delete any duplicates from
+  # it.  We can then analyse it later.  Duplicates are saved but not presented
+  # during history search.
   HISTFILE=${XDG_CACHE_HOME:-~/.cache}/zsh/history
-  HISTSIZE=15000
-  SAVEHIST=10000
-  setopt hist_ignore_all_dups
-  setopt hist_expire_dups_first
+  HISTSIZE=1500000
+  SAVEHIST=1000000
+  #setopt hist_ignore_all_dups
+  #setopt hist_expire_dups_first
   setopt hist_find_no_dups
   setopt hist_reduce_blanks
-  setopt hist_save_no_dups
+  #setopt hist_save_no_dups
   setopt hist_ignore_space
   #setopt hist_verify
   setopt share_history
