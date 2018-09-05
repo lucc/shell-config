@@ -821,6 +821,11 @@ function zrc-parse-ssh-config () {
   # ${=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
   # sed -n '/\*/d;/^Host/s/^Host[=\t ]*//p' ~/.ssh/config
 }
+function _email-luc-abq () {
+  # See man zshcompsys under "email-plugin"
+  reply=(${=${(f)$(abq.sh . | sed '/^+\?[0-9]\+@/d; s/\t.*//')}})
+  return 300
+}
 function zrc-compinit () {
   zrc-zstyle-layout
   zrc-zstyle-performemce
@@ -832,7 +837,7 @@ function zrc-compinit () {
   compdef colordiff=diff
   compdef gpg2=gpg
   #compdef pip2=pip
-  compdef vi=vim
+  compdef vi=nvim
   compdef _gnu_generic afew
 }
 
