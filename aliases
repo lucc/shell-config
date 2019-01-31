@@ -29,7 +29,8 @@ alias mkdir='mkdir -p'
 alias nload='nload -i 6144 -o 1024'
 alias diff=colordiff
 alias qmv='qmv --format=destination-only'
-alias py=ipython3
+alias py=ptipython
+alias hs='stack ghci'
 
 # view documentation {{{1
 #alias info='transparent-gvim.sh --info'
