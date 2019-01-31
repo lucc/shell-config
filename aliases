@@ -15,8 +15,11 @@ alias grep='grep --extended-regexp --color=auto --ignore-case'
 alias l='ls -l'
 alias L='ls -l --time-style=+%F\ %H:%M:%S'
 alias lh='L -h'
-alias lr='tree -Chuapl' # replacement for ls -lR
-alias lr='tree -aCI ".git|.svn|__pycache__|*.egg-info|*.pyc|.stack-work"'
+function lr () {
+  local ignore='.git|.svn|__pycache__|*.egg-info|*.pyc|.stack-work'
+  [[ -e Cargo.toml || -e Cargo.lock ]] && ignore+='|target'
+  tree -aCI "$ignore" "${@:-.}"
+}
 alias ls='ls --color=auto'
 alias la='ls -A'
 alias lla='l -A'
