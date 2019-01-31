@@ -10,9 +10,14 @@ for arg; do
     echo "Error: $arg is not readable." >&2
     continue
   fi
-  case $(xdg-mime query filetype $arg) in
+  case $(file --mime-type --brief $arg) in
     text/html|text/htm) browser $arg &!;;
     text/*|inode/x-empty) ${EDITOR:-vi} $arg;;
+    application/zip)
+      case $(file --brief $arg) in
+	Microsoft\ OOXML) libreoffice $arg &!;;
+	*) xdg-open $arg &!;;
+      esac;;
     *) xdg-open $arg &!;;
   esac
 done
