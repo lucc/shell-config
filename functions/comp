@@ -1,6 +1,6 @@
 # vim: ft=zsh
 
-local output='>& /dev/null'
+local silent=true
 local check=true
 local debug=false
 local i
@@ -20,26 +20,13 @@ functions or literal shell code.
 
 while getopts fhnx FLAG; do
   case $FLAG in
-    h)
-      echo $usage
-      echo $help
-      return
-      ;;
-    n)
-      output=
-      ;;
-    f)
-      check=false
-      ;;
-    x)
-      # Only set xtrace if it was not set (especially only unset xtrace if we
-      # set it ourselfs).
-      [[ -o xtrace ]] || debug=true
-      ;;
-    *)
-      echo $usage >&2
-      return 2
-      ;;
+    h) echo $usage; echo $help; return;;
+    n) silent=false;;
+    f) check=false;;
+    # Only set xtrace if it was not set (especially only unset xtrace if we
+    # set it ourselfs).
+    x) [[ -o xtrace ]] || debug=true;;
+    *) echo $usage >&2; return 2;;
   esac
 done
 
@@ -73,10 +60,20 @@ count=${1:-10}
 if $debug; then
   set -x
 fi
+
+if $silent; then
+  exec {stdout}>&1 >/dev/null
+fi
+
 for ((j=1; j<=$#cmds; j++)); do
   printf "%d" $j
-  eval time \( for i in {0..${count}} \; do ${cmds[j]} \; done $output \)
+  time ( for i in {0..${count}} ; do ${cmds[j]} ; done )
 done
+
+if $silent; then
+  exec 1>&${stdout} {stdout}>&-
+fi
+
 if $debug; then
   set +x
 fi
