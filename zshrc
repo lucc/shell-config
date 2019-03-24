@@ -512,7 +512,7 @@ function zrc-set-up-zplug () {
   #zplug "mafredri/zsh-async"
   #zplug "seletskiy/zsh-fuzzy-search-and-edit"
   #bindkey '^@' fuzzy-search-and-edit
-  zplug "marzocchi/zsh-notify"
+  zplug "marzocchi/zsh-notify", if:'[[ -z $WAYLAND_DISPLAY ]]'
   zplug "joel-porquet/zsh-dircolors-solarized"
 
   if ! zplug check; then
