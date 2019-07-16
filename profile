@@ -1,5 +1,5 @@
 # ~/.profile file by luc
-# vim: spelllang=en filetype=sh
+# vim: spelllang=en filetype=zsh
 #
 # This file contains code for many different systems.  As it should only be
 # sourced once on login the size and complexity should not be a performance
@@ -210,6 +210,9 @@ _profile_main () {
 	yoga)
 	  export TASKRC=~/.config/taskwarrior/yoga
 	  [ "$TTY" = /dev/tty1 ] && exec startx "$cdir/xinit/xinitrc";;
+	luc)   # this shold be @ work (asam)
+	  if [ "$TTY" = /dev/tty1 ] ; then exec startx; fi
+	  ;;
       esac
       ;;
     Darwin) # MacOS X
