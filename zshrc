@@ -859,7 +859,7 @@ function zrc-compinit () {
   compdef colordiff=diff
   compdef gpg2=gpg
   #compdef pip2=pip
-  compdef vi=nvim
+  compdef vi=vim
   compdef _gnu_generic afew
 }
 
