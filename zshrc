@@ -589,17 +589,21 @@ function zrc-parse-netrc () {
 }
 function zrc-parse-known-hosts () {
   # many thanks to http://www.sourceguru.net/ssh-host-completion-zsh-stylee
-  known_hosts=(${=${${(f)"$(cat {/etc/ssh_,{~/.ssh/,/var/lib/misc/ssh_}known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })
+  local known_hosts_files=( {/etc/ssh_,~/.ssh/known_}hosts(N) /dev/null )
+  known_hosts=(${=${${(f)"$(cat $known_hosts_files)"}%%[# ]*}//,/ })
   known_hosts=(
   $(
-    awk '
-      !/^#/ &&
+    sed \
+      -e '/^#/d' \
+      -e 's/ .*//' \
+      -e 's/,/\n/g' \
+      $known_hosts_files \
+    | awk '
       !/([12]?[0-9]?[0-9]\.){3}[12]?[0-9]?[0-9]/ &&
       !/([0-9a-f]{0,4}:){7}[0-9a-f]{0,4}/ {
-        gsub(","," ",$1)
         gsub("[][]","",$1)
         print $1
-      }' {/etc/ssh_,{~/.ssh/,/var/lib/misc/ssh_}known_}hosts(|2)(N) /dev/null
+      }'
   )
   )
   # TODO ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2>/dev/null))"}%%\#*}
