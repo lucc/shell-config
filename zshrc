@@ -384,6 +384,18 @@ function zrc-meta-prompt () {
   zrc-full-colour-rps1
 }
 
+function zrc-set-up-window-title () {
+  function set-window-title-precmd () {
+    printf '\e]2;%s@%s:%s\a' $USER $HOST $PWD
+  }
+  function set-window-title-preexec () {
+    local cmd=${2%% *}
+    printf '\e]2;%s\a' $cmd
+  }
+  add-zsh-hook preexec set-window-title-preexec
+  add-zsh-hook precmd set-window-title-precmd
+}
+
 # functions to set up zsh special variables
 function zrc-module-path () {
   module_path=($module_path /usr/local/lib/zpython)
@@ -876,6 +888,7 @@ zrc-main () {
   zrc-directory-hash-table
 
   zrc-zmodload
+  zrc-set-up-window-title
   zrc-lesspipe
   zrc-autojump-decision
   zrc-gpg-setup
