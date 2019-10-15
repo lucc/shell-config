@@ -16,7 +16,7 @@ alias l='ls -l'
 alias L='ls -l --time-style=+%F\ %H:%M:%S'
 alias lh='L -h'
 function lr () {
-  local ignore='.git|.svn|__pycache__|*.egg-info|*.pyc|.stack-work'
+  local ignore='.git|.svn|__pycache__|*.egg-info|*.pyc|.stack-work|latex.out'
   [[ -e Cargo.toml || -e Cargo.lock ]] && ignore+='|target'
   tree -aCI "$ignore" "${@:-.}"
 }
@@ -78,7 +78,7 @@ function c () {
     --format "{calendar-color}{cancelled}{start-end-time-style} {title}{repeat-symbol}{reset}" \
     today $end
 }
-alias m='alot --debug-level debug --logfile ~/log/alot.log'
+alias m='alot --debug-level debug --logfile ~/log/alot.$(date +%FT%T).log'
 alias news='newsboat -q'
 alias ctw-muc='ctw GMXX0087'
 alias tex=latexmk
@@ -96,6 +96,7 @@ elif which ack &>/dev/null; then alias s=ack
 else s () { grep --recursive $1 .; }
 fi
 alias quoted-printeable-decode='python -c "import os,quopri,sys;quopri.decode(sys.stdin,os.fdopen(sys.stdout.fileno(), \"wb\"))"'
+alias feh='feh --auto-rotate'
 
 # games {{{1
 alias histhead='history -n 1 | \
