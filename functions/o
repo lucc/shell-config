@@ -10,6 +10,8 @@ for arg; do
     echo "Error: $arg is not readable." >&2
     continue
   fi
+  # Add this file to the cache for the rofi mru mode.
+  date +"%s $(realpath $arg)" >> ~/.cache/rofi-xdg-open-mru-list.txt
   case $(file --mime-type --brief $arg) in
     text/html|text/htm) browser $arg &!;;
     text/*|inode/x-empty) ${EDITOR:-vi} $arg;;
