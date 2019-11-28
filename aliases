@@ -95,7 +95,7 @@ else
 fi
 alias g=hub
 alias t='tig --all'
-if   which rg  &>/dev/null; then alias s='rg --ignore-case'
+if   which rg  &>/dev/null; then alias s='rg --ignore-case'; alias s_='rg --ignore-case -g "!*.css" -g "!*.js" -g "!*.xml"'
 elif which ag  &>/dev/null; then alias s=ag
 elif which ack &>/dev/null; then alias s=ack
 else s () { grep --recursive $1 .; }
