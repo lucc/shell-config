@@ -650,6 +650,13 @@ function zrc-aliases () {
       alias pacnews='yay --show --news'
     fi
   fi
+
+  # Some work aliases
+  alias s_='rg --ignore-case -g "!*.css" -g "!*.js" -g "!*.xml"'
+  alias vm='([[ $PWD =~ ~/dev.vm ]] && dir=${PWD#~/dev.vm}; cd ~/src/vm-infra; vagrant ssh --command "${dir+cd /var/www/html/dev/$dir;} . /etc/os-release; if [ \$VERSION_ID -eq 7 ]; then scl enable rh-php71 bash; else bash; fi" -- -A)'
+  #alias vm='([[ $PWD =~ ~/dev.vm ]] && dir=${PWD#~/dev.vm}; cd ~/vm-infra; vagrant ssh --command "${dir+cd /var/www/html/dev/$dir;} bash" -- -A)'
+
+  tel () { s $@ /media/nextcloud/ASAM\ Intern/asam_telefonliste.txt; }
 }
 
 # main functions
