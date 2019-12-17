@@ -574,7 +574,8 @@ function zrc-autojump () {
   zrc-source /usr/share/autojump/autojump.zsh  || \
     zrc-source /usr/share/autojump/autojump.sh || \
     zrc-source $ZRC_PREFIX/etc/autojump.sh     || \
-    zrc-source /etc/profile.d/autojump.zsh
+    zrc-source /etc/profile.d/autojump.zsh     || \
+    zrc-source ~/.nix-profile/share/autojump/autojump.zsh
 }
 function zrc-rupa-z () {
   if [[ -r $ZRC_PREFIX/etc/profile.d/z.sh ]]; then
@@ -637,6 +638,7 @@ function zrc-fzf-setup () {
   FZF_ALT_C_COMMAND=__fzf-list-files-helper
   export FZF_ALT_C_COMMAND
   zrc-source /usr/share/fzf/key-bindings.zsh ||
+    zrc-source ~/.nix-profile/share/fzf/key-bindings.zsh ||
     zrc-source /etc/profile.d/fzf.zsh
   bindkey '^j' fzf-cd-widget
 }
