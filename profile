@@ -312,9 +312,8 @@ _profile_system_specific () {
     LINUX|Linux|linux)
       # set up the host specific environment
       case $(hostname) in
-	tp*)
-	  _profile_start_gui
-	  ;;
+	tp*) _profile_start_gui;;
+	yoga) [ "$TTY" = /dev/tty1 ] && exec startx "$cdir/xinit/xinitrc";;
       esac
       ;;
     Darwin) # MacOS X
@@ -323,9 +322,7 @@ _profile_system_specific () {
 	_profile_helper_export_to_launchd
       fi
       ;;
-    OpenBSD)
-      _profile_system_open_bsd
-      ;;
+    OpenBSD) _profile_system_open_bsd;;
   esac
 }
 _profile_main () {
