@@ -571,11 +571,12 @@ function zrc-lesspipe () {
 }
 function zrc-autojump () {
   #export AUTOJUMP_KEEP_SYMLINKS=1
-  zrc-source /usr/share/autojump/autojump.zsh  || \
-    zrc-source /usr/share/autojump/autojump.sh || \
-    zrc-source $ZRC_PREFIX/etc/autojump.sh     || \
-    zrc-source /etc/profile.d/autojump.zsh     || \
-    zrc-source ~/.nix-profile/share/autojump/autojump.zsh
+  zrc-source /usr/share/autojump/autojump.zsh  ||
+    zrc-source /usr/share/autojump/autojump.sh ||
+    zrc-source $ZRC_PREFIX/etc/autojump.sh     ||
+    zrc-source /etc/profile.d/autojump.zsh     ||
+    zrc-source ~/.nix-profile/share/autojump/autojump.zsh ||
+    zrc-source /etc/profiles/per-user/$USER/share/zsh/site-functions/autojump.zsh
 }
 function zrc-rupa-z () {
   if [[ -r $ZRC_PREFIX/etc/profile.d/z.sh ]]; then
@@ -639,7 +640,8 @@ function zrc-fzf-setup () {
   export FZF_ALT_C_COMMAND
   zrc-source /usr/share/fzf/key-bindings.zsh ||
     zrc-source ~/.nix-profile/share/fzf/key-bindings.zsh ||
-    zrc-source /etc/profile.d/fzf.zsh
+    zrc-source /etc/profile.d/fzf.zsh ||
+    zrc-source $(fzf-share)/key-bindings.zsh
   bindkey '^j' fzf-cd-widget
 }
 function zrc-setup-history-statistics () {
