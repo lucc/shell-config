@@ -645,7 +645,7 @@ function zrc-fzf-setup () {
     zrc-source /etc/profile.d/fzf.zsh ||
     zrc-source ~/.fzf.zsh ||
     zrc-source $(fzf-share)/key-bindings.zsh
-  bindkey '^j' fzf-cd-widget
+  bindkey '^g' fzf-cd-widget
 }
 function zrc-setup-history-statistics () {
   # Collect data about executed commands.
