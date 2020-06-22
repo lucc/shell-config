@@ -114,26 +114,10 @@ alias :q='echo You are not in vi. Use \"exit\", \"logout\" or CTRL-D.; false'
 alias -s pdf=o
 
 # Mac OS X specific aliases {{{1
-if [ $(uname) = Darwin ] ; then
-  alias dl='cd $HOME/Downloads && wget'
+if [[ $(uname) = Darwin ]] ; then
   #play go
   alias igo='(wine c:/Program\ Files/igowin/igowin.exe &) >/dev/null 2>&1'
-  alias l='ls -l'
-  alias L='ls -lT'
-  alias ls='ls -G'
-  alias pstree='pstree -g3'
-  alias pst='pstree $(ps -o ppid= $$) $(pgrep tmux)'
-  alias psu='pstree -u $USER'
-  #alias f=mdfind
-  alias o=open
-  alias app='open -a'
-  alias sp='open -a System\ Preferences'
   alias quit_finder='osascript -e tell\ app\ \"Finder\"\ to\ quit'
-  alias d='display.scpt iterm'
-  alias -s jpg=open
-  alias -s pdf=open
-  alias e='for v in /Volumes/*~/Volumes/System(N); diskutil unmount $v'
-  urlopen () { open "http://$*"; }
   alias suspenduser='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
 # Linux specific aliases {{{1
 elif [ $(uname) = Linux ]; then
