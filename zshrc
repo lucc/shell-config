@@ -240,8 +240,9 @@ function zrc-bind-basic-keys () {
   zrc-vi-bindkey $key[Delete]     vi-delete-char
 }
 function zrc-history-substring-search-keys () {
-  zrc-source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh || \
-    zrc-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh || \
+  zrc-source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh ||
+    zrc-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ||
+    zrc-source ~/.nix-profile/share/zsh-history-substring-search/zsh-history-substring-search.zsh ||
     return
   zrc-vi-bindkey $key[ShiftUp]   history-substring-search-up
   zrc-vi-bindkey $key[ShiftDown] history-substring-search-down
