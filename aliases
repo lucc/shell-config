@@ -123,9 +123,11 @@ if [[ $(uname) = Darwin ]] ; then
 elif [ $(uname) = Linux ]; then
   alias pstree='pstree -n'
   alias cal='cal -3'
-  alias pacs='yay -Ss'
-  alias paci='yay --show --news && yay -Syu --devel --needed'
-  alias pacstat='yay --show --stats'
-  alias pacnews='yay --show --news'
   alias blk='lsblk -o NAME,FSTYPE,MOUNTPOINT,PARTLABEL,SIZE,RO'
+  if [[ -x =yay ]]; then
+    alias pacs='yay -Ss'
+    alias paci='yay --show --news && yay -Syu --devel --needed'
+    alias pacstat='yay --show --stats'
+    alias pacnews='yay --show --news'
+  fi
 fi
