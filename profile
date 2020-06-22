@@ -221,16 +221,16 @@ _profile_start_gui () {
 }
 # functions to set environment variables
 _profile_export_PATH () {
-  _profile_helper_add_to_var PATH                          \
-    $NPM_PACKAGES                                          \
-    /Applications/LilyPond.app/Contents/Resources/bin      \
-    $HOME/.config/composer/vendor/bin                      \
-    $HOME/.cabal/bin                                       \
-    $HOME/.cargo/bin                                       \
-    $(ls -d $HOME/.gem/ruby/*/bin 2>/dev/null | head -n 1) \
-    $HOME/.luarocks/bin                                    \
-    $HOME/.local/bin                                       \
-    $HOME/bin                                              \
+  _profile_helper_add_to_var PATH                     \
+    $NPM_PACKAGES                                     \
+    /Applications/LilyPond.app/Contents/Resources/bin \
+    $HOME/.config/composer/vendor/bin                 \
+    $HOME/.cabal/bin                                  \
+    $HOME/.cargo/bin                                  \
+    $HOME/.gem/ruby/*/bin(N[1])                       \
+    $HOME/.luarocks/bin                               \
+    $HOME/.local/bin                                  \
+    $HOME/bin                                         \
 
 }
 _profile_export_PAGER () {
