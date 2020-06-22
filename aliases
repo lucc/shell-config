@@ -123,7 +123,7 @@ elif [ $(uname) = Linux ]; then
   alias pstree='pstree -n'
   alias cal='cal -3'
   alias blk='lsblk -o NAME,FSTYPE,MOUNTPOINT,PARTLABEL,SIZE,RO'
-  if [[ -x =yay ]]; then
+  if which yay >/dev/null 2>&1; then
     alias pacs='yay -Ss'
     alias paci='yay --show --news && yay -Syu --devel --needed'
     alias pacstat='yay --show --stats'
