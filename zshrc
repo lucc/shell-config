@@ -700,13 +700,9 @@ function zrc-khal-notifications-2 () {
   # prompt expand sequence for the current time in seconds since EPOCH
   local epoch=%D{%s}
   zmodload -F zsh/stat b:zstat
-  # image should be updated every 1/2 h.
-  if (( ${(%)epoch} > $(zstat +mtime $image) + 3600 )); then
-    systemctl --user start khal-ascii-image.timer &!
-    systemctl --user start khal-ascii-image &!
-  fi
-  # use marker every hour
-  if (( ${(%)epoch} > $(zstat +mtime $marker) + 3600 )); then
+  # Display the image if it is newer than the marker (last time it was viewed)
+  # or if it was not displayed for some time.
+  if [[ $image -nt $marker ]] || (( ${(%)epoch} > $(zstat +mtime $marker) + 3600 )); then
     cat $image
     touch $marker
   fi
