@@ -867,6 +867,15 @@ zrc-main () {
   typeset -la ZRC_AT_EXIT_FUNCTIONS
   typeset -A ZRC_ONCE_FUNCTION_LIST
 
+  # setup for profiling the zshrc file
+  #zmodload zsh/datetime
+  #setopt PROMPT_SUBST
+  #PS4='+$EPOCHREALTIME %N:%i> '
+  #logfile=$(mktemp ~/.config/zsh/zshrc_profile.XXXXXXXX)
+  #echo "Logging to $logfile"
+  #exec 3>&2 2>$logfile
+  #setopt XTRACE
+
   zrc-set-up-zplug
   zrc-source-files
 
@@ -906,6 +915,11 @@ zrc-main () {
 
   # execute the at exit hooks
   zrc-run-exit-hooks
+
+  # cleanup for profiling
+  #unsetopt XTRACE
+  #exec 2>&3 3>&-
+
 }
 
 # call main
