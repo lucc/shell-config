@@ -77,7 +77,7 @@ function c () {
     today $end
 }
 alias k=ikhal
-alias m='alot --debug-level debug --logfile ~/.log/alot/$(date +%FT%T).log'
+alias m=~/src/alot/alot.nix
 alias news='newsboat -q'
 alias ctw-muc='ctw GMXX0087'
 alias tex=latexmk
