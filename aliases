@@ -76,7 +76,7 @@ function c () {
     today $end
 }
 alias k=ikhal
-alias m=~/src/alot/alot.nix
+alias m=alot
 if which latexrun &>/dev/null; then
   alias tex=latexrun
 else
