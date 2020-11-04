@@ -759,6 +759,9 @@ function zrc-zstyle-other () {
   zstyle ':completion:*:messages' format '%d'
 
   zstyle ':completion:*:warnings' format 'No matches for: %d'
+  # ignore some files when completion files for my editor
+  zstyle ':completion:*:*:nvim:*:*files' ignored-patterns '*.pdf'
+  zstyle ':completion:*:*:v:*:*files' ignored-patterns '*.pdf'
 }
 function zrc-zstyle-todo () {
   zstyle ':completion:*' muttrc ~/.mutt/muttrc
