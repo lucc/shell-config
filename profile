@@ -150,7 +150,6 @@ _profile_export_standard_env () {
 }
 _profile_export_special_env () {
   # force some programs to load their configuration from ~/.config
-  export TIGRC_USER=$cdir/tig/tigrc
   export PASSWORD_STORE_DIR=$cdir/pass
   export PASSWORD_STORE_ENABLE_EXTENSIONS=true
   export GNUPGHOME=$cdir/gpg
