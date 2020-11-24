@@ -204,8 +204,12 @@ _profile_main () {
     LINUX|Linux|linux)
       # set up the host specific environment
       case $(hostname) in
-	tp*) _profile_start_gui;;
-	yoga) [ "$TTY" = /dev/tty1 ] && exec startx "$cdir/xinit/xinitrc";;
+	tp*)
+	  export TASKRC=~/.config/taskwarrior/tp
+	  _profile_start_gui;;
+	yoga)
+	  export TASKRC=~/.config/taskwarrior/yoga
+	  [ "$TTY" = /dev/tty1 ] && exec startx "$cdir/xinit/xinitrc";;
       esac
       ;;
     Darwin) # MacOS X
