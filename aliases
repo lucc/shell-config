@@ -133,3 +133,5 @@ elif [ $(uname) = Linux ]; then
     alias pacnews='yay --show --news'
   fi
 fi
+
+alias vm='([[ $PWD =~ ~/dev.vm ]] && dir=${PWD#~/dev.vm}; cd ~/vm-infra; vagrant ssh --command "${dir+cd /var/www/html/dev/$dir;} scl enable rh-php71 bash")'
