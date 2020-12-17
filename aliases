@@ -61,6 +61,7 @@ alias up='date +"%F $(uptime)"'
 #fi
 alias music='ncmpcpp -q'
 alias ffprobe='ffprobe -hide_banner'
+alias f='find /media/nas/video -type f | cut -d/ -f5- | fzf | sed '\''s#^#/media/nas/video/#'\'' | xargs --no-run-if-empty --delimiter="\n" mpv --fullscreen'
 
 # other {{{1
 alias a=khard
