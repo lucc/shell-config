@@ -194,7 +194,6 @@ _profile_main () {
     export NPM_PACKAGES=$ddir/npm
   fi
   _profile_export_PATH
-  _profile_export_PAGER
   _profile_export_DISPLAY
   _profile_export_special_env
   #_profile_export_systemctl_env
@@ -205,6 +204,7 @@ _profile_main () {
       # set up the host specific environment
       case $(hostname) in
 	tp*)
+	  _profile_export_PAGER
 	  export TASKRC=~/.config/taskwarrior/tp
 	  _profile_start_gui;;
 	yoga)
