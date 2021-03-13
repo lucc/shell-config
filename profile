@@ -152,7 +152,7 @@ _profile_export_special_env () {
   # force some programs to load their configuration from ~/.config
   export PASSWORD_STORE_DIR=$cdir/pass
   export PASSWORD_STORE_ENABLE_EXTENSIONS=true
-  export GNUPGHOME=$cdir/gpg
+  #export GNUPGHOME=$cdir/gpg
   #export VIMPAGER_RC=$cdir/nvim/vimpagerrc
   export WINEPREFIX=$ddir/wine
   export ELINKS_CONFDIR=$cdir/elinks
