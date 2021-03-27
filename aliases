@@ -134,4 +134,5 @@ elif [ $(uname) = Linux ]; then
   fi
 fi
 
-alias vm='([[ $PWD =~ ~/dev.vm ]] && dir=${PWD#~/dev.vm}; cd ~/vm-infra; vagrant ssh --command "${dir+cd /var/www/html/dev/$dir;} scl enable rh-php71 bash")'
+alias vm='([[ $PWD =~ ~/dev.vm ]] && dir=${PWD#~/dev.vm}; cd ~/vm-infra; vagrant ssh --command "${dir+cd /var/www/html/dev/$dir;} scl enable rh-php71 bash" -- -A)'
+alias fetch-all='for d in ~/dev.vm/*/.git ~/prod-infra ~/vm-infra; (cd ${d%.git} && git fa &)'
