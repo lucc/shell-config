@@ -1,0 +1,18 @@
+# vim: ft=zsh
+
+if [[ -z $1 ]]; then
+  print Please give a file name. >&2
+  return 2
+fi
+type=${${$(file $1)#$1:}# }
+case $type in
+  'PEM certificate')
+    openssl x509 -noout -text -in $1
+    ;;
+  'PEM certificate request')
+    openssl req -noout -text -in $1
+    ;;
+  'PEM RSA private key')
+    openssl rsa -noout -text -in $1
+    ;;
+esac
