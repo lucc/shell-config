@@ -42,11 +42,10 @@ alias c:='internet-search.sh -f'
 alias q='surfraw duckduckgo'
 
 # connecting to remote servers {{{1
-alias lima='ftp --netrc=$NETRC luc42.ftp.de'
-alias limalog='curl --silent --netrc ftp://luc42.lima-ftp.de/html/.log'
+alias lima='ftp --netrc=$NETRC luc42.lima-ftp.de'
 
 alias myip='curl --silent https://luc42.lima-city.de/ip.php'
-# dig +short myip.opendns.com A @208.67.222.222
+alias myip='dig +short myip.opendns.com A @resolver1.opendns.com'
 
 # backup and statistics {{{1
 alias tbz2='tar -cjv --exclude .DS_Store --one-file-system'
