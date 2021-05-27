@@ -1,0 +1,16 @@
+#! zsh
+
+for arg; do
+  if [[ ! -f $arg ]]; then
+    echo "Error: $arg does not exist." >&2
+    continue
+  elif [[ ! -r $arg ]]; then
+    echo "Error: $arg is not readable." >&2
+    continue
+  fi
+  case $arg in
+    *.md) pandoc --standalone -o ${arg%.*}.pdf $arg;;
+    *.tex) latexrun $arg;;
+  esac
+  o ${arg%.*}.pdf
+done
