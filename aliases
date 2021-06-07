@@ -132,7 +132,7 @@ elif [ $(uname) = Linux ]; then
     alias pacnews='yay --show --news'
   elif which nix >/dev/null 2>&1; then
     function s-nipkgs () {
-      s $@ /nix/store/*$(nixos-version | cut -f 1 -d " ")*/nixos
+      s $@ $(nix registry list | grep flake:sys | sed 's/.*path://;s/?.*//')
     }
     alias lua='nix-shell -p lua5_3.withPackages"(p:[p.luarepl])" --run lua'
   fi
