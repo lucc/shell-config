@@ -548,12 +548,6 @@ function zrc-set-up-zplug () {
 }
 
 # functions to set xxx
-function zrc-directory-hash-table () {
-  #hash -d i=~/Pictures
-  #hash -d m=~/Music
-  hash -d t=~/tmp
-  hash -d u=~/uni/semester/current
-}
 function zrc-autoloading () {
   autoload -Uz colors && colors
   #autoload -Uz checkmail
@@ -583,34 +577,14 @@ function zrc-autojump () {
   #export AUTOJUMP_KEEP_SYMLINKS=1
   zrc-source /usr/share/autojump/autojump.zsh  ||
     zrc-source /usr/share/autojump/autojump.sh ||
-    zrc-source $ZRC_PREFIX/etc/autojump.sh     ||
+    zrc-source /etc/autojump.sh                ||
     zrc-source /etc/profile.d/autojump.zsh     ||
     zrc-source ~/.nix-profile/share/autojump/autojump.zsh ||
     zrc-source /etc/profiles/per-user/$USER/share/zsh/site-functions/autojump.zsh
 }
-function zrc-rupa-z () {
-  if [[ -r $ZRC_PREFIX/etc/profile.d/z.sh ]]; then
-    autoload -Uz add-zsh-hook
-    # read man z
-    export _Z_DATA=~/.cache/z
-    _Z_CMD=j source $ZRC_PREFIX/etc/profile.d/z.sh
-    add-zsh-hook chpwd _z_precmd
-    unalias j
-    function j () {
-      _z $@ 2>&1 && print ${fg[red]}$PWD$reset_color
-    }
-    function j-completion-at-exit-function () {
-      compctl -U -K _z_zsh_tab_completion j
-    }
-    zrc-add-exit-hook j-completion-at-exit-function
-  fi
-}
 function zrc-autojump-decision () {
   if which autojump >/dev/null 2>&1; then
     zrc-autojump
-  # TODO How to find rupa's z?
-  elif which hans; then
-    zrc-rupa-z
   fi
 }
 function zrc-gpg-setup () {
@@ -872,9 +846,6 @@ function zrc-compinit () {
 zrc-main () {
   # local variables
   local ZRC_UNAME=$(uname)
-  # Will expand to the nullstring if we are not on Mac OS X or brew is not
-  # installed.
-  local ZRC_PREFIX=$(brew --prefix 2>/dev/null)
   # an array of functions to be called at exit
   typeset -la ZRC_AT_EXIT_FUNCTIONS
   typeset -A ZRC_ONCE_FUNCTION_LIST
@@ -899,8 +870,6 @@ zrc-main () {
   zrc-set-up-autopair-plugin
   zrc-keymap
   zrc-run-help
-
-  zrc-directory-hash-table
 
   zrc-zmodload
   zrc-set-up-window-title
