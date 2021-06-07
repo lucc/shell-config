@@ -15,8 +15,21 @@
 #          apropriate at the end and then unset at EOF.
 # TODO:    autoload -U throw catch
 
+# profiling ##################################################################
+# Setup for startup profiling and the execution timer in the right prompt.
+
 # Get the current time for startup profiling
 _start=${(%):-%D{%s.%.}}
+_diff=
+function execution-time-formatter () {
+  local now=%D{%s.%.}
+  _diff=$(printf '%.2f' $(( ${(%)now} - $_start )))
+}
+function zrc-profile () {
+  execution-time-formatter
+  printf 'startup %5s: %s\n' $_diff "${*:-...}"
+}
+zrc-profile "finished defineing profileing functions"
 
 # helper functions
 function zrc-once () {
@@ -349,10 +362,6 @@ function zrc-full-colour-rps1 () {
     local now=%D{%s.%.}
     _start=${(%)now}
     (( _threshold = SECONDS + 4 ))
-  }
-  function execution-time-formatter () {
-    local now=%D{%s.%.}
-    _diff=$(printf '%.2f' $(( ${(%)now} - $_start )))
   }
   function zle-keymap-select zle-line-init {
     zle reset-prompt
@@ -870,18 +879,11 @@ zrc-main () {
   typeset -la ZRC_AT_EXIT_FUNCTIONS
   typeset -A ZRC_ONCE_FUNCTION_LIST
 
-  # setup for profiling the zshrc file
-  #zmodload zsh/datetime
-  #setopt PROMPT_SUBST
-  #PS4='+$EPOCHREALTIME %N:%i> '
-  #logfile=$(mktemp ~/.config/zsh/zshrc_profile.XXXXXXXX)
-  #echo "Logging to $logfile"
-  #exec 3>&2 2>$logfile
-  #setopt XTRACE
-
+  zrc-profile before zplug
   zrc-set-up-zplug
   zrc-source-files
 
+  zrc-profile setting up prompt
   zrc-meta-prompt
 
   zrc-history-options
@@ -911,20 +913,19 @@ zrc-main () {
   zrc-set-up-autosuggest-plugin
   zrc-set-up-reporttime-and-reportmem
 
+  zrc-profile doing compinit
   zrc-compinit
 
+  zrc-profile setting up notifications
   zrc-pacman-update-notification
   zrc-khal-notifications-2
 
+  zrc-profile running exit hooks
   # execute the at exit hooks
   zrc-run-exit-hooks
 
-  # cleanup for profiling
-  #unsetopt XTRACE
-  #exec 2>&3 3>&-
-
 }
-
+zrc-profile calling main
 # call main
 zrc-main
 # unset all local functions
