@@ -29,7 +29,7 @@ function zrc-profile () {
   execution-time-formatter
   printf 'startup %5s: %s\n' $_diff "${*:-...}"
 }
-zrc-profile "finished defineing profileing functions"
+zrc-profile Defined profileing functions, executing init script ...
 
 # helper functions
 function zrc-once () {
@@ -897,5 +897,10 @@ zrc-main () {
 zrc-profile calling main
 # call main
 zrc-main
+
+zrc-profile going to undefine zrc functions
 # unset all local functions
 unfunction -m 'zrc-*'
+
+execution-time-formatter
+printf 'startup %5s: finished!\n' $_diff
