@@ -850,8 +850,7 @@ zrc-main () {
   typeset -la ZRC_AT_EXIT_FUNCTIONS
   typeset -A ZRC_ONCE_FUNCTION_LIST
 
-  zrc-profile before zplug
-  zrc-set-up-zplug
+  #zrc-set-up-zplug
   zrc-source-files
 
   zrc-profile setting up prompt
