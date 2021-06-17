@@ -1,0 +1,14 @@
+#! zsh
+
+local ignore='.git|.svn|__pycache__|*.egg-info|*.pyc|.stack-work|latex.out'
+
+# ignore rust/cargo stuff
+[[ -e Cargo.toml || -e Cargo.lock ]] && ignore+='|target'
+
+# ignore php/comoser stuff
+[[ -e composer.json || -e composer.lock ]] && ignore+='|vendor'
+
+# ignore scala/mill stuff
+[[ -e build.sc ]] && ignore+='|out'
+
+tree -aCI "$ignore" "${@:-.}"

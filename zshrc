@@ -395,13 +395,6 @@ function zrc-meta-prompt () {
 }
 
 function zrc-set-up-window-title () {
-  function set-window-title-precmd () {
-    printf '\e]2;%s@%s:%s\a' $USER $HOST $PWD
-  }
-  function set-window-title-preexec () {
-    local cmd=${2%% *}
-    printf '\e]2;%s\a' $cmd
-  }
   add-zsh-hook preexec set-window-title-preexec
   add-zsh-hook precmd set-window-title-precmd
 }
@@ -821,11 +814,6 @@ function zrc-parse-ssh-config () {
   ssh_config=(${=${${${(@M)${(f)"$(cat ~/.ssh/config(N) /dev/null)"}:#Host *}#Host }:#*[*?]*}})
   # ${=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
   # sed -n '/\*/d;/^Host/s/^Host[=\t ]*//p' ~/.ssh/config
-}
-function _email-luc-abq () {
-  # See man zshcompsys under "email-plugin"
-  reply=(${=${(f)$(abq.sh . | sed '/^+\?[0-9]\+@/d; s/\t.*//')}})
-  return 300
 }
 function zrc-compinit () {
   zrc-zstyle-layout

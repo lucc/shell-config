@@ -1,0 +1,11 @@
+#! zsh
+
+case $1 in
+  week | 1w | '') end=7d;;
+  month | 1m) end=30d;;
+  *) end=$1;;
+esac
+
+khal --color calendar --format \
+  "{calendar-color}{cancelled}{start-end-time-style} {title}{repeat-symbol}{reset}" \
+  today $end

@@ -15,16 +15,6 @@ alias grep='grep --extended-regexp --color=auto --ignore-case'
 alias l='ls -l'
 alias L='ls -l --time-style=+%F\ %H:%M:%S'
 alias lh='L -h'
-function lr () {
-  local ignore='.git|.svn|__pycache__|*.egg-info|*.pyc|.stack-work|latex.out'
-  # ignore rust/cargo stuff
-  [[ -e Cargo.toml || -e Cargo.lock ]] && ignore+='|target'
-  # ignore php/comoser stuff
-  [[ -e composer.json || -e composer.lock ]] && ignore+='|vendor'
-  # ignore scala/mill stuff
-  [[ -e build.sc ]] && ignore+='|out'
-  tree -aCI "$ignore" "${@:-.}"
-}
 alias ls='ls --color=auto'
 alias la='ls -A'
 alias lla='l -A'
@@ -64,16 +54,6 @@ alias f='find /media/nas/video -type f | cut -d/ -f5- | fzf | sed '\''s#^#/media
 
 # other {{{1
 alias a=khard
-function c () {
-  case $1 in
-    week | 1w | '') end=7d;;
-    month | 1m) end=30d;;
-    *) end=$1;;
-  esac
-  khal --color calendar \
-    --format "{calendar-color}{cancelled}{start-end-time-style} {title}{repeat-symbol}{reset}" \
-    today $end
-}
 alias k=ikhal
 alias m=~/src/alot/alot.nix
 if which latexrun &>/dev/null; then

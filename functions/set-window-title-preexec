@@ -1,0 +1,3 @@
+#! zsh
+local cmd=${2%% *}
+printf '\e]2;%s\a' $cmd

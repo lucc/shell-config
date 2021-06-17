@@ -1,0 +1,5 @@
+#! zsh
+
+# See man zshcompsys under "email-plugin"
+reply=(${=${(f)$(abq.sh . | sed '/^+\?[0-9]\+@/d; s/\t.*//')}})
+return 300
