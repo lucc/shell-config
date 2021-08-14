@@ -55,7 +55,8 @@ alias f='find /media/nas/video -type f | cut -d/ -f5- | fzf | sed '\''s#^#/media
 # other {{{1
 alias a=khard
 alias k=ikhal
-alias m=~/src/alot/alot.nix
+alias m='nix develop ~/src/alot-flake -c sh -c '\''python3 -m alot  "$@"'\'' --'
+alias mm=~/vcs/purebred/result/bin/purebred
 if which latexrun &>/dev/null; then
   alias tex=latexrun
 else
