@@ -157,7 +157,6 @@ _profile_export_special_env () {
   export WINEPREFIX=$ddir/wine
   export ELINKS_CONFDIR=$cdir/elinks
   #export SCREENRC=$dir/screen/screenrc
-  export NOTMUCH_CONFIG=$cdir/notmuch/config
   [ -r "$cdir/netrc" ] && export NETRC=$cdir/netrc
   export FZF_DEFAULT_OPTS="--inline-info --cycle"
   export RLWRAP_HOME=$ddir/rlwrap
