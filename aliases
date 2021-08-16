@@ -115,6 +115,6 @@ elif [ $(uname) = Linux ]; then
     function s-nipkgs () {
       s $@ $(nix registry list | grep flake:sys | sed 's/.*path://;s/?.*//')
     }
-    alias lua='nix-shell -p lua5_3.withPackages"(p:[p.luarepl])" --run lua'
+    alias lua='nix-shell -p lua5_3.withPackages"(p:[p.luarepl p.inspect])" --run lua'
   fi
 fi
