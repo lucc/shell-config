@@ -619,7 +619,7 @@ function zrc-fzf-setup () {
     zrc-source ~/.nix-profile/share/fzf/key-bindings.zsh ||
     zrc-source /etc/profile.d/fzf.zsh ||
     zrc-source $(fzf-share)/key-bindings.zsh
-  bindkey '^j' fzf-cd-widget
+  bindkey '^a' fzf-cd-widget
 }
 function zrc-setup-history-statistics () {
   # Collect data about executed commands.
