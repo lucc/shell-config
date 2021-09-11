@@ -275,7 +275,7 @@ function zrc-push-zle-buffer-keys () {
 }
 
 # prompt related functions
-# functions to set up the vsc_info plugin for the prompt
+# functions to set up the vcs_info plugin for the prompt
 function zrc-vcs-info-zstyle () {
   zstyle ':vcs_info:*' actionformats '%F{cyan}%s%F{green}%c%u%b%F{blue}%a%f'
   ####TODO
