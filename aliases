@@ -116,5 +116,6 @@ elif [ $(uname) = Linux ]; then
       s $@ $(nix registry list | grep flake:sys | sed 's/.*path://;s/?.*//')
     }
     alias lua='nix-shell -p lua5_3.withPackages"(p:[p.luarepl p.inspect])" --run lua'
+    alias nix-roots='nix-store --gc --print-roots | egrep -v '\''^(/nix/var|/run/current-system|/run/booted-system|/proc|{memory|{censored)'\'
   fi
 fi
