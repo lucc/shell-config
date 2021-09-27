@@ -29,7 +29,6 @@ function zrc-profile () {
   execution-time-formatter
   printf 'startup %5s: %s\n' $_diff "${*:-...}"
 }
-zrc-profile Defined profileing functions, executing init script ...
 
 # helper functions
 function zrc-once () {
@@ -841,7 +840,6 @@ zrc-main () {
   #zrc-set-up-zplug
   zrc-source-files
 
-  zrc-profile setting up prompt
   zrc-meta-prompt
 
   zrc-history-options
@@ -869,25 +867,17 @@ zrc-main () {
   zrc-set-up-autosuggest-plugin
   zrc-set-up-reporttime-and-reportmem
 
-  zrc-profile doing compinit
   zrc-compinit
 
-  zrc-profile setting up notifications
   zrc-pacman-update-notification
   zrc-khal-notifications-2
 
-  zrc-profile running exit hooks
   # execute the at exit hooks
   zrc-run-exit-hooks
-
 }
-zrc-profile calling main
+
 # call main
 zrc-main
 
-zrc-profile going to undefine zrc functions
 # unset all local functions
 unfunction -m 'zrc-*'
-
-execution-time-formatter
-printf 'startup %5s: finished!\n' $_diff
