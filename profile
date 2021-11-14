@@ -204,10 +204,8 @@ _profile_main () {
       case $(hostname) in
 	tp*)
 	  _profile_export_PAGER
-	  export TASKRC=~/.config/taskwarrior/tp
 	  _profile_start_gui;;
 	yoga)
-	  export TASKRC=~/.config/taskwarrior/yoga
 	  [ "$TTY" = /dev/tty1 ] && exec startx "$cdir/xinit/xinitrc";;
       esac
       ;;
