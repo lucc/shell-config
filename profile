@@ -132,9 +132,6 @@ _profile_export_PATH () {
     $HOME/bin                                         \
 
 }
-_profile_export_PAGER () {
-  export PAGER=nvimpager
-}
 _profile_export_DISPLAY () {
   if [ -z "$DISPLAY" ] && [ "$SSH_CLIENT" ]; then
     export DISPLAY=$(echo $SSH_CLIENT | cut -f1 -d\ ):0.0
@@ -143,16 +140,10 @@ _profile_export_DISPLAY () {
 _profile_export_standard_env () {
   # set some widely used environment variables to default values which can be
   # overriden in the specialized functions
-  export EDITOR=nvim
   #export HISTSIZE=2000
-  export HTMLPAGER='elinks --dump'
-  export PYTHONSTARTUP=$cdir/python/init.py
 }
 _profile_export_special_env () {
   # force some programs to load their configuration from ~/.config
-  export PASSWORD_STORE_DIR=$cdir/pass
-  export PASSWORD_STORE_ENABLE_EXTENSIONS=true
-  #export GNUPGHOME=$cdir/gpg
   #export VIMPAGER_RC=$cdir/nvim/vimpagerrc
   export WINEPREFIX=$ddir/wine
   export ELINKS_CONFDIR=$cdir/elinks
@@ -206,6 +197,7 @@ _profile_main () {
 	  _profile_export_PAGER
 	  _profile_start_gui;;
 	yoga)
+	  #[ "$TTY" = /dev/tty1 ] && exec /home/luc/.config/cardboard/start;;
 	  [ "$TTY" = /dev/tty1 ] && exec startx "$cdir/xinit/xinitrc";;
       esac
       ;;
