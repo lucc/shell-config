@@ -143,8 +143,8 @@ function zrc-keys-terminfo () {
   key[Left]=$terminfo[kcub1]
   key[Right]=$terminfo[kcuf1]
   # shifted arrows
-  key[ShiftUp]=$terminfo[kPRV]   # TODO not right in urxvt
-  key[ShiftDown]=$terminfo[kNXT] # TODO not right in urxvt
+  key[ShiftUp]=$terminfo[kPRV]
+  key[ShiftDown]=$terminfo[kNXT]
   key[ShiftLeft]=$terminfo[kLFT]
   key[ShiftRight]=$terminfo[kRIT]
   # fn-arrows
@@ -153,20 +153,26 @@ function zrc-keys-terminfo () {
   key[Home]=$terminfo[khome]
   key[End]=$terminfo[kend]
   # shifted fn-arrows
-  key[ShiftPageUp]=  # Not possible?
-  key[ShiftPageDown]=  # Not possible?
   key[ShiftHome]=$terminfo[kHOME]
   key[ShiftEnd]=$terminfo[kEND]
   # delete and such
   key[Backspace]=$terminfo[kbs]
   key[Delete]=$terminfo[kdch1]
-  key[ShiftBackspace]= # TODO
-  key[ShiftDelete]=$terminfo[kDC] # TODO
+  key[ShiftDelete]=$terminfo[kDC]
 }
 function zrc-keys-manual-corrections () {
   # Collection of conditions and corrections for errors with terminfo
   if zrc-test-linux; then
-    if [[ -n $MYVIMRC && $VIM = *nvim* && $VIMRUNTIME = *nvim* ]]; then
+    if [[ $TERM == alacritty ]]; then
+      key[Up]='\e[A'
+      key[Down]='\e[B'
+      key[Left]='\e[D'
+      key[Right]='\e[C'
+      key[Home]='\e[H'
+      key[End]='\e[F'
+      key[ShiftUp]='\e[1;2A'
+      key[ShiftDown]='\e[1;2B'
+    elif [[ -n $MYVIMRC && $VIM = *nvim* && $VIMRUNTIME = *nvim* ]]; then
       zrc-keys-manual-corrections-nvim
     elif [[ $TERM == urxvt || $TERM == rxvt-unicode-256color ]]; then
       key[ShiftUp]='\e[a'
@@ -239,7 +245,6 @@ function zrc-keys-manual-corrections-nvim () {
   key[ShiftEnd]='\U7fffc8d6'
   # delete and such
   key[Delete]='\e[3~'
-  key[ShiftBackspace]= # TODO
   key[ShiftDelete]='\U7fffcbd6'
 }
 function zrc-bind-basic-keys () {
