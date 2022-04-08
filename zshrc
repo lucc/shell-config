@@ -31,25 +31,6 @@ function zrc-profile () {
 }
 
 # helper functions
-function zrc-once () {
-  # Return true if the calling function was not called befor, false otherwise.
-  # This depends on the global associative array ZRC_ONCE_FUNCTION_LIST.  This
-  # can be used in other functions to return early, like this:
-  #   func_name () {
-  #     zrc-once || return
-  #     other code
-  #   }
-  if [[ -z $funcstack[2] ]]; then
-    print "ERROR: This function needs to be called from a function." >&2
-    return 2
-  fi
-  if [[ -z $ZRC_ONCE_FUNCTION_LIST[${funcstack[2]//-/_}] ]]; then
-    ZRC_ONCE_FUNCTION_LIST[${funcstack[2]//-/_}]=1
-    return
-  else
-    return 1
-  fi
-}
 function zrc-test-osx () {
   [[ $ZRC_UNAME == Darwin ]]
 }
@@ -67,16 +48,6 @@ function zrc-source () {
     return 1
   fi
 }
-function zrc-run-exit-hooks () {
-  local f
-  for f in $ZRC_AT_EXIT_FUNCTIONS; do
-    $f
-    unfunction $f
-  done
-}
-function zrc-add-exit-hook () {
-  ZRC_AT_EXIT_FUNCTIONS+=$1
-}
 function zrc-vi-bindkey () {
   if [[ -z $1 || -z $2 ]]; then
     bindkey_error=1
@@ -87,37 +58,6 @@ function zrc-vi-bindkey () {
   bindkey -M vicmd $1 $2
 }
 
-# functions to set up basic zsh options
-function zrc-history-options () {
-  # We set a *very* large history limit and never delete any duplicates from
-  # it.  We can then analyse it later.  Duplicates are saved but not presented
-  # during history search.
-  HISTFILE=${XDG_CACHE_HOME:-~/.cache}/zsh/history
-  HISTSIZE=1500000
-  SAVEHIST=1000000
-  #setopt hist_ignore_all_dups
-  #setopt hist_expire_dups_first
-  setopt hist_find_no_dups
-  setopt hist_reduce_blanks
-  #setopt hist_save_no_dups
-  setopt hist_ignore_space
-  #setopt hist_verify
-  setopt share_history
-  setopt extended_history
-}
-function zrc-misc-options () {
-  setopt extended_glob
-  setopt no_no_match
-  setopt prompt_subst
-}
-function zrc-interesting-options () {
-  setopt auto_cd
-  setopt glob_dots
-  #setopt print_exit_value
-  setopt no_list_ambiguous
-  #setopt correct_all
-}
-
 # functions to set up key bindings
 function zrc-keymap () {
   bindkey -v
@@ -126,7 +66,6 @@ function zrc-keymap () {
   zrc-keys-terminfo
   zrc-keys-manual-corrections
   zrc-bind-basic-keys
-  zrc-history-substring-search-keys
   zrc-keys-edit-command-line
   zrc-search-keys
   zrc-push-zle-buffer-keys
@@ -255,14 +194,6 @@ function zrc-bind-basic-keys () {
   zrc-vi-bindkey $key[ShiftLeft]  vi-backward-word
   zrc-vi-bindkey $key[ShiftRight] vi-forward-word
   zrc-vi-bindkey $key[Delete]     vi-delete-char
-}
-function zrc-history-substring-search-keys () {
-  zrc-source /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh ||
-    zrc-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ||
-    zrc-source ~/.nix-profile/share/zsh-history-substring-search/zsh-history-substring-search.zsh ||
-    return
-  zrc-vi-bindkey $key[ShiftUp]   history-substring-search-up
-  zrc-vi-bindkey $key[ShiftDown] history-substring-search-down
 }
 function zrc-search-keys () {
   zrc-vi-bindkey '\C-r' history-incremental-pattern-search-backward
@@ -505,45 +436,6 @@ function zrc-run-help () {
   }
 }
 
-# Plugin managers
-function zrc-set-up-zplug () {
-  ZPLUG_HOME=~/.local/share/zsh/zplug
-  ZPLUG_CACHE_DIR=~/.cache/zsh/zplug
-
-  local zplug_init_script=$ZPLUG_HOME/repos/zplug/zplug/init.zsh
-  local run=false
-  if [[ ! -e $zplug_init_script ]]; then
-    echo 'WARNING: zplug ist not installed!'
-    echo 'Installing it now ...'
-    git clone https://github.com/zplug/zplug $ZPLUG_HOME/repos/zplug/zplug
-    run=true
-  fi
-
-  source $zplug_init_script
-  path+=$ZPLUG_HOME/bin
-
-  zplug "zplug/zplug", hook-build:'zplug --self-manage'
-  #zplug "zsh-users/zsh-history-substring-search"
-  zplug "zdharma/fast-syntax-highlighting", defer:3
-  #zplug "arzzen/calc.plugin.zsh"
-  #zplug "laurenkt/zsh-vimto"  # FIXME breaks my RPROMPT
-  #zplug "RobSis/zsh-completion-generator"
-  #zplug "mafredri/zsh-async"
-  #zplug "seletskiy/zsh-fuzzy-search-and-edit"
-  #bindkey '^@' fuzzy-search-and-edit
-  #zplug "marzocchi/zsh-notify", if:'[[ -z $WAYLAND_DISPLAY ]]'
-  #zplug "joel-porquet/zsh-dircolors-solarized"
-
-  if ! zplug check; then
-    zplug install
-  fi
-  if $run; then
-    zplug update
-  fi
-
-  zplug load
-}
-
 # functions to set xxx
 function zrc-autoloading () {
   autoload -Uz colors && colors
@@ -568,20 +460,6 @@ function zrc-lesspipe () {
     eval "$(lesspipe)"
   elif whence -p lesspipe.sh &>/dev/null; then
     eval "$(lesspipe.sh)"
-  fi
-}
-function zrc-autojump () {
-  #export AUTOJUMP_KEEP_SYMLINKS=1
-  zrc-source /usr/share/autojump/autojump.zsh  ||
-    zrc-source /usr/share/autojump/autojump.sh ||
-    zrc-source /etc/autojump.sh                ||
-    zrc-source /etc/profile.d/autojump.zsh     ||
-    zrc-source ~/.nix-profile/share/autojump/autojump.zsh ||
-    zrc-source /etc/profiles/per-user/$USER/share/zsh/site-functions/autojump.zsh
-}
-function zrc-autojump-decision () {
-  if which autojump >/dev/null 2>&1; then
-    zrc-autojump
   fi
 }
 function zrc-gpg-setup () {
@@ -838,18 +716,10 @@ function zrc-compinit () {
 zrc-main () {
   # local variables
   local ZRC_UNAME=$(uname)
-  # an array of functions to be called at exit
-  typeset -la ZRC_AT_EXIT_FUNCTIONS
-  typeset -A ZRC_ONCE_FUNCTION_LIST
 
-  #zrc-set-up-zplug
   zrc-source-files
 
   zrc-meta-prompt
-
-  zrc-history-options
-  zrc-misc-options
-  zrc-interesting-options
 
   zrc-autoloading
   zrc-module-path
@@ -864,7 +734,6 @@ zrc-main () {
   zrc-zmodload
   zrc-set-up-window-title
   zrc-lesspipe
-  zrc-autojump-decision
   zrc-gpg-setup
   zrc-fzf-setup
   zrc-setup-history-statistics
@@ -876,9 +745,6 @@ zrc-main () {
 
   zrc-pacman-update-notification
   zrc-khal-notifications-2
-
-  # execute the at exit hooks
-  zrc-run-exit-hooks
 }
 
 # call main
