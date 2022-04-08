@@ -137,20 +137,10 @@ _profile_export_DISPLAY () {
     export DISPLAY=$(echo $SSH_CLIENT | cut -f1 -d\ ):0.0
   fi
 }
-_profile_export_standard_env () {
-  # set some widely used environment variables to default values which can be
-  # overriden in the specialized functions
-  #export HISTSIZE=2000
-}
 _profile_export_special_env () {
   # force some programs to load their configuration from ~/.config
-  #export VIMPAGER_RC=$cdir/nvim/vimpagerrc
   export WINEPREFIX=$ddir/wine
-  export ELINKS_CONFDIR=$cdir/elinks
-  #export SCREENRC=$dir/screen/screenrc
   [ -r "$cdir/netrc" ] && export NETRC=$cdir/netrc
-  export FZF_DEFAULT_OPTS="--inline-info --cycle"
-  export RLWRAP_HOME=$ddir/rlwrap
 }
 _profile_export_less_env () {
   LESSKEY=$cdir/less/lesskey
@@ -178,7 +168,6 @@ _profile_main () {
   local ddir=${XDG_DATA_HOME:-$HOME/.local/share}
 
   # start setting up the environment
-  _profile_export_standard_env
   # https://github.com/sindresorhus/guides/blob/master/npm-global-without-sudo.md
   if [ -d "$ddir/npm" ]; then
     export NPM_PACKAGES=$ddir/npm
