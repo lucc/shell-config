@@ -342,15 +342,6 @@ function zrc-fignore () {
   # file endings to ignore for completion
   fignore=($fignore '~' .o .bak '.sw?')
 }
-function zrc-zle-highlighting () {
-  # zle stuff
-  zle_highlight=(
-    region:bg=green
-    special:bg=blue
-    suffix:fg=red
-    isearch:fg=yellow
-  )
-}
 function zrc-fpath () {
   local trypath
   # functions for completion and user defined functions
@@ -448,49 +439,9 @@ function zrc-zmodload () {
   zmodload zsh/zprof
   #zmodload zsh/zpython
 }
-function zrc-source-files () {
-  local file
-  for file in $ZDOTDIR/aliases; do
-    zrc-source $file
-  done
-}
 function zrc-zsh-mime-handling-setup () {
   autoload zsh-mime-setup
   zsh-mime-setup
-}
-function zrc-fzf-setup () {
-  function __fzf-list-files-helper () {
-    # first list autojump data:
-    sort --reverse --numeric-sort ~/.local/share/autojump/autojump.txt | \
-      cut --fields=2
-    # second list the contents of the locate database:
-    locate '*'
-    # lastly find files below the current directory (like the upstream
-    # version):
-    command find -L . \
-      -mindepth 1 \
-      \( \
-	-fstype 'sysfs' -o \
-	-fstype 'devfs' -o \
-	-fstype 'devtmpfs' -o \
-	-fstype 'proc' \
-      \) -prune \
-      -o -type d -print \
-      2> /dev/null \
-      | cut -b3-
-    # original command from the upstream script
-    #   command find -L . -mindepth 1 \( -path '*/\\.*' -o -fstype 'sysfs' -o
-    #   -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \) -prune -o
-    #   -type d -print 2> /dev/null | cut -b3-
-  }
-  # set up fzf keybindings
-  FZF_ALT_C_COMMAND=__fzf-list-files-helper
-  export FZF_ALT_C_COMMAND
-  zrc-source /usr/share/fzf/key-bindings.zsh ||
-    zrc-source ~/.nix-profile/share/fzf/key-bindings.zsh ||
-    zrc-source /etc/profile.d/fzf.zsh ||
-    zrc-source $(fzf-share)/key-bindings.zsh
-  bindkey '^a' fzf-cd-widget
 }
 function zrc-setup-history-statistics () {
   # Collect data about executed commands.
@@ -507,10 +458,6 @@ function zrc-set-up-mail-warning-variables () {
     mailpath=(~/.cache/notmuch/new-mail-marker ~/mail/inbox)
     set -U
   fi
-}
-function zrc-set-up-autopair-plugin () {
-  # should be placed before syntax highlighting
-  zrc-source /usr/share/zsh/plugins/zsh-autopair/autopair.zsh
 }
 function zrc-set-up-autosuggest-plugin () {
   zrc-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -552,22 +499,6 @@ function zrc-khal-notifications-2 () {
   if [[ $image -nt $marker ]] || (( ${(%)epoch} > $(zstat +mtime $marker) + 3600 )); then
     cat $image
     touch $marker
-  fi
-}
-zrc-pacman-update-notification () {
-  [[ -x =pacman ]] || return
-  local epoch=%D{%s}
-  local file=/var/log/pacman.log
-  zmodload -F zsh/stat b:zstat
-  # Print a warning if the last update (interaction with pacman) is more than
-  # one week ago.
-  if (( ${(%)epoch} > $(zstat +mtime $file) + 60*60*24*7 )); then
-    print Consider updateing your system.
-    # Override all other notifications
-    for name in $(functions -m 'zrc-*notification*' | \
-		  sed -n '/^zrc/{s/ .*//;p;}'); do
-      function $name () :
-    done
   fi
 }
 
@@ -704,23 +635,20 @@ zrc-main () {
   # local variables
   local ZRC_UNAME=$(uname)
 
-  zrc-source-files
+  source $ZDOTDIR/aliases
 
   zrc-meta-prompt
 
   zrc-autoloading
   zrc-module-path
   zrc-fignore
-  zrc-zle-highlighting
   zrc-fpath
 
-  zrc-set-up-autopair-plugin
   zrc-keymap
   zrc-run-help
 
   zrc-zmodload
   zrc-set-up-window-title
-  zrc-fzf-setup
   zrc-setup-history-statistics
   zrc-set-up-mail-warning-variables
   zrc-set-up-autosuggest-plugin
@@ -728,7 +656,6 @@ zrc-main () {
 
   zrc-compinit
 
-  zrc-pacman-update-notification
   zrc-khal-notifications-2
 }
 
