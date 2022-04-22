@@ -454,17 +454,6 @@ function zrc-source-files () {
     zrc-source $file
   done
 }
-function zrc-lesspipe () {
-  ## make less more friendly for non-text input files, see lesspipe(1)
-  if whence -p lesspipe &>/dev/null; then
-    eval "$(lesspipe)"
-  elif whence -p lesspipe.sh &>/dev/null; then
-    eval "$(lesspipe.sh)"
-  fi
-}
-function zrc-gpg-setup () {
-  export GPG_TTY=$(tty)
-}
 function zrc-zsh-mime-handling-setup () {
   autoload zsh-mime-setup
   zsh-mime-setup
@@ -706,9 +695,7 @@ function zrc-compinit () {
   autoload -Uz compinit
   compinit
   compdef colordiff=diff
-  compdef gpg2=gpg
   #compdef pip2=pip
-  compdef vi=nvim
   compdef _gnu_generic afew
 }
 
@@ -733,8 +720,6 @@ zrc-main () {
 
   zrc-zmodload
   zrc-set-up-window-title
-  zrc-lesspipe
-  zrc-gpg-setup
   zrc-fzf-setup
   zrc-setup-history-statistics
   zrc-set-up-mail-warning-variables
