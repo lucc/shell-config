@@ -25,12 +25,6 @@ _profile_helper_add_to_PATH () {
 _profile_main () {
   # Local variables for this script.
   local cdir=${XDG_CONFIG_HOME:-$HOME/.config}
-  local ddir=${XDG_DATA_HOME:-$HOME/.local/share}
-
-  # https://github.com/sindresorhus/guides/blob/master/npm-global-without-sudo.md
-  if [ -d "$ddir/npm" ]; then
-    export NPM_PACKAGES=$ddir/npm
-  fi
 
   _profile_helper_add_to_PATH                         \
     $NPM_PACKAGES                                     \
@@ -48,10 +42,9 @@ _profile_main () {
   fi
 
   # force some programs to load their configuration from ~/.config
-  export WINEPREFIX=$ddir/wine
   [ -r "$cdir/netrc" ] && export NETRC=$cdir/netrc
 
-  [ "$TTY" = /dev/tty1 ] && exec startx "$cdir/xinit/xinitrc"
+  [ "$TTY" = /dev/tty1 ] && exec start-gui
 }
 
 _profile_main "$@"
