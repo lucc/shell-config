@@ -67,7 +67,6 @@ function zrc-keymap () {
   zrc-keys-manual-corrections
   zrc-bind-basic-keys
   zrc-keys-edit-command-line
-  zrc-search-keys
   zrc-push-zle-buffer-keys
   unset key
   if ((bindkey_error)); then
@@ -194,10 +193,6 @@ function zrc-bind-basic-keys () {
   zrc-vi-bindkey $key[ShiftLeft]  vi-backward-word
   zrc-vi-bindkey $key[ShiftRight] vi-forward-word
   zrc-vi-bindkey $key[Delete]     vi-delete-char
-}
-function zrc-search-keys () {
-  zrc-vi-bindkey '\C-r' history-incremental-pattern-search-backward
-  zrc-vi-bindkey '\C-s' history-incremental-pattern-search-forward
 }
 function zrc-keys-edit-command-line () {
   autoload edit-command-line
