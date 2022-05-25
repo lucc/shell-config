@@ -1,8 +1,2 @@
 .zcompdump*
-.zkbd/
-.zcalc_history
 *.zwc
-*.swp
-
-help/
-functions/_alot
