@@ -8,23 +8,9 @@
 # TODO: merge into zshrc
 
 # general aliases {{{1
-alias cp='cp -ip'
-alias d=diff-wrapper.bash
-alias grep='grep --extended-regexp --color=auto --ignore-case'
 #alias l='ls -l --time-style=full-iso'
-alias l='ls -l'
 alias L='ls -l --time-style=+%F\ %H:%M:%S'
-alias lh='L -h'
-alias ls='ls --color=auto'
-alias la='ls -A'
-alias lla='l -A'
-alias mv='mv -i'
-alias scp='scp -p'
-alias mkdir='mkdir -p'
 alias nload='nload -i 6144 -o 1024'
-alias diff=colordiff
-alias qmv='qmv --format=destination-only'
-alias py=ipython
 alias hs='stack ghci'
 
 # searching the internet {{{1
@@ -34,8 +20,6 @@ alias q='surfraw duckduckgo'
 # connecting to remote servers {{{1
 alias lima='ftp --netrc=$NETRC luc42.lima-ftp.de'
 
-alias myip='curl --silent https://luc42.lima-city.de/ip.php'
-alias myip='dig +short myip.opendns.com A @resolver1.opendns.com'
 
 # backup and statistics {{{1
 alias tbz2='tar -cjv --exclude .DS_Store --one-file-system'
@@ -49,44 +33,23 @@ alias up='date +"%F $(uptime)"'
 #  alias mpc='mpc --host pi.local'
 #fi
 alias music='ncmpcpp -q'
-alias ffprobe='ffprobe -hide_banner'
 alias f='find /media/nas/video -type f | cut -d/ -f5- | fzf | sed '\''s#^#/media/nas/video/#'\'' | xargs --no-run-if-empty --delimiter="\n" mpv --fullscreen'
 
 # other {{{1
-alias a=khard
-alias k=ikhal
-alias m=alot
-alias mm=purebred
 if which latexrun &>/dev/null; then
   alias tex=latexrun
 else
   alias tex=latexmk
 fi
-alias D='date +%F'
-alias T='date +%T'
-alias isodate='date "+%F %T"'
-alias timestamp='date +%Y%m%d%H%M%S'
 alias hgrep='history 1 | grep'
 if which hg &>/dev/null; then
   alias -- '?=if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) = true ]]; then git status --short; elif hg -q stat 2>/dev/null; then hg status; else echo Not under version control.; fi'
 else
   alias -- '?=if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) = true ]]; then git status --short; else echo Not under version control.; fi'
 fi
-alias g=hub
-alias t='tig --all'
-if   which rg  &>/dev/null; then alias s='rg --ignore-case'
-elif which ag  &>/dev/null; then alias s=ag
-elif which ack &>/dev/null; then alias s=ack
-else s () { grep --recursive $1 .; }
-fi
+
 alias quoted-printeable-decode='python -c "import os,quopri,sys;quopri.decode(sys.stdin,os.fdopen(sys.stdout.fileno(), \"wb\"))"'
 alias feh='feh --auto-rotate'
-
-# games {{{1
-alias histhead='history -n 1 | \
-		  awk '\''{a[$1]++}END{for(i in a){print a[i]" "i}}'\'' | \
-		  sort -rn | \
-		  head'
 
 # suffix aliases {{{1
 #alias -s com=xdg-open
@@ -105,17 +68,10 @@ if [[ $(uname) = Darwin ]] ; then
 elif [ $(uname) = Linux ]; then
   alias pstree='pstree -n'
   alias cal='cal -3'
-  alias blk='lsblk -o NAME,FSTYPE,MOUNTPOINT,PARTLABEL,SIZE,RO'
   if which yay >/dev/null 2>&1; then
     alias pacs='yay -Ss'
     alias paci='yay --show --news && yay -Syu --devel --needed'
     alias pacstat='yay --show --stats'
     alias pacnews='yay --show --news'
-  elif which nix >/dev/null 2>&1; then
-    function s-nipkgs () {
-      s $@ $(nix registry list | grep flake:sys | sed 's/.*path://;s/?.*//')
-    }
-    alias lua='nix-shell -p lua5_3.withPackages"(p:[p.luarepl p.inspect])" --run lua'
-    alias nix-roots='nix-store --gc --print-roots | egrep -v '\''^(/nix/var|/run/current-system|/run/booted-system|/proc|{memory|{censored)'\'
   fi
 fi
