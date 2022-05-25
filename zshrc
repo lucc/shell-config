@@ -624,14 +624,38 @@ function zrc-compinit () {
   #compdef pip2=pip
   compdef _gnu_generic afew
 }
+function zrc-aliases () {
+  alias hs='ghci'
+  alias lima='ftp --netrc=$NETRC luc42.lima-ftp.de'
+  alias music='ncmpcpp -q'
+  alias f='find /media/nas/video -type f | cut -d/ -f5- | fzf | sed '\''s#^#/media/nas/video/#'\'' | xargs --no-run-if-empty --delimiter="\n" mpv --fullscreen'
+  alias hgrep='history 1 | grep'
+  alias quoted-printeable-decode='python -c "import os,quopri,sys;quopri.decode(sys.stdin,os.fdopen(sys.stdout.fileno(), \"wb\"))"'
+  alias -s pdf=o
+
+  # Mac OS X specific aliases {{{1
+  if [[ $(uname) = Darwin ]] ; then
+    #play go
+    alias igo='(wine c:/Program\ Files/igowin/igowin.exe &) >/dev/null 2>&1'
+    alias quit_finder='osascript -e tell\ app\ \"Finder\"\ to\ quit'
+    alias suspenduser='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
+  # Linux specific aliases {{{1
+  elif [ $(uname) = Linux ]; then
+    if which yay >/dev/null 2>&1; then
+      alias pacs='yay -Ss'
+      alias paci='yay --show --news && yay -Syu --devel --needed'
+      alias pacstat='yay --show --stats'
+      alias pacnews='yay --show --news'
+    fi
+  fi
+}
 
 # main functions
 zrc-main () {
   # local variables
   local ZRC_UNAME=$(uname)
 
-  source $ZDOTDIR/aliases
-
+  zrc-aliases
   zrc-meta-prompt
 
   zrc-autoloading
