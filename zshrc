@@ -653,8 +653,22 @@ function zrc-aliases () {
 
   # Some work aliases
   alias s_='rg --ignore-case -g "!*.css" -g "!*.js" -g "!*.xml"'
-  alias vm='([[ $PWD =~ ~/dev.vm ]] && dir=${PWD#~/dev.vm}; cd ~/src/vm-infra; vagrant ssh --command "${dir+cd /var/www/html/dev/$dir;} . /etc/os-release; if [ \$VERSION_ID -eq 7 ]; then scl enable rh-php71 bash; else bash; fi" -- -A)'
-  #alias vm='([[ $PWD =~ ~/dev.vm ]] && dir=${PWD#~/dev.vm}; cd ~/vm-infra; vagrant ssh --command "${dir+cd /var/www/html/dev/$dir;} bash" -- -A)'
+function vm () {
+  [[ $PWD =~ ~/dev.vm ]] && local dir=${PWD#~/dev.vm}
+  if [[ $# -eq 0 ]]; then
+    set bash
+  fi
+  (cd ~/src/vm-infra
+   vagrant ssh --command "
+     ${dir+cd /var/www/html/dev/$dir;}
+     . /etc/os-release
+     if [ \$VERSION_ID = 7 ]; then
+       scl enable rh-php71 -- $*
+     else
+       $*
+     fi"
+  )
+}
 
   tel () { s $@ /media/nextcloud/ASAM\ Intern/asam_telefonliste.txt; }
 }
